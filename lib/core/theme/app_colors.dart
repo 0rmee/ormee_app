@@ -54,7 +54,7 @@ final class OrmeeColor extends Color {
     20: Color(0xFF00B3FF),
   };
 
-  static const Map<int, double> opacity = {
+  static const Map<int, double> opacityLevel = {
     90: 0.9,
     80: 0.8,
     70: 0.7,
