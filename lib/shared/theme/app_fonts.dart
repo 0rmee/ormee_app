@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ormee_app/core/theme/app_colors.dart';
+import 'package:ormee_app/shared/theme/app_colors.dart';
 
 /// 폰트 굵기 매핑
 /// Bold = w700, SemiBold = w600, Medium = w500, Regular = w400

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ormee_app/core/theme/app_colors.dart';
+import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'router/app_router.dart';
 
 class OrmeeApp extends StatelessWidget {
