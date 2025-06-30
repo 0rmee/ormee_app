@@ -995,3 +995,31 @@ class Caption2Regular10 extends StatelessWidget {
     overflow: overflow ?? TextOverflow.clip,
   );
 }
+
+// --- Caption 2 (10px) ---
+class Caption2Semibold10 extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final TextOverflow? overflow;
+
+  const Caption2Semibold10({
+    super.key,
+    required this.text,
+    this.color,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
+      fontSize: 10,
+      height: 1.4,
+      letterSpacing: -0.02 * 10,
+      color: color ?? OrmeeColor.black,
+    ),
+    overflow: overflow ?? TextOverflow.clip,
+  );
+}
