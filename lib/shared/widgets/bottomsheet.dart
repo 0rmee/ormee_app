@@ -21,7 +21,10 @@ class OrmeeBottomSheet extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 39),
-      color: OrmeeColor.white,
+      decoration: BoxDecoration(
+        color: OrmeeColor.white,
+        border: Border(top: BorderSide(color: OrmeeColor.gray[10]!, width: 1)),
+      ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
