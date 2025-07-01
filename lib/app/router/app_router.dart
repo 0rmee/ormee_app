@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
+import 'package:ormee_app/shared/widgets/dialog.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 
 class AppRouter {
@@ -128,7 +129,17 @@ class ProfileScreen extends StatelessWidget {
                     text: '확인',
                     isTrue: true,
                     trueAction: () {
-                      context.go('/');
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return OrmeeDialog(
+                            titleText: "퀴즈를 삭제하시겠어요?",
+                            contentText: "삭제된 퀴즈는 복구가 불가능해요.",
+                            onConfirm: () async {},
+                            icon: 'assets/icons/trash.svg',
+                          );
+                        },
+                      );
                     },
                   ),
                 ),

@@ -742,6 +742,33 @@ class Headline2SemiBold16 extends StatelessWidget {
   );
 }
 
+class Headline2SemiBold20 extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final TextOverflow? overflow;
+
+  const Headline2SemiBold20({
+    super.key,
+    required this.text,
+    this.color,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
+      fontSize: 20,
+      height: 1.4,
+      letterSpacing: -0.02 * 16,
+      color: color ?? OrmeeColor.black,
+    ),
+    overflow: overflow ?? TextOverflow.clip,
+  );
+}
+
 class Headline2Regular16 extends StatelessWidget {
   final String text;
   final Color? color;
@@ -902,6 +929,33 @@ class Label1Medium14 extends StatelessWidget {
     style: TextStyle(
       fontFamily: 'Pretendard',
       fontWeight: FontWeight.w500, // Medium
+      fontSize: 14,
+      height: 1.4,
+      letterSpacing: -0.02 * 14,
+      color: color ?? OrmeeColor.black,
+    ),
+    overflow: overflow ?? TextOverflow.clip,
+  );
+}
+
+class Label1Regular14 extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final TextOverflow? overflow;
+
+  const Label1Regular14({
+    super.key,
+    required this.text,
+    this.color,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w400,
       fontSize: 14,
       height: 1.4,
       letterSpacing: -0.02 * 14,
