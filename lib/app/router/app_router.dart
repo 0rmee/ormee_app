@@ -1,32 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ormee_app/shared/widgets/navigationbar.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/',
+    initialLocation: '/home',
     routes: [
-      GoRoute(
-        path: '/',
-        name: 'home',
-        builder: (context, state) => const HomeScreen(),
-      ),
-      GoRoute(
-        path: '/profile',
-        name: 'profile',
-        builder: (context, state) => const ProfileScreen(),
-      ),
-      GoRoute(
-        path: '/settings',
-        name: 'settings',
-        builder: (context, state) => const SettingsScreen(),
-      ),
-      GoRoute(
-        path: '/detail/:id',
-        name: 'detail',
-        builder: (context, state) {
-          final id = state.pathParameters['id']!;
-          return DetailScreen(id: id);
-        },
+      // GoRoute(
+      //   path: '/home',
+      //   name: 'home',
+      //   builder: (context, state) => const HomeScreen(),
+      // ),
+      // GoRoute(
+      //   path: '/profile',
+      //   name: 'profile',
+      //   builder: (context, state) => const ProfileScreen(),
+      // ),
+      // GoRoute(
+      //   path: '/settings',
+      //   name: 'settings',
+      //   builder: (context, state) => const SettingsScreen(),
+      // ),
+      // GoRoute(
+      //   path: '/detail/:id',
+      //   name: 'detail',
+      //   builder: (context, state) {
+      //     final id = state.pathParameters['id']!;
+      //     return DetailScreen(id: id);
+      //   },
+      // ),
+      ShellRoute(
+        builder: (context, state, child) => OrmeeNavigationBar(child: child),
+        routes: [
+          GoRoute(
+            path: '/home',
+            name: 'home',
+            builder: (context, state) => const HomeScreen(),
+          ),
+          GoRoute(
+            path: '/lecture',
+            name: 'lecture',
+            builder: (context, state) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: '/notification',
+            name: 'notification',
+            builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: '/mypage',
+            name: 'mypage',
+            builder: (context, state) => const ProfileScreen(),
+          ),
+        ],
       ),
     ],
     errorBuilder: (context, state) => const ErrorScreen(),
