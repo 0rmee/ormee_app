@@ -6,6 +6,7 @@ import 'package:ormee_app/shared/widgets/bottomsheet.dart';
 import 'package:ormee_app/shared/widgets/box.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
 import 'package:ormee_app/shared/widgets/dialog.dart';
+import 'package:ormee_app/shared/widgets/lecture_card.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
 
@@ -142,17 +143,28 @@ class ProfileScreen extends StatelessWidget {
               ),
             ];
           },
-          body: const TabBarView(
+          body: TabBarView(
             children: [
               SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const Text("내용"),
+                    const SizedBox(height: 20),
+                    OrmeeLectureCard(
+                      title: '오름토익 기본반 RC',
+                      teacherNames: '강수이 • 최윤선 T',
+                      subText: '재수하지 말자',
+                      // dDay: 'D-16',
+                    ),
+                  ],
+                ),
+              ),
+              const SingleChildScrollView(
                 padding: EdgeInsets.all(16.0),
                 child: Column(children: [Text("내용")]),
               ),
-              SingleChildScrollView(
-                padding: EdgeInsets.all(16.0),
-                child: Column(children: [Text("내용")]),
-              ),
-              SingleChildScrollView(
+              const SingleChildScrollView(
                 padding: EdgeInsets.all(16.0),
                 child: Column(children: [Text("내용")]),
               ),

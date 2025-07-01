@@ -441,6 +441,33 @@ class Title4SemiBold16 extends StatelessWidget {
   );
 }
 
+class Title5SemiBold14 extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final TextOverflow? overflow;
+
+  const Title5SemiBold14({
+    super.key,
+    required this.text,
+    this.color,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
+      fontSize: 14,
+      height: 1.4,
+      letterSpacing: -0.02 * 24,
+      color: color ?? OrmeeColor.black,
+    ),
+    overflow: overflow ?? TextOverflow.clip,
+  );
+}
+
 // --- Heading 1 (22px) ---
 class Heading1Bold22 extends StatelessWidget {
   final String text;
@@ -910,6 +937,34 @@ class Body2RegularReading14 extends StatelessWidget {
   );
 }
 
+// Medium 14px (lineHeight 150%)
+class Body4Medium14 extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final TextOverflow? overflow;
+
+  const Body4Medium14({
+    super.key,
+    required this.text,
+    this.color,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w500,
+      fontSize: 14,
+      height: 1.5,
+      letterSpacing: -0.02 * 14,
+      color: color ?? OrmeeColor.black,
+    ),
+    overflow: overflow ?? TextOverflow.clip,
+  );
+}
+
 // --- Label 1 (Medium 14px) ---
 class Label1Medium14 extends StatelessWidget {
   final String text;
@@ -1095,6 +1150,33 @@ class Caption2Regular10 extends StatelessWidget {
     style: TextStyle(
       fontFamily: 'Pretendard',
       fontWeight: FontWeight.w400,
+      fontSize: 10,
+      height: 1.4,
+      letterSpacing: -0.02 * 10,
+      color: color ?? OrmeeColor.black,
+    ),
+    overflow: overflow ?? TextOverflow.clip,
+  );
+}
+
+class Caption2Semibold10 extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final TextOverflow? overflow;
+
+  const Caption2Semibold10({
+    super.key,
+    required this.text,
+    this.color,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
       fontSize: 10,
       height: 1.4,
       letterSpacing: -0.02 * 10,
