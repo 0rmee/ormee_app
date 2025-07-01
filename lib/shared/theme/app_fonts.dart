@@ -414,6 +414,33 @@ class Title3Regular24 extends StatelessWidget {
   );
 }
 
+class Title4SemiBold16 extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final TextOverflow? overflow;
+
+  const Title4SemiBold16({
+    super.key,
+    required this.text,
+    this.color,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
+      fontSize: 16,
+      height: 1.4,
+      letterSpacing: -0.02 * 24,
+      color: color ?? OrmeeColor.black,
+    ),
+    overflow: overflow ?? TextOverflow.clip,
+  );
+}
+
 // --- Heading 1 (22px) ---
 class Heading1Bold22 extends StatelessWidget {
   final String text;

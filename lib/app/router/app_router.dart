@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ormee_app/shared/widgets/bottomsheet.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 
 class AppRouter {
@@ -11,11 +12,11 @@ class AppRouter {
       //   name: 'home',
       //   builder: (context, state) => const HomeScreen(),
       // ),
-      // GoRoute(
-      //   path: '/profile',
-      //   name: 'profile',
-      //   builder: (context, state) => const ProfileScreen(),
-      // ),
+      GoRoute(
+        path: '/profile',
+        name: 'profile',
+        builder: (context, state) => const ProfileScreen(),
+      ),
       // GoRoute(
       //   path: '/settings',
       //   name: 'settings',
@@ -120,6 +121,7 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomSheet: OrmeeBottomSheet(text: '숙제 제출하기', isCheck: false),
     );
   }
 }
