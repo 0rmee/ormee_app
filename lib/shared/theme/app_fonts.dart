@@ -965,6 +965,33 @@ class Label1Regular14 extends StatelessWidget {
   );
 }
 
+class Label1Semibold14 extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final TextOverflow? overflow;
+
+  const Label1Semibold14({
+    super.key,
+    required this.text,
+    this.color,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
+      fontSize: 14,
+      height: 1.4,
+      letterSpacing: -0.02 * 14,
+      color: color ?? OrmeeColor.black,
+    ),
+    overflow: overflow ?? TextOverflow.clip,
+  );
+}
+
 // --- Label 2 (Regular 12px) ---
 class Label2Regular12 extends StatelessWidget {
   final String text;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet.dart';
+import 'package:ormee_app/shared/widgets/box.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
 import 'package:ormee_app/shared/widgets/dialog.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
@@ -120,6 +121,8 @@ class ProfileScreen extends StatelessWidget {
               onPressed: () => context.go('/'),
               child: const Text('Go Back Home'),
             ),
+            OrmeeBox(text: '전체', isCheck: true),
+            OrmeeBox(text: '제출완료', isCheck: false),
             Row(
               children: [
                 Expanded(child: OrmeeButton(text: '취소', isTrue: false)),
