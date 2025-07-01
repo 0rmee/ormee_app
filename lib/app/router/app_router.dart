@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet.dart';
+import 'package:ormee_app/shared/widgets/button.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 
 class AppRouter {
@@ -117,6 +118,21 @@ class ProfileScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () => context.go('/'),
               child: const Text('Go Back Home'),
+            ),
+            Row(
+              children: [
+                Expanded(child: OrmeeButton(text: '취소', isTrue: false)),
+                SizedBox(width: 12),
+                Expanded(
+                  child: OrmeeButton(
+                    text: '확인',
+                    isTrue: true,
+                    trueAction: () {
+                      context.go('/');
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
