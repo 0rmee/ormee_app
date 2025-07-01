@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ormee_app/shared/theme/app_colors.dart';
+import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet.dart';
 import 'package:ormee_app/shared/widgets/box.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
 import 'package:ormee_app/shared/widgets/dialog.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
+import 'package:ormee_app/shared/widgets/tab.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -18,7 +21,7 @@ class AppRouter {
       GoRoute(
         path: '/profile',
         name: 'profile',
-        builder: (context, state) => const ProfileScreen(),
+        builder: (context, state) => ProfileScreen(),
       ),
       // GoRoute(
       //   path: '/settings',
@@ -44,7 +47,7 @@ class AppRouter {
           GoRoute(
             path: '/lecture',
             name: 'lecture',
-            builder: (context, state) => const ProfileScreen(),
+            builder: (context, state) => ProfileScreen(),
           ),
           GoRoute(
             path: '/notification',
@@ -54,7 +57,7 @@ class AppRouter {
           GoRoute(
             path: '/mypage',
             name: 'mypage',
-            builder: (context, state) => const ProfileScreen(),
+            builder: (context, state) => ProfileScreen(),
           ),
         ],
       ),
@@ -106,52 +109,57 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Profile Screen'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => context.go('/'),
-              child: const Text('Go Back Home'),
-            ),
-            OrmeeBox(text: '전체', isCheck: true),
-            OrmeeBox(text: '제출완료', isCheck: false),
-            Row(
-              children: [
-                Expanded(child: OrmeeButton(text: '취소', isTrue: false)),
-                SizedBox(width: 12),
-                Expanded(
-                  child: OrmeeButton(
-                    text: '확인',
-                    isTrue: true,
-                    trueAction: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return OrmeeDialog(
-                            titleText: "퀴즈를 삭제하시겠어요?",
-                            contentText: "삭제된 퀴즈는 복구가 불가능해요.",
-                            onConfirm: () async {},
-                            icon: 'assets/icons/trash.svg',
-                          );
-                        },
-                      );
-                    },
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Profile'),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              // 탭바 위에 올릴 내용들
+              SliverToBoxAdapter(child: Container()),
+              // 탭바
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                pinned: true,
+                floating: false,
+                toolbarHeight: 0,
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(48.0),
+                  child: OrmeeTabBar(
+                    tabs: [
+                      OrmeeTab(text: '공지', notificationCount: 3),
+                      OrmeeTab(text: '숙제', notificationCount: null),
+                      OrmeeTab(text: '퀴즈', notificationCount: 1),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+            ];
+          },
+          body: const TabBarView(
+            children: [
+              SingleChildScrollView(
+                padding: EdgeInsets.all(16.0),
+                child: Column(children: [Text("내용")]),
+              ),
+              SingleChildScrollView(
+                padding: EdgeInsets.all(16.0),
+                child: Column(children: [Text("내용")]),
+              ),
+              SingleChildScrollView(
+                padding: EdgeInsets.all(16.0),
+                child: Column(children: [Text("내용")]),
+              ),
+            ],
+          ),
         ),
       ),
-      bottomSheet: OrmeeBottomSheet(text: '숙제 제출하기', isCheck: false),
     );
   }
 }
