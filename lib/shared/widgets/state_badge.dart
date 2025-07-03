@@ -3,13 +3,13 @@ import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 
 // 미제출, 제출완료 외 pruple[400]
-//Badge(text: '미제출')
-//Badge(text: '제출완료')
-//Badge(text: 'D-16')
+//StateBadge(text: '미제출')
+//StateBadge(text: '제출완료')
+//StateBadge(text: 'D-16')
 
-class Badge extends StatelessWidget {
+class StateBadge extends StatelessWidget {
   final String text;
-  const Badge({super.key, required this.text});
+  const StateBadge({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class Badge extends StatelessWidget {
         color: backgroundColor,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Caption2Semibold10(text: text, olor: OrmeeColor.white),
+      child: Caption2Semibold10(text: text, color: OrmeeColor.white),
     );
   }
 }
