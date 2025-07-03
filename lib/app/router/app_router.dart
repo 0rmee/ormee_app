@@ -1,32 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ormee_app/shared/theme/app_colors.dart';
+import 'package:ormee_app/shared/theme/app_fonts.dart';
+import 'package:ormee_app/shared/widgets/bottomsheet.dart';
+import 'package:ormee_app/shared/widgets/box.dart';
+import 'package:ormee_app/shared/widgets/button.dart';
+import 'package:ormee_app/shared/widgets/dialog.dart';
+import 'package:ormee_app/shared/widgets/lecture_card.dart';
+import 'package:ormee_app/shared/widgets/navigationbar.dart';
+import 'package:ormee_app/shared/widgets/tab.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/',
+    initialLocation: '/home',
     routes: [
-      GoRoute(
-        path: '/',
-        name: 'home',
-        builder: (context, state) => const HomeScreen(),
-      ),
+      // GoRoute(
+      //   path: '/home',
+      //   name: 'home',
+      //   builder: (context, state) => const HomeScreen(),
+      // ),
       GoRoute(
         path: '/profile',
         name: 'profile',
-        builder: (context, state) => const ProfileScreen(),
+        builder: (context, state) => ProfileScreen(),
       ),
-      GoRoute(
-        path: '/settings',
-        name: 'settings',
-        builder: (context, state) => const SettingsScreen(),
-      ),
-      GoRoute(
-        path: '/detail/:id',
-        name: 'detail',
-        builder: (context, state) {
-          final id = state.pathParameters['id']!;
-          return DetailScreen(id: id);
-        },
+      // GoRoute(
+      //   path: '/settings',
+      //   name: 'settings',
+      //   builder: (context, state) => const SettingsScreen(),
+      // ),
+      // GoRoute(
+      //   path: '/detail/:id',
+      //   name: 'detail',
+      //   builder: (context, state) {
+      //     final id = state.pathParameters['id']!;
+      //     return DetailScreen(id: id);
+      //   },
+      // ),
+      ShellRoute(
+        builder: (context, state, child) => OrmeeNavigationBar(child: child),
+        routes: [
+          GoRoute(
+            path: '/home',
+            name: 'home',
+            builder: (context, state) => const HomeScreen(),
+          ),
+          GoRoute(
+            path: '/lecture',
+            name: 'lecture',
+            builder: (context, state) => ProfileScreen(),
+          ),
+          GoRoute(
+            path: '/notification',
+            name: 'notification',
+            builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: '/mypage',
+            name: 'mypage',
+            builder: (context, state) => ProfileScreen(),
+          ),
+        ],
       ),
     ],
     errorBuilder: (context, state) => const ErrorScreen(),
@@ -76,22 +110,66 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Profile Screen'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => context.go('/'),
-              child: const Text('Go Back Home'),
-            ),
-          ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Profile'),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              // 탭바 위에 올릴 내용들
+              SliverToBoxAdapter(child: Container()),
+              // 탭바
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                pinned: true,
+                floating: false,
+                toolbarHeight: 0,
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(48.0),
+                  child: OrmeeTabBar(
+                    tabs: [
+                      OrmeeTab(text: '공지', notificationCount: 3),
+                      OrmeeTab(text: '숙제', notificationCount: null),
+                      OrmeeTab(text: '퀴즈', notificationCount: 1),
+                    ],
+                  ),
+                ),
+              ),
+            ];
+          },
+          body: TabBarView(
+            children: [
+              SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const Text("내용"),
+                    const SizedBox(height: 20),
+                    OrmeeLectureCard(
+                      title: '오름토익 기본반 RC',
+                      teacherNames: '강수이 • 최윤선 T',
+                      subText: '재수하지 말자',
+                      // dDay: 'D-16',
+                    ),
+                  ],
+                ),
+              ),
+              const SingleChildScrollView(
+                padding: EdgeInsets.all(16.0),
+                child: Column(children: [Text("내용")]),
+              ),
+              const SingleChildScrollView(
+                padding: EdgeInsets.all(16.0),
+                child: Column(children: [Text("내용")]),
+              ),
+            ],
+          ),
         ),
       ),
     );
