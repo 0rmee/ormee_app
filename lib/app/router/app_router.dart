@@ -98,6 +98,19 @@ class HomeScreen extends StatelessWidget {
               onPressed: () => context.go('/detail/123'),
               child: const Text('Go to Detail (ID: 123)'),
             ),
+            OrmeeButton(
+              text: 'text',
+              isTrue: false,
+              assetName: 'assets/icons/trash.svg',
+              dday: 'D-1',
+            ),
+            OrmeeButton(
+              text: 'text',
+              isTrue: true,
+              trueAction: () {},
+              assetName: 'assets/icons/trash.svg',
+              dday: 'D-1',
+            ),
           ],
         ),
       ),
@@ -121,7 +134,36 @@ class ProfileScreen extends StatelessWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               // 탭바 위에 올릴 내용들
-              SliverToBoxAdapter(child: Container()),
+              SliverToBoxAdapter(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: OrmeeButton(
+                        text: 'text',
+                        isTrue: true,
+                        trueAction: () {},
+                        assetName: 'assets/icons/trash.svg',
+                      ),
+                    ),
+                    Expanded(
+                      child: OrmeeButton(
+                        text: 'text',
+                        isTrue: true,
+                        trueAction: () {},
+                        assetName: 'assets/icons/trash.svg',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: OrmeeButton(
+                  text: 'text',
+                  isTrue: true,
+                  trueAction: () {},
+                  assetName: 'assets/icons/trash.svg',
+                ),
+              ),
               // 탭바
               SliverAppBar(
                 automaticallyImplyLeading: false,
