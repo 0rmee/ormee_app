@@ -9,7 +9,7 @@ class Profile extends StatelessWidget {
   const Profile({
     super.key,
     this.profileImageUrl,
-    this.defaultImagePath = 'assets/images/default_profile.png',
+    this.defaultImagePath = 'assets/images/profile48.png',
     this.opacity = 1.0,
   });
 
