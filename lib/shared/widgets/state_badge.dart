@@ -16,7 +16,7 @@ class StateBadge extends StatelessWidget {
     Color backgroundColor;
     switch (text) {
       case '진행중':
-        backgroundColor = OrmeeColor.purple[400]!;
+        backgroundColor = OrmeeColor.purple[50]!;
         break;
       case '미제출':
         backgroundColor = OrmeeColor.gray[40]!;
@@ -25,15 +25,19 @@ class StateBadge extends StatelessWidget {
         backgroundColor = OrmeeColor.purple[30]!;
         break;
       default:
-        backgroundColor = OrmeeColor.purple[400]!;
+        backgroundColor = OrmeeColor.purple[50]!;
     }
     return Container(
+      width: 50,
+      height: 20,
       padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Caption2Semibold10(text: text, color: OrmeeColor.white),
+      child: Center(
+        child: Caption2Semibold10(text: text, color: OrmeeColor.white),
+      ),
     );
   }
 }

@@ -34,6 +34,7 @@ class NotificationCard extends StatelessWidget {
           SizedBox(width: 18),
           Expanded(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -47,6 +48,7 @@ class NotificationCard extends StatelessWidget {
                     Caption2Semibold10(text: time, color: OrmeeColor.gray[40]),
                   ],
                 ),
+                SizedBox(height: 6),
                 Label1Semibold14(
                   text: title,
                   color: OrmeeColor.gray[read ? 50 : 75],
