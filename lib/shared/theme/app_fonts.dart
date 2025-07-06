@@ -1159,6 +1159,7 @@ class Caption2Regular10 extends StatelessWidget {
   );
 }
 
+// --- Caption 2 (10px) ---
 class Caption2Semibold10 extends StatelessWidget {
   final String text;
   final Color? color;
