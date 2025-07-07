@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/widgets/teacher_card.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/widgets/appbar.dart';
+import 'package:ormee_app/shared/widgets/assignment_card.dart';
+import 'package:ormee_app/shared/widgets/box.dart';
 import 'package:ormee_app/shared/widgets/notice_card.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
 
@@ -83,9 +85,49 @@ class LectureDetailScreen extends StatelessWidget {
                     ],
                   ),
                   // 퀴즈 탭
-                  const SingleChildScrollView(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(children: [Text("내용")]),
+                  Column(
+                    children: [
+                      SizedBox(height: 12),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 20,
+                        ),
+                        width: double.infinity,
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            OrmeeBox(text: '전체', isCheck: true),
+                            SizedBox(width: 4),
+                            OrmeeBox(text: '미제출', isCheck: false),
+                            SizedBox(width: 4),
+                            OrmeeBox(text: '제출완료', isCheck: false),
+                            Spacer(),
+                            SvgPicture.asset(
+                              'assets/icons/search_20.svg',
+                              color: OrmeeColor.gray[50],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.separated(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          itemBuilder: (BuildContext context, index) {
+                            return AssignmentCard(
+                              assignment: '6/19 퀴즈',
+                              state: 'D-16',
+                              period: '2024.06.06 (수) - 2024.06.06 (수)',
+                              teacher: '강수이',
+                              active: true,
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              Divider(color: OrmeeColor.gray[20]),
+                          itemCount: 5,
+                        ),
+                      ),
+                    ],
                   ),
                   // 숙제 탭
                   const SingleChildScrollView(
