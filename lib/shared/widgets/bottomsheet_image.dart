@@ -47,7 +47,10 @@ class OrmeeBottomSheetImage extends StatelessWidget {
                   children: [
                     SvgPicture.asset('assets/icons/image.svg'),
                     const SizedBox(width: 8),
-                    Title4SemiBold16(text: '사진 첨부', color: OrmeeColor.gray[50]),
+                    Headline2SemiBold16(
+                      text: '사진 첨부',
+                      color: OrmeeColor.gray[50],
+                    ),
                   ],
                 ),
               ),

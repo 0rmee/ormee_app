@@ -24,7 +24,7 @@ class OrmeeDialog extends StatelessWidget {
       backgroundColor: OrmeeColor.white,
       surfaceTintColor: Colors.transparent,
       icon: SvgPicture.asset(icon, color: OrmeeColor.purple[50]),
-      title: Headline2SemiBold20(text: titleText, color: OrmeeColor.gray[90]),
+      title: Heading2SemiBold20(text: titleText, color: OrmeeColor.gray[90]),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
         child: Column(

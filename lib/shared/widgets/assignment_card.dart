@@ -29,7 +29,7 @@ class AssignmentCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Title4SemiBold16(
+              Headline2SemiBold16(
                 text: assignment,
                 color: active ? OrmeeColor.black : OrmeeColor.gray[40],
               ),

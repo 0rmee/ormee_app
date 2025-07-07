@@ -39,7 +39,7 @@ class OrmeeBottomSheet extends StatelessWidget {
               color: activeColor,
             ),
             child: Center(
-              child: Title4SemiBold16(text: text, color: textColor),
+              child: Headline2SemiBold16(text: text, color: textColor),
             ),
           ),
         ),
