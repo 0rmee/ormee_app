@@ -1,14 +1,27 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchBar;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ormee_app/feature/search/search_bloc.dart';
+import 'package:ormee_app/feature/search/search_event.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
+import 'package:ormee_app/shared/widgets/assignment_card.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet.dart';
 import 'package:ormee_app/shared/widgets/box.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
+import 'package:ormee_app/shared/widgets/day_badge';
 import 'package:ormee_app/shared/widgets/dialog.dart';
+import 'package:ormee_app/shared/widgets/downloader.dart';
+import 'package:ormee_app/shared/widgets/fab.dart';
 import 'package:ormee_app/shared/widgets/lecture_card.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
+import 'package:ormee_app/shared/widgets/notice_card.dart';
+import 'package:ormee_app/shared/widgets/notification_card.dart';
+import 'package:ormee_app/shared/widgets/profile.dart';
+import 'package:ormee_app/shared/widgets/state_badge.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
+import 'package:ormee_app/shared/widgets/search_bar.dart';
+import 'package:ormee_app/shared/widgets/textfield.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -67,52 +80,159 @@ class AppRouter {
   );
 }
 
-// 예시 화면들
-class HomeScreen extends StatelessWidget {
+// class HomeScreen extends StatelessWidget {
+//   const HomeScreen({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocProvider(
+//       create: (_) => SearchBloc(),
+//       child: const _HomeScreenView(),
+//     );
+//   }
+// }
+
+// // 예시 화면들
+// class _HomeScreenView extends StatefulWidget  {
+//   const _HomeScreenView({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final TextEditingController _controller = TextEditingController();
+//     final FocusNode _focusNode = FocusNode();
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Ormee Home'),
+//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             const Text('Welcome to Ormee App!'),
+//             const SizedBox(height: 20),
+//             ElevatedButton(
+//               onPressed: () => context.go('/profile'),
+//               child: const Text('Go to Profile'),
+//             ),
+//             const SizedBox(height: 10),
+//             ElevatedButton(
+//               onPressed: () => context.go('/settings'),
+//               child: const Text('Go to Settings'),
+//             ),
+//             const SizedBox(height: 10),
+//             ElevatedButton(
+//               onPressed: () => context.go('/detail/123'),
+//               child: const Text('Go to Detail (ID: 123)'),
+//             ),
+//             DayBadge(text: '월'),
+
+//             SearchBar(
+//               controller: _controller,
+//               focusNode: _focusNode,
+//               onChanged: (text) {
+//                 context.read<SearchBloc>().add(SearchTextChanged(text));
+//               },
+//               onSearch: () {
+//                 context.read<SearchBloc>().add(
+//                   SearchSubmitted(_controller.text),
+//                 );
+//               },
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final _controller = TextEditingController();
+  final _focusNode = FocusNode();
+  bool isTextFieldNotEmpty2 = false; // 일반 bool 변수
+  bool isPwNotEmpty = false;
+
+  final TextEditingController _controller_1 = TextEditingController();
+  bool isTextFieldNotEmpty1 = false; // 일반 bool 변수
+  bool isIdNotEmpty = false;
+  final FocusNode _idFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ormee Home'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Welcome to Ormee App!'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => context.go('/profile'),
-              child: const Text('Go to Profile'),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  OrmeeTextField(
+                    hintText: "이름을 입력하세요.",
+                    controller: _controller_1,
+                    focusNode: _idFocusNode,
+                    textInputAction: TextInputAction.next,
+                    isTextNotEmpty: isTextFieldNotEmpty1,
+                    onTextChanged: (text) {
+                      // BLoC 이벤트 발생 또는 setState 호출
+                      setState(() {
+                        isTextFieldNotEmpty1 = text.isNotEmpty;
+                      });
+                    },
+                    onFieldSubmitted: (term) {
+                      FocusScope.of(context).nextFocus();
+                    },
+                  ),
+                  OrmeeTextField(
+                    hintText: "비번을 입력하세요.",
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    textInputAction: TextInputAction.next,
+                    isTextNotEmpty: isTextFieldNotEmpty2,
+                    isPassword: true,
+                    onTextChanged: (text) {
+                      // BLoC 이벤트 발생 또는 setState 호출
+                      setState(() {
+                        isTextFieldNotEmpty2 = text.isNotEmpty;
+                      });
+                    },
+                    onFieldSubmitted: (term) {
+                      FocusScope.of(context).nextFocus();
+                    },
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => context.go('/settings'),
-              child: const Text('Go to Settings'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => context.go('/detail/123'),
-              child: const Text('Go to Detail (ID: 123)'),
-            ),
-            OrmeeButton(
-              text: 'text',
-              isTrue: false,
-              assetName: 'assets/icons/trash.svg',
-              dday: 'D-1',
-            ),
-            OrmeeButton(
-              text: 'text',
-              isTrue: true,
-              trueAction: () {},
-              assetName: 'assets/icons/trash.svg',
-              dday: 'D-1',
-            ),
-          ],
+          ),
         ),
+        floatingActionButton: Fab(action: () => debugPrint("djfksl")),
       ),
     );
   }
@@ -134,36 +254,7 @@ class ProfileScreen extends StatelessWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               // 탭바 위에 올릴 내용들
-              SliverToBoxAdapter(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: OrmeeButton(
-                        text: 'text',
-                        isTrue: true,
-                        trueAction: () {},
-                        assetName: 'assets/icons/trash.svg',
-                      ),
-                    ),
-                    Expanded(
-                      child: OrmeeButton(
-                        text: 'text',
-                        isTrue: true,
-                        trueAction: () {},
-                        assetName: 'assets/icons/trash.svg',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: OrmeeButton(
-                  text: 'text',
-                  isTrue: true,
-                  trueAction: () {},
-                  assetName: 'assets/icons/trash.svg',
-                ),
-              ),
+              SliverToBoxAdapter(child: Container()),
               // 탭바
               SliverAppBar(
                 automaticallyImplyLeading: false,
