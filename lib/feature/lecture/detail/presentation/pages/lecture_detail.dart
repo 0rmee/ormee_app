@@ -22,6 +22,7 @@ class LectureDetailScreen extends StatelessWidget {
           isImage: false,
           isDetail: false,
           isPosting: false,
+          memoState: false,
         ),
         body: Column(
           children: [
@@ -70,6 +71,7 @@ class LectureDetailScreen extends StatelessWidget {
                         child: ListView.separated(
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           itemBuilder: (BuildContext context, index) {
+                            // TODO: item.length == 0 일 경우 안내메시지
                             return NoticeCard(
                               read: false,
                               date: '2024.06.06 (수)',
@@ -79,9 +81,10 @@ class LectureDetailScreen extends StatelessWidget {
                           },
                           separatorBuilder: (context, index) =>
                               Divider(color: OrmeeColor.gray[20]),
-                          itemCount: 15,
+                          itemCount: 7,
                         ),
                       ),
+                      SizedBox(height: 80),
                     ],
                   ),
                   // 퀴즈 탭
@@ -114,6 +117,7 @@ class LectureDetailScreen extends StatelessWidget {
                         child: ListView.separated(
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           itemBuilder: (BuildContext context, index) {
+                            // TODO: item.length == 0 일 경우 안내메시지
                             return AssignmentCard(
                               assignment: '6/19 퀴즈',
                               state: 'D-16',
@@ -127,6 +131,7 @@ class LectureDetailScreen extends StatelessWidget {
                           itemCount: 5,
                         ),
                       ),
+                      SizedBox(height: 80),
                     ],
                   ),
                   // 숙제 탭
@@ -159,6 +164,7 @@ class LectureDetailScreen extends StatelessWidget {
                         child: ListView.separated(
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           itemBuilder: (BuildContext context, index) {
+                            // TODO: item.length == 0 일 경우 안내메시지
                             return AssignmentCard(
                               assignment: '6/19 숙제',
                               state: 'D-16',
@@ -172,6 +178,7 @@ class LectureDetailScreen extends StatelessWidget {
                           itemCount: 5,
                         ),
                       ),
+                      SizedBox(height: 80),
                     ],
                   ),
                 ],
