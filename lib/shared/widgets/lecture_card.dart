@@ -40,7 +40,7 @@ class OrmeeLectureCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Title4SemiBold16(text: title),
+              Headline2SemiBold16(text: title),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -75,7 +75,7 @@ class OrmeeLectureCard extends StatelessWidget {
             ],
           ),
           if (dDay != null)
-            Body4Medium14(text: dDay!, color: OrmeeColor.gray[60]),
+            Label1Medium14(text: dDay!, color: OrmeeColor.gray[60]),
         ],
       ),
     );

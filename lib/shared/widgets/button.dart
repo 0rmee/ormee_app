@@ -69,7 +69,7 @@ class OrmeeButton extends StatelessWidget {
                   SvgPicture.asset(assetName!, color: textColor),
                   SizedBox(width: 8),
                 ],
-                Title4SemiBold16(text: text, color: textColor),
+                Headline2SemiBold16(text: text, color: textColor),
                 // DDAY
                 if (dday != null) ...[
                   SizedBox(width: 8),

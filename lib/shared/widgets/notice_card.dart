@@ -30,7 +30,7 @@ class NoticeCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Title4SemiBold16(text: notice),
+              Headline2SemiBold16(text: notice),
               SizedBox(height: 12),
               Row(
                 children: [
