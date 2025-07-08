@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
+import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet.dart';
@@ -14,11 +16,16 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/home',
     routes: [
-      // GoRoute(
-      //   path: '/home',
-      //   name: 'home',
-      //   builder: (context, state) => const HomeScreen(),
-      // ),
+      GoRoute(
+        path: '/branch',
+        name: 'branch',
+        builder: (context, state) => const Branch(),
+      ),
+      GoRoute(
+        path: '/signup',
+        name: 'signup',
+        builder: (context, state) => Signup(),
+      ),
       GoRoute(
         path: '/profile',
         name: 'profile',
