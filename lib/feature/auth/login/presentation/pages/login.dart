@@ -86,7 +86,7 @@ class _LoginState extends State<Login> {
                               controller: _idController,
                               focusNode: _idFocusNode,
                               textInputAction: TextInputAction.next,
-                              isTextNotEmpty: state.isIdNotEmpty,
+                              //isTextNotEmpty: state.isIdNotEmpty,
                               onTextChanged: (text) {
                                 context.read<LoginBloc>().add(IdChanged(text));
                               },
@@ -102,7 +102,7 @@ class _LoginState extends State<Login> {
                               controller: _pwController,
                               focusNode: _pwFocusNode,
                               textInputAction: TextInputAction.next,
-                              isTextNotEmpty: state.isPwNotEmpty,
+                              //isTextNotEmpty: state.isPwNotEmpty,
                               isPassword: true,
                               onTextChanged: (text) {
                                 context.read<LoginBloc>().add(PwChanged(text));
