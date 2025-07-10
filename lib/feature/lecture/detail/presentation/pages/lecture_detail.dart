@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:ormee_app/feature/lecture/detail/homework/bloc/homework_bloc.dart';
 import 'package:ormee_app/feature/lecture/detail/homework/bloc/homework_event.dart';
+import 'package:ormee_app/feature/lecture/detail/homework/bloc/homework_state.dart';
 import 'package:ormee_app/feature/lecture/detail/homework/data/homework_remote_datasource.dart';
 import 'package:ormee_app/feature/lecture/detail/homework/data/homework_repository.dart';
 import 'package:ormee_app/feature/lecture/detail/notice/bloc/notice_bloc.dart';
 import 'package:ormee_app/feature/lecture/detail/notice/bloc/notice_event.dart';
+import 'package:ormee_app/feature/lecture/detail/notice/bloc/notice_state.dart';
 import 'package:ormee_app/feature/lecture/detail/notice/data/notice_remote_datasource.dart';
 import 'package:ormee_app/feature/lecture/detail/notice/data/notice_repository.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/widgets/homework_tab.dart';
@@ -16,6 +18,7 @@ import 'package:ormee_app/feature/lecture/detail/presentation/widgets/search_but
 import 'package:ormee_app/feature/lecture/detail/presentation/widgets/teacher_card.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/bloc/quiz_bloc.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/bloc/quiz_event.dart';
+import 'package:ormee_app/feature/lecture/detail/quiz/bloc/quiz_state.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/data/quiz_remote_datasource.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/data/quiz_repository.dart';
 import 'package:ormee_app/shared/widgets/appbar.dart';
@@ -92,12 +95,44 @@ class LectureDetailScreen extends StatelessWidget {
               ),
               Container(
                 color: Colors.white,
-                child: OrmeeTabBar(
-                  tabs: [
-                    OrmeeTab(text: '공지', notificationCount: null),
-                    OrmeeTab(text: '퀴즈', notificationCount: null),
-                    OrmeeTab(text: '숙제', notificationCount: null),
-                  ],
+                child: BlocBuilder<NoticeBloc, NoticeState>(
+                  builder: (context, noticeState) {
+                    return BlocBuilder<QuizBloc, QuizState>(
+                      builder: (context, quizState) {
+                        return BlocBuilder<HomeworkBloc, HomeworkState>(
+                          builder: (context, homeworkState) {
+                            final noticeCount = noticeState is NoticeLoaded
+                                ? noticeState.notices.length
+                                : null;
+                            final quizCount = quizState is QuizLoaded
+                                ? quizState.quizzes.length
+                                : null;
+                            final homeworkCount =
+                                homeworkState is HomeworkLoaded
+                                ? homeworkState.homeworks.length
+                                : null;
+
+                            return OrmeeTabBar(
+                              tabs: [
+                                OrmeeTab(
+                                  text: '공지',
+                                  notificationCount: noticeCount,
+                                ),
+                                OrmeeTab(
+                                  text: '퀴즈',
+                                  notificationCount: quizCount,
+                                ),
+                                OrmeeTab(
+                                  text: '숙제',
+                                  notificationCount: homeworkCount,
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
               Expanded(
