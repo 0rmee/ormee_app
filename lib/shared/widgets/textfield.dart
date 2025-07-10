@@ -47,7 +47,7 @@ class OrmeeTextField extends StatefulWidget {
   final TextEditingController controller;
   final TextInputAction textInputAction;
   final Function(String) onFieldSubmitted;
-  final bool isTextNotEmpty; // 일반 bool 타입
+  //final bool isTextNotEmpty; // 일반 bool 타입
   final bool? isPassword; // 선택적 파라미터
   /*final String? helpertext;
   final bool Function(String)? condition;*/
@@ -60,7 +60,7 @@ class OrmeeTextField extends StatefulWidget {
     required this.controller,
     required this.textInputAction,
     required this.onFieldSubmitted,
-    required this.isTextNotEmpty,
+    //required this.isTextNotEmpty,
     required this.focusNode,
     this.isPassword,
     /*this.condition,
@@ -74,6 +74,15 @@ class OrmeeTextField extends StatefulWidget {
 
 class _OrmeeTextField1State extends State<OrmeeTextField> {
   bool isObscure = true; // 비밀번호 숨김 상태 관리
+  bool get isTextNotEmpty => widget.controller.text.isNotEmpty;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.focusNode.addListener(() {
+      setState(() {}); // 포커스 상태가 바뀔 때마다 다시 빌드
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +128,7 @@ class _OrmeeTextField1State extends State<OrmeeTextField> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(width: 12),
-            if (widget.isTextNotEmpty && widget.focusNode.hasFocus)
+            if (isTextNotEmpty && widget.focusNode.hasFocus)
               GestureDetector(
                 onTap: () {
                   widget.controller.clear();
@@ -136,7 +145,7 @@ class _OrmeeTextField1State extends State<OrmeeTextField> {
                 ),
               ),
             SizedBox(width: 12),
-            if (widget.isPassword == true && widget.isTextNotEmpty)
+            if (widget.isPassword == true && isTextNotEmpty)
               GestureDetector(
                 onTap: () {
                   setState(() {
