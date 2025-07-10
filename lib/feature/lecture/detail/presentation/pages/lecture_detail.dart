@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:ormee_app/feature/lecture/detail/homework/bloc/homework_bloc.dart';
 import 'package:ormee_app/feature/lecture/detail/homework/bloc/homework_event.dart';
@@ -13,14 +12,13 @@ import 'package:ormee_app/feature/lecture/detail/notice/data/notice_repository.d
 import 'package:ormee_app/feature/lecture/detail/presentation/widgets/homework_tab.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/widgets/notice_tab.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/widgets/quiz_tab.dart';
+import 'package:ormee_app/feature/lecture/detail/presentation/widgets/search_button.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/widgets/teacher_card.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/bloc/quiz_bloc.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/bloc/quiz_event.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/data/quiz_remote_datasource.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/data/quiz_repository.dart';
-import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/widgets/appbar.dart';
-import 'package:ormee_app/shared/widgets/box.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
 import 'package:get_it/get_it.dart';
 
@@ -108,23 +106,8 @@ class LectureDetailScreen extends StatelessWidget {
                     // 공지 탭
                     Column(
                       children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 12,
-                            horizontal: 20,
-                          ),
-                          width: double.infinity,
-                          color: Colors.white,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/icons/search_20.svg',
-                                color: OrmeeColor.gray[50],
-                              ),
-                            ],
-                          ),
-                        ),
+                        SizedBox(height: 12),
+                        SearchButton(),
                         Expanded(child: NoticeTab()),
                         SizedBox(height: 80),
                       ],
@@ -133,28 +116,6 @@ class LectureDetailScreen extends StatelessWidget {
                     Column(
                       children: [
                         SizedBox(height: 12),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 20,
-                          ),
-                          width: double.infinity,
-                          color: Colors.white,
-                          child: Row(
-                            children: [
-                              OrmeeBox(text: '전체', isCheck: true),
-                              SizedBox(width: 4),
-                              OrmeeBox(text: '미제출', isCheck: false),
-                              SizedBox(width: 4),
-                              OrmeeBox(text: '제출완료', isCheck: false),
-                              Spacer(),
-                              SvgPicture.asset(
-                                'assets/icons/search_20.svg',
-                                color: OrmeeColor.gray[50],
-                              ),
-                            ],
-                          ),
-                        ),
                         Expanded(child: QuizTab()),
                         SizedBox(height: 80),
                       ],
@@ -163,28 +124,6 @@ class LectureDetailScreen extends StatelessWidget {
                     Column(
                       children: [
                         SizedBox(height: 12),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 20,
-                          ),
-                          width: double.infinity,
-                          color: Colors.white,
-                          child: Row(
-                            children: [
-                              OrmeeBox(text: '전체', isCheck: true),
-                              SizedBox(width: 4),
-                              OrmeeBox(text: '미제출', isCheck: false),
-                              SizedBox(width: 4),
-                              OrmeeBox(text: '제출완료', isCheck: false),
-                              Spacer(),
-                              SvgPicture.asset(
-                                'assets/icons/search_20.svg',
-                                color: OrmeeColor.gray[50],
-                              ),
-                            ],
-                          ),
-                        ),
                         Expanded(child: HomeworkTab()),
                         SizedBox(height: 80),
                       ],
