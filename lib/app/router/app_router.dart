@@ -49,7 +49,7 @@ class AppRouter {
           GoRoute(
             path: '/lecture/detail',
             name: 'lecture detail',
-            builder: (context, state) => LectureDetailScreen(),
+            builder: (context, state) => LectureDetailScreen(lectureId: 1),
           ),
           GoRoute(
             path: '/notification',
