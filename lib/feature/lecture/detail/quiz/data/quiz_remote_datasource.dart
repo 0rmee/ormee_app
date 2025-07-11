@@ -9,7 +9,6 @@ class QuizRemoteDataSource {
   QuizRemoteDataSource(this.client);
 
   Future<List<QuizModel>> fetchQuizzes(int lectureId) async {
-    print('Check1');
     final response = await client.get(
       Uri.parse(
         'https://52.78.13.49.nip.io:8443/students/lectures/$lectureId/quizzes',
@@ -22,7 +21,6 @@ class QuizRemoteDataSource {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body)['data'] as List;
-      print('data: $data');
       return data.map((e) => QuizModel.fromJson(e)).toList();
     } else {
       print('error: ${response.statusCode}');

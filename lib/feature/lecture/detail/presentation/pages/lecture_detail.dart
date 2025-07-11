@@ -6,6 +6,11 @@ import 'package:ormee_app/feature/lecture/detail/homework/bloc/homework_event.da
 import 'package:ormee_app/feature/lecture/detail/homework/bloc/homework_state.dart';
 import 'package:ormee_app/feature/lecture/detail/homework/data/homework_remote_datasource.dart';
 import 'package:ormee_app/feature/lecture/detail/homework/data/homework_repository.dart';
+import 'package:ormee_app/feature/lecture/detail/lecture/bloc/lecture_bloc.dart';
+import 'package:ormee_app/feature/lecture/detail/lecture/bloc/lecture_event.dart';
+import 'package:ormee_app/feature/lecture/detail/lecture/bloc/lecture_state.dart';
+import 'package:ormee_app/feature/lecture/detail/lecture/data/lecture_remote_datasource.dart';
+import 'package:ormee_app/feature/lecture/detail/lecture/data/lecture_repository.dart';
 import 'package:ormee_app/feature/lecture/detail/notice/bloc/notice_bloc.dart';
 import 'package:ormee_app/feature/lecture/detail/notice/bloc/notice_event.dart';
 import 'package:ormee_app/feature/lecture/detail/notice/bloc/notice_state.dart';
@@ -21,6 +26,7 @@ import 'package:ormee_app/feature/lecture/detail/quiz/bloc/quiz_event.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/bloc/quiz_state.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/data/quiz_remote_datasource.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/data/quiz_repository.dart';
+import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/widgets/appbar.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
 import 'package:get_it/get_it.dart';
@@ -28,30 +34,60 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 void setupDependencies() {
-  // RemoteDataSource 등록
+  // lecture/detail/notice
   getIt.registerLazySingleton<NoticeRemoteDataSource>(
     () => NoticeRemoteDataSource(http.Client()),
   );
-  getIt.registerLazySingleton<QuizRemoteDataSource>(
-    () => QuizRemoteDataSource(http.Client()),
-  );
-  getIt.registerLazySingleton<HomeworkRemoteDataSource>(
-    () => HomeworkRemoteDataSource(http.Client()),
-  );
-
-  // Repository 등록
   getIt.registerLazySingleton<NoticeRepository>(
     () => NoticeRepository(getIt()),
   );
+  getIt.registerFactory<NoticeBloc>(() => NoticeBloc(getIt()));
+
+  // lecture/detail/quiz
+  getIt.registerLazySingleton<QuizRemoteDataSource>(
+    () => QuizRemoteDataSource(http.Client()),
+  );
   getIt.registerLazySingleton<QuizRepository>(() => QuizRepository(getIt()));
+  getIt.registerFactory<QuizBloc>(() => QuizBloc(getIt()));
+
+  // lecture/detail/homework
+  getIt.registerLazySingleton<HomeworkRemoteDataSource>(
+    () => HomeworkRemoteDataSource(http.Client()),
+  );
   getIt.registerLazySingleton<HomeworkRepository>(
     () => HomeworkRepository(getIt()),
   );
-
-  // Bloc 등록
-  getIt.registerFactory<NoticeBloc>(() => NoticeBloc(getIt()));
-  getIt.registerFactory<QuizBloc>(() => QuizBloc(getIt()));
   getIt.registerFactory<HomeworkBloc>(() => HomeworkBloc(getIt()));
+
+  // lecture/detail/lecture
+  getIt.registerLazySingleton<LectureRemoteDataSource>(
+    () => LectureRemoteDataSource(http.Client()),
+  );
+  getIt.registerLazySingleton<LectureRepository>(
+    () => LectureRepository(getIt()),
+  );
+  getIt.registerFactory<LectureBloc>(() => LectureBloc(getIt()));
+}
+
+String _dayToKorean(String day) {
+  switch (day) {
+    case 'MON':
+      return '월';
+    case 'TUE':
+      return '화';
+    case 'WED':
+      return '수';
+    case 'THU':
+      return '목';
+    case 'FRI':
+      return '금';
+    case 'SAT':
+      return '토';
+    case 'SUN':
+      return '일';
+    default:
+      return '';
+  }
 }
 
 class LectureDetailScreen extends StatelessWidget {
@@ -71,6 +107,10 @@ class LectureDetailScreen extends StatelessWidget {
         BlocProvider(
           create: (_) => getIt<HomeworkBloc>()..add(FetchHomeworks(lectureId)),
         ),
+        BlocProvider(
+          create: (_) =>
+              getIt<LectureBloc>()..add(FetchLectureDetail(lectureId)),
+        ),
       ],
       child: DefaultTabController(
         length: 3,
@@ -85,14 +125,47 @@ class LectureDetailScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
-              OrmeeTeacherCard(
-                teacherNames: ['강수이'],
-                startTime: '15:30',
-                endTime: '16:30',
-                startPeriod: '2025.06.01',
-                endPeriod: '2025.07.30',
-                day: ['월', '수'],
+              // OrmeeTeacherCard(
+              //   teacherNames: ['강수이'],
+              //   startTime: '15:30',
+              //   endTime: '16:30',
+              //   startPeriod: '2025.06.01',
+              //   endPeriod: '2025.07.30',
+              //   day: ['월', '수'],
+              // ),
+              BlocBuilder<LectureBloc, LectureState>(
+                builder: (context, state) {
+                  if (state is LectureLoading) {
+                    return CircularProgressIndicator();
+                  } else if (state is LectureLoaded) {
+                    final data = state.lecture;
+                    return OrmeeTeacherCard(
+                      teacherNames: [
+                        data.name,
+                        ...data.coTeachers.map((e) => e.name),
+                      ],
+                      teacherImages: [
+                        if (data.profileImage != null) data.profileImage!,
+                        ...data.coTeachers
+                            .map((e) => e.image)
+                            .whereType<String>(),
+                      ],
+                      startTime: data.formattedStartTime,
+                      endTime: data.formattedEndTime,
+                      startPeriod: data.startDate ?? 'YYYY.MM.DD',
+                      endPeriod: data.dueDate ?? 'YYYY.MM.DD',
+                      day: data.lectureDays
+                          .map((e) => _dayToKorean(e))
+                          .toList(),
+                    );
+                  } else if (state is LectureError) {
+                    return Text('에러: ${state.message}');
+                  } else {
+                    return SizedBox();
+                  }
+                },
               ),
+              Container(height: 8, color: const Color(0xFFFBFBFB)),
               Container(
                 color: Colors.white,
                 child: BlocBuilder<NoticeBloc, NoticeState>(

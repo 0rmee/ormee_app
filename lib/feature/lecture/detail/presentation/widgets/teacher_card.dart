@@ -33,17 +33,22 @@ class OrmeeTeacherCard extends StatelessWidget {
         children: [
           Wrap(
             children: [
-              // 선생님 이미지 있는 경우
-              if (teacherImages != null)
-                teacherImages!.length == 1
-                    ? Profile(profileImageUrl: teacherImages![0])
+              if (teacherImages != null && teacherImages!.isNotEmpty)
+                teacherNames.length == 1
+                    ? Profile(profileImageUrl: teacherImages![0], size1: 70)
                     : MultiProfile(
                         profileImageUrl: teacherImages![0],
-                        otherProfileImageUrl: teacherImages![1],
-                      ),
-              // 선생님 이미지 없는 경우
-              if (teacherImages == null)
-                teacherNames.length == 1 ? Profile() : MultiProfile(),
+                        otherProfileImageUrl: teacherImages!.length > 1
+                            ? teacherImages![1]
+                            : null,
+                        size1: 70,
+                        size2: 48,
+                        border: 2,
+                      )
+              else
+                teacherNames.length == 1
+                    ? Profile(size1: 70)
+                    : MultiProfile(size1: 70, size2: 48, border: 2),
             ],
           ),
           SizedBox(width: 12),
