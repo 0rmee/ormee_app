@@ -21,7 +21,7 @@ class OrmeeNavigationBar extends StatefulWidget {
 class _OrmeeNavigationBarState extends State<OrmeeNavigationBar> {
   final List<String> _routes = [
     '/home',
-    '/lecture',
+    '/lecture/detail',
     '/notification',
     '/mypage',
   ];

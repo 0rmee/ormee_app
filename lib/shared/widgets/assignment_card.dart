@@ -41,7 +41,7 @@ class AssignmentCard extends StatelessWidget {
             children: [
               TeacherBadge(teacherName: teacher),
               SizedBox(width: 10),
-              Caption1Regular11(text: period),
+              Label2Regular12(text: period, color: OrmeeColor.gray[50]),
             ],
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
@@ -14,7 +15,7 @@ import 'package:ormee_app/shared/widgets/tab.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/lecture/detail',
     routes: [
       GoRoute(
         path: '/branch',
@@ -53,9 +54,9 @@ class AppRouter {
             builder: (context, state) => const HomeScreen(),
           ),
           GoRoute(
-            path: '/lecture',
-            name: 'lecture',
-            builder: (context, state) => ProfileScreen(),
+            path: '/lecture/detail',
+            name: 'lecture detail',
+            builder: (context, state) => LectureDetailScreen(lectureId: 1),
           ),
           GoRoute(
             path: '/notification',
