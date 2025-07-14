@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ormee_app/feature/auth/login/bloc/login_bloc.dart';
+import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
+import 'package:ormee_app/feature/auth/token/update.dart';
+import 'package:ormee_app/feature/splash/splash.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet.dart';
@@ -14,8 +19,19 @@ import 'package:ormee_app/shared/widgets/tab.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/splash',
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: '/login',
+        name: 'login',
+        builder: (context, state) {
+          return BlocProvider(create: (_) => LoginBloc(), child: const Login());
+        },
+      ),
       GoRoute(
         path: '/branch',
         name: 'branch',
