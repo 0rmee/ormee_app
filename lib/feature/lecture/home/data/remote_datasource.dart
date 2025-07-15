@@ -23,4 +23,18 @@ class LectureHomeRemoteDataSource {
       throw Exception('강의 목록을 불러오지 못했습니다.');
     }
   }
+
+  Future<void> leaveLecture(int lectureId) async {
+    final response = await client.delete(
+      Uri.parse('https://52.78.13.49.nip.io:8443/students/lectures/$lectureId'),
+      headers: {
+        'Authorization':
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdHVkZW50MyIsImF1dGgiOiJST0xFX1NUVURFTlQiLCJleHAiOjE3ODM2NjY4OTF9.m_Bb8CU6mYTcNP-Y15YPUgcz6VRnTplbwTxEs0fNqS0",
+      }, //TODO: token 수정
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('강의실 퇴장 실패');
+    }
+  }
 }

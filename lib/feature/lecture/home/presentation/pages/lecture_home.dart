@@ -48,6 +48,8 @@ class LectureHome extends StatelessWidget {
                           ],
                           startPeriod: lecture.startDate ?? 'YYYY.MM.DD',
                           endPeriod: lecture.dueDate ?? 'YYYY.MM.DD',
+                          lectureId: lecture.id,
+                          bloc: context.read<LectureHomeBloc>(),
                         );
                       },
                     ),

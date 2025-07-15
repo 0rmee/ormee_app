@@ -16,5 +16,14 @@ class LectureHomeBloc extends Bloc<LectureHomeEvent, LectureHomeState> {
         emit(LectureHomeError(e.toString()));
       }
     });
+
+    on<LeaveLecture>((event, emit) async {
+      try {
+        await repository.leaveLecture(event.lectureId);
+        add(FetchLectures()); // 퇴장 후 강의 목록 갱신
+      } catch (e) {
+        emit(LectureHomeError('강의 퇴장 실패: ${e.toString()}'));
+      }
+    });
   }
 }

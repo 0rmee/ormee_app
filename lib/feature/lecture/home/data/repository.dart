@@ -9,4 +9,8 @@ class LectureHomeRepository {
   Future<List<LectureHome>> getLectures() {
     return remoteDataSource.fetchLectures();
   }
+
+  Future<void> leaveLecture(int lectureId) {
+    return remoteDataSource.leaveLecture(lectureId);
+  }
 }

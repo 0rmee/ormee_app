@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
+import 'package:ormee_app/feature/lecture/home/bloc/lecture_event.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/dialog.dart';
@@ -12,6 +16,8 @@ class LectureCard extends StatelessWidget {
   final String? description; // 설명
   final String startPeriod; // 강의 시작 기간
   final String endPeriod; // 강의 종료 기간
+  final int lectureId;
+  final bloc;
 
   const LectureCard({
     super.key,
@@ -21,6 +27,8 @@ class LectureCard extends StatelessWidget {
     this.description,
     required this.startPeriod,
     required this.endPeriod,
+    required this.lectureId,
+    required this.bloc,
   });
 
   @override
@@ -124,12 +132,12 @@ class LectureCard extends StatelessWidget {
                 if (value == 'delete') {
                   showDialog(
                     context: context,
-                    builder: (BuildContext context) {
+                    builder: (_) {
                       return OrmeeDialog(
                         titleText: '강의실을 퇴장하시겠습니까?',
                         onConfirm: () {
-                          print('강의 나가기');
-                          Navigator.of(context).pop();
+                          bloc.add(LeaveLecture(lectureId));
+                          context.pop();
                         },
                       );
                     },
