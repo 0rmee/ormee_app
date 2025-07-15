@@ -47,9 +47,12 @@ class AppRouter {
       //   },
       // ),
       GoRoute(
-        path: '/lecture/detail',
+        path: '/lecture/detail/:id',
         name: 'lecture detail',
-        builder: (context, state) => LectureDetailScreen(lectureId: 1),
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return LectureDetailScreen(lectureId: id);
+        },
       ),
       ShellRoute(
         builder: (context, state, child) => OrmeeNavigationBar(child: child),

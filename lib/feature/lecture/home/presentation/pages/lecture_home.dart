@@ -34,6 +34,7 @@ class LectureHome extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final lecture = lectures[index];
                         return LectureCard(
+                          id: lecture.id,
                           title: lecture.title,
                           teacherNames: [
                             lecture.name ?? '오르미',
