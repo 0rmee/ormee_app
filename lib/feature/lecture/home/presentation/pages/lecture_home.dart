@@ -9,7 +9,7 @@ class LectureHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: LectureHomeAppBar(count: 100),
-      body: LectureHomeEmpty(),
+      body: LectureHomeEmpty(context),
     );
   }
 }

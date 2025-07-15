@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
+import 'package:ormee_app/shared/utils/camera_utils.dart';
 
 class LectureHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int count;
@@ -25,9 +26,8 @@ class LectureHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       actions: [
         Container(
-          // margin: const EdgeInsets.only(right: 20),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () => pickImageFromCamera(context),
             icon: SvgPicture.asset('assets/icons/scan.svg'),
             color: OrmeeColor.gray[90],
           ),
