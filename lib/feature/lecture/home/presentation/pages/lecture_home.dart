@@ -8,6 +8,7 @@ import 'package:ormee_app/feature/lecture/home/data/remote_datasource.dart';
 import 'package:ormee_app/feature/lecture/home/data/repository.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/appbar.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/lecture_card.dart';
+import 'package:ormee_app/feature/lecture/home/presentation/widgets/lecture_enter_dialog.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/lecture_home_empty.dart';
 
 class LectureHome extends StatelessWidget {
@@ -19,7 +20,38 @@ class LectureHome extends StatelessWidget {
       create: (_) => LectureHomeBloc(
         LectureHomeRepository(LectureHomeRemoteDataSource(http.Client())),
       )..add(FetchLectures()),
-      child: BlocBuilder<LectureHomeBloc, LectureHomeState>(
+      child: BlocConsumer<LectureHomeBloc, LectureHomeState>(
+        listener: (context, state) {
+          if (state is LectureDialogReady) {
+            showDialog(
+              context: context,
+              builder: (_) => BlocProvider.value(
+                value: context.read<LectureHomeBloc>(),
+                child: LectureEnterDialog(
+                  lectureId: state.lecture.id,
+                  lectureTitle: state.lecture.title,
+                  teacherNames: [
+                    state.lecture.name!,
+                    ...state.lecture.coTeachers.map((e) => e.name),
+                  ],
+                  teacherImages: [
+                    if (state.lecture.profileImage != null)
+                      state.lecture.profileImage!,
+                    ...state.lecture.coTeachers
+                        .map((e) => e.image)
+                        .whereType<String>(),
+                  ],
+                ),
+              ),
+            ).then((_) {
+              context.read<LectureHomeBloc>().add(FetchLectures());
+            });
+          } else if (state is LectureHomeError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
         builder: (context, state) {
           if (state is LectureHomeLoading) {
             return const Center(child: CircularProgressIndicator());

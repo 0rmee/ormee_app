@@ -25,5 +25,23 @@ class LectureHomeBloc extends Bloc<LectureHomeEvent, LectureHomeState> {
         emit(LectureHomeError('강의 퇴장 실패: ${e.toString()}'));
       }
     });
+
+    on<EnterLecture>((event, emit) async {
+      try {
+        await repository.enterLecture(event.lectureId);
+        add(FetchLectures()); // 입장 후 목록 갱신
+      } catch (e) {
+        emit(LectureHomeError('강의실 입장 실패: ${e.toString()}'));
+      }
+    });
+
+    on<ShowLectureDialog>((event, emit) async {
+      try {
+        final lecture = await repository.getLectureById(event.lectureId);
+        emit(LectureDialogReady(lecture));
+      } catch (e) {
+        emit(LectureHomeError('강의 정보 조회 실패: ${e.toString()}'));
+      }
+    });
   }
 }

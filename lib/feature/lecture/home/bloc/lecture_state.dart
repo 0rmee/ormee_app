@@ -29,3 +29,12 @@ class LectureHomeError extends LectureHomeState {
   @override
   List<Object?> get props => [message];
 }
+
+class LectureDialogReady extends LectureHomeState {
+  final LectureHome lecture;
+
+  const LectureDialogReady(this.lecture);
+
+  @override
+  List<Object?> get props => [lecture];
+}
