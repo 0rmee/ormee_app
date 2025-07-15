@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
+import 'package:ormee_app/shared/widgets/dialog.dart';
 import 'package:ormee_app/shared/widgets/profile.dart';
 
 class LectureCard extends StatelessWidget {
@@ -110,16 +111,42 @@ class LectureCard extends StatelessWidget {
           Positioned(
             top: 0,
             right: 0,
-            child: GestureDetector(
-              onTap: () {
-                // TODO: 팝업
-              },
-              child: SvgPicture.asset(
-                'assets/icons/more_vert.svg',
-                // width: 24,
-                // height: 24,
-                color: OrmeeColor.gray[60],
+            child: PopupMenuButton<String>(
+              offset: const Offset(0, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
               ),
+              elevation: 3,
+              color: OrmeeColor.white,
+              shadowColor: Color(0xFF464854).withOpacity(0.1),
+              icon: SvgPicture.asset('assets/icons/more_vert.svg'),
+              onSelected: (String value) {
+                if (value == 'delete') {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return OrmeeDialog(
+                        titleText: '강의실을 퇴장하시겠습니까?',
+                        onConfirm: () {
+                          print('강의 나가기');
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    },
+                  );
+                }
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                PopupMenuItem<String>(
+                  value: 'delete',
+                  child: Container(
+                    child: Headline2Regular16(
+                      text: '나가기',
+                      color: OrmeeColor.gray[90],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
