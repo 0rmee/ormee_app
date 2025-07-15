@@ -4,9 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
 import 'package:ormee_app/feature/lecture/home/bloc/lecture_event.dart';
 import 'package:ormee_app/feature/lecture/home/bloc/lecture_state.dart';
-import 'package:ormee_app/feature/lecture/home/data/datasources/remote_datasource.dart';
-import 'package:ormee_app/feature/lecture/home/data/repositories/repository.dart';
+import 'package:ormee_app/feature/lecture/home/data/remote_datasource.dart';
+import 'package:ormee_app/feature/lecture/home/data/repository.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/appbar.dart';
+import 'package:ormee_app/feature/lecture/home/presentation/widgets/lecture_card.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/lecture_home_empty.dart';
 
 class LectureHome extends StatelessWidget {
@@ -16,7 +17,7 @@ class LectureHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => LectureHomeBloc(
-        LectureRepository(LectureRemoteDataSource(http.Client())),
+        LectureHomeRepository(LectureHomeRemoteDataSource(http.Client())),
       )..add(FetchLectures()),
       child: BlocBuilder<LectureHomeBloc, LectureHomeState>(
         builder: (context, state) {
@@ -32,7 +33,22 @@ class LectureHome extends StatelessWidget {
                       itemCount: lectures.length,
                       itemBuilder: (context, index) {
                         final lecture = lectures[index];
-                        return ListTile(title: Text(lecture.title));
+                        return LectureCard(
+                          title: lecture.title,
+                          teacherNames: [
+                            lecture.name ?? '오르미',
+                            ...lecture.coTeachers.map((e) => e.name),
+                          ],
+                          teacherImages: [
+                            if (lecture.profileImage != null)
+                              lecture.profileImage!,
+                            ...lecture.coTeachers
+                                .map((e) => e.image)
+                                .whereType<String>(),
+                          ],
+                          startPeriod: lecture.startDate ?? 'YYYY.MM.DD',
+                          endPeriod: lecture.dueDate ?? 'YYYY.MM.DD',
+                        );
                       },
                     ),
             );

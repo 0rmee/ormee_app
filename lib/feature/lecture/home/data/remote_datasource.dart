@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:ormee_app/feature/lecture/home/data/models/model.dart';
+import 'package:ormee_app/feature/lecture/home/data/model.dart';
 
-class LectureRemoteDataSource {
+class LectureHomeRemoteDataSource {
   final http.Client client;
 
-  LectureRemoteDataSource(this.client);
+  LectureHomeRemoteDataSource(this.client);
 
-  Future<List<Lecture>> fetchLectures() async {
+  Future<List<LectureHome>> fetchLectures() async {
     final response = await client.get(
       Uri.parse('https://52.78.13.49.nip.io:8443/students/lectures'),
       headers: {
@@ -18,7 +18,7 @@ class LectureRemoteDataSource {
 
     if (response.statusCode == 200) {
       final List data = json.decode(response.body)['data'];
-      return data.map((e) => Lecture.fromJson(e)).toList();
+      return data.map((e) => LectureHome.fromJson(e)).toList();
     } else {
       throw Exception('강의 목록을 불러오지 못했습니다.');
     }

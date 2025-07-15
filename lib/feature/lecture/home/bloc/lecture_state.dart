@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:ormee_app/feature/lecture/home/data/models/model.dart';
+import 'package:ormee_app/feature/lecture/home/data/model.dart';
 
 abstract class LectureHomeState extends Equatable {
   const LectureHomeState();
@@ -13,7 +13,7 @@ class LectureHomeInitial extends LectureHomeState {}
 class LectureHomeLoading extends LectureHomeState {}
 
 class LectureHomeLoaded extends LectureHomeState {
-  final List<Lecture> lectures;
+  final List<LectureHome> lectures;
 
   const LectureHomeLoaded(this.lectures);
 
