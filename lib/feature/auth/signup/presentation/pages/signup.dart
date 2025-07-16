@@ -97,6 +97,20 @@ class _SignupContentState extends State<SignupContent> {
         );
       }
     });
+    // 🔥 비밀번호 필드 unfocus 시 비밀번호 확인 필드 재검증
+    _focusNodes[SignUpFieldType.password]!.addListener(() {
+      if (!_focusNodes[SignUpFieldType.password]!.hasFocus) {
+        final passwordConfirmText =
+            _controllers[SignUpFieldType.passwordConfirm]!.text;
+
+        // 비밀번호 확인 필드에 텍스트가 있으면 재검증
+        if (passwordConfirmText.isNotEmpty) {
+          context.read<SignUpBloc>().add(
+            FieldValidated(SignUpFieldType.passwordConfirm),
+          );
+        }
+      }
+    });
   }
 
   // ID 필드 unfocus 처리 로직
