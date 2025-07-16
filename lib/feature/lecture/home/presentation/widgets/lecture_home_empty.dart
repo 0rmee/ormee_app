@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
-import 'package:ormee_app/shared/utils/camera_utils.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
 
 class LectureHomeEmpty extends StatelessWidget {
@@ -25,7 +27,10 @@ class LectureHomeEmpty extends StatelessWidget {
           OrmeeButton(
             text: 'QR코드로 강의실 입장하기',
             isTrue: true,
-            trueAction: () => pickImageFromCamera(context),
+            trueAction: () {
+              final bloc = context.read<LectureHomeBloc>();
+              context.push('/qr-scanner', extra: bloc);
+            },
           ),
         ],
       ),

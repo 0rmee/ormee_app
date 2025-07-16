@@ -58,34 +58,37 @@ class LectureHome extends StatelessWidget {
           } else if (state is LectureHomeLoaded) {
             final lectures = state.lectures;
             return Scaffold(
+              resizeToAvoidBottomInset: true,
               appBar: LectureHomeAppBar(count: lectures.length),
-              body: lectures.isEmpty
-                  ? LectureHomeEmpty()
-                  : ListView.builder(
-                      itemCount: lectures.length,
-                      itemBuilder: (context, index) {
-                        final lecture = lectures[index];
-                        return LectureCard(
-                          id: lecture.id,
-                          title: lecture.title,
-                          teacherNames: [
-                            lecture.name ?? '오르미',
-                            ...lecture.coTeachers.map((e) => e.name),
-                          ],
-                          teacherImages: [
-                            if (lecture.profileImage != null)
-                              lecture.profileImage!,
-                            ...lecture.coTeachers
-                                .map((e) => e.image)
-                                .whereType<String>(),
-                          ],
-                          startPeriod: lecture.startDate ?? 'YYYY.MM.DD',
-                          endPeriod: lecture.dueDate ?? 'YYYY.MM.DD',
-                          lectureId: lecture.id,
-                          bloc: context.read<LectureHomeBloc>(),
-                        );
-                      },
-                    ),
+              body: SafeArea(
+                child: lectures.isEmpty
+                    ? LectureHomeEmpty()
+                    : ListView.builder(
+                        itemCount: lectures.length,
+                        itemBuilder: (context, index) {
+                          final lecture = lectures[index];
+                          return LectureCard(
+                            id: lecture.id,
+                            title: lecture.title,
+                            teacherNames: [
+                              lecture.name ?? '오르미',
+                              ...lecture.coTeachers.map((e) => e.name),
+                            ],
+                            teacherImages: [
+                              if (lecture.profileImage != null)
+                                lecture.profileImage!,
+                              ...lecture.coTeachers
+                                  .map((e) => e.image)
+                                  .whereType<String>(),
+                            ],
+                            startPeriod: lecture.startDate ?? 'YYYY.MM.DD',
+                            endPeriod: lecture.dueDate ?? 'YYYY.MM.DD',
+                            lectureId: lecture.id,
+                            bloc: context.read<LectureHomeBloc>(),
+                          );
+                        },
+                      ),
+              ),
             );
           } else if (state is LectureHomeError) {
             return Center(child: Text('에러: ${state.message}'));

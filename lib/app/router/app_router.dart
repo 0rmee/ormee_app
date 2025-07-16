@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
+import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/pages/lecture_home.dart';
+import 'package:ormee_app/feature/lecture/home/presentation/widgets/qr_scanner.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet.dart';
@@ -52,6 +55,14 @@ class AppRouter {
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return LectureDetailScreen(lectureId: id);
+        },
+      ),
+      GoRoute(
+        path: '/qr-scanner',
+        builder: (context, state) {
+          // extra에서 BLoC 인스턴스 가져오기
+          final bloc = state.extra as LectureHomeBloc?;
+          return QRScannerPage(bloc: bloc);
         },
       ),
       ShellRoute(

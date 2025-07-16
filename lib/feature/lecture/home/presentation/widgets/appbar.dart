@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
+import 'package:ormee_app/feature/lecture/home/presentation/widgets/qr_scanner.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
-import 'package:ormee_app/shared/utils/camera_utils.dart';
 
 class LectureHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int count;
@@ -27,7 +30,10 @@ class LectureHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Container(
           child: IconButton(
-            onPressed: () => pickImageFromCamera(context),
+            onPressed: () {
+              final bloc = context.read<LectureHomeBloc>();
+              context.push('/qr-scanner', extra: bloc);
+            },
             icon: SvgPicture.asset('assets/icons/scan.svg'),
             color: OrmeeColor.gray[90],
           ),
