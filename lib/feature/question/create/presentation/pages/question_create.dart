@@ -13,6 +13,7 @@ import 'package:ormee_app/feature/question/create/data/repository.dart';
 import 'package:ormee_app/feature/question/create/data/remote_datasource.dart';
 import 'package:ormee_app/core/network/attachment_repository.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
+import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/appbar.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet_image.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
@@ -60,49 +61,36 @@ class _QuestionCreateState extends State<QuestionCreate> {
     }
   }
 
-  void _showImageSourceDialog(BuildContext context) {
-    showModalBottomSheet(
+  void _showImagePopupMenu(BuildContext context) async {
+    await showMenu<String>(
       context: context,
-      builder: (BuildContext ctx) {
-        return SafeArea(
-          child: Container(
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: OrmeeColor.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16.0),
-                topRight: Radius.circular(16.0),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: OrmeeButton(
-                    text: '카메라',
-                    isTrue: true,
-                    trueAction: () {
-                      ctx.pop();
-                      _pickImage(context, ImageSource.camera);
-                    },
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: OrmeeButton(
-                    text: '갤러리',
-                    isTrue: true,
-                    trueAction: () {
-                      ctx.pop();
-                      _pickImage(context, ImageSource.gallery);
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+      position: RelativeRect.fromLTRB(
+        20,
+        MediaQuery.of(context).size.height - 200,
+        20,
+        100,
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      elevation: 3,
+      color: OrmeeColor.white,
+      shadowColor: Color(0xFF464854).withOpacity(0.1),
+      items: <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          value: 'camera',
+          child: Headline2Regular16(text: '카메라'),
+        ),
+        PopupMenuItem<String>(
+          value: 'gallery',
+          child: Headline2Regular16(text: '갤러리'),
+        ),
+      ],
+    ).then((String? value) {
+      if (value == 'camera') {
+        _pickImage(context, ImageSource.camera);
+      } else if (value == 'gallery') {
+        _pickImage(context, ImageSource.gallery);
+      }
+    });
   }
 
   void _handleSubmit(BuildContext context) {
@@ -211,7 +199,8 @@ class _QuestionCreateState extends State<QuestionCreate> {
                 bottomSheet: OrmeeBottomSheetImage(
                   isQuestion: true,
                   isSecret: state.isLocked,
-                  onImagePick: () => _showImageSourceDialog(context),
+                  // 그리고 호출 부분을 다음과 같이 변경:
+                  onImagePick: () => _showImagePopupMenu(context),
                   onSecretToggle: () {
                     context.read<QuestionCreateBloc>().add(IsLockedToggled());
                   },
