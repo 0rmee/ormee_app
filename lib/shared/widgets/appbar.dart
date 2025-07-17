@@ -60,7 +60,7 @@ class OrmeeAppBar extends StatelessWidget implements PreferredSizeWidget {
               Container(
                 padding: EdgeInsets.only(right: 24),
                 child: InkWell(
-                  onTap: () => postAction,
+                  onTap: postAction,
                   child: Body2RegularNormal14(
                     text: '완료',
                     color: OrmeeColor.gray[60],

@@ -19,7 +19,7 @@ import 'package:ormee_app/shared/widgets/tab.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/question/create',
+    initialLocation: '/lecture',
     routes: [
       GoRoute(
         path: '/branch',
@@ -59,8 +59,11 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/question/create',
-        builder: (context, state) => QuestionCreate(),
+        path: '/lecture/detail/:id/question/create',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return QuestionCreate(lectureId: id);
+        },
       ),
       GoRoute(
         path: '/qr-scanner',

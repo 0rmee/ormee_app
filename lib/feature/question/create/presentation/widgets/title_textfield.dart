@@ -15,11 +15,10 @@ class TitleTextField extends StatelessWidget {
         return TextFormField(
           maxLength: 20,
           initialValue: state.title,
-          onChanged: (value) {
-            context.read<QuestionCreateBloc>().add(TitleChanged(value));
-          },
+          onChanged: (value) =>
+              context.read<QuestionCreateBloc>().add(TitleChanged(value)),
           style: TextStyle(
-            color: OrmeeColor.gray[80],
+            color: OrmeeColor.gray[90],
             fontFamily: 'Pretendard',
             fontSize: 20,
             fontWeight: FontWeight.w600,

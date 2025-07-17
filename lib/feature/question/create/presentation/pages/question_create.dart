@@ -5,66 +5,65 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ormee_app/feature/question/create/bloc/question_create_bloc.dart';
+import 'package:ormee_app/feature/question/create/bloc/question_create_event.dart';
+import 'package:ormee_app/feature/question/create/bloc/question_create_state.dart';
 import 'package:ormee_app/feature/question/create/presentation/widgets/content_textfield.dart';
 import 'package:ormee_app/feature/question/create/presentation/widgets/title_textfield.dart';
+import 'package:ormee_app/feature/question/create/data/repository.dart';
+import 'package:ormee_app/feature/question/create/data/remote_datasource.dart';
+import 'package:ormee_app/core/network/attachment_repository.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/widgets/appbar.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet_image.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
 import 'package:ormee_app/shared/widgets/temp_image_viewer.dart';
 import 'package:ormee_app/shared/widgets/toast.dart';
+import 'package:http/http.dart' as http;
 
 class QuestionCreate extends StatefulWidget {
-  QuestionCreate({super.key});
+  final int lectureId;
+  QuestionCreate({super.key, required this.lectureId});
 
   @override
   State<QuestionCreate> createState() => _QuestionCreateState();
 }
 
 class _QuestionCreateState extends State<QuestionCreate> {
-  List<XFile> _images = [];
-  bool _isSecret = false;
-
-  // 이미지 선택 함수 추가
-  Future<void> _pickImage(ImageSource source) async {
+  Future<void> _pickImage(BuildContext context, ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile != null) {
-      // 파일 크기 체크 (10MB 제한)
       final file = File(pickedFile.path);
       final fileSize = await file.length();
 
       if (fileSize > 10 * 1024 * 1024) {
-        // 10MB
         OrmeeToast.show(context, '파일 크기가 10MB를 초과합니다.');
         return;
       }
 
-      // 총 용량 체크 (50MB 제한)
+      // 현재 선택된 이미지들의 총 크기 계산
+      final currentImages = context.read<QuestionCreateBloc>().state.images;
       int totalSize = fileSize;
-      for (XFile image in _images) {
+      for (XFile image in currentImages) {
         final existingFile = File(image.path);
         totalSize += await existingFile.length();
       }
 
       if (totalSize > 50 * 1024 * 1024) {
-        // 50MB
         OrmeeToast.show(context, '총 파일 크기가 50MB를 초과합니다.');
         return;
       }
 
-      setState(() {
-        _images.add(pickedFile);
-      });
+      // BLoC에 이미지 추가
+      context.read<QuestionCreateBloc>().add(ImageAdded(pickedFile));
     }
   }
 
-  // 이미지 선택 옵션 다이얼로그
-  void _showImageSourceDialog() {
+  void _showImageSourceDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext ctx) {
         return SafeArea(
           child: Container(
             padding: EdgeInsets.all(20),
@@ -82,8 +81,8 @@ class _QuestionCreateState extends State<QuestionCreate> {
                     text: '카메라',
                     isTrue: true,
                     trueAction: () {
-                      context.pop();
-                      _pickImage(ImageSource.camera);
+                      ctx.pop();
+                      _pickImage(context, ImageSource.camera);
                     },
                   ),
                 ),
@@ -93,8 +92,8 @@ class _QuestionCreateState extends State<QuestionCreate> {
                     text: '갤러리',
                     isTrue: true,
                     trueAction: () {
-                      context.pop();
-                      _pickImage(ImageSource.gallery);
+                      ctx.pop();
+                      _pickImage(context, ImageSource.gallery);
                     },
                   ),
                 ),
@@ -106,73 +105,120 @@ class _QuestionCreateState extends State<QuestionCreate> {
     );
   }
 
+  void _handleSubmit(BuildContext context) {
+    final bloc = context.read<QuestionCreateBloc>();
+    final state = bloc.state;
+
+    // 제목이나 내용이 비어있는지 확인
+    if (state.title.trim().isEmpty || state.content.trim().isEmpty) {
+      OrmeeToast.show(context, '제목과 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    // 이미 제출 중이면 중복 실행 방지
+    if (state.isSubmitting) {
+      print('이미 제출 중입니다.');
+      return;
+    }
+
+    // 이벤트 전송
+    bloc.add(SubmitQuestion(widget.lectureId));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => QuestionCreateBloc(),
-      child: SafeArea(
-        child: Scaffold(
-          appBar: OrmeeAppBar(
-            title: '질문',
-            isLecture: false,
-            isImage: false,
-            isDetail: false,
-            isPosting: true,
-          ),
-          body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-            child: Column(
-              children: [
-                // 제목 글자수 20자 제한
-                TitleTextField(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 12, 0, 16),
-                  child: Divider(height: 1, color: OrmeeColor.gray[20]),
+      create: (_) => QuestionCreateBloc(
+        QuestionRepository(QuestionCreateRemoteDataSource(http.Client())),
+        AttachmentRepository(),
+      ),
+      child: BlocListener<QuestionCreateBloc, QuestionCreateState>(
+        listener: (context, state) {
+          if (state.submitSuccess) {
+            OrmeeToast.show(context, '질문이 등록되었습니다.');
+            context.pop();
+          } else if (state.error != null) {
+            OrmeeToast.show(context, state.error!);
+          }
+        },
+        child: BlocBuilder<QuestionCreateBloc, QuestionCreateState>(
+          builder: (context, state) {
+            return SafeArea(
+              child: Scaffold(
+                appBar: OrmeeAppBar(
+                  title: '질문',
+                  isLecture: false,
+                  isImage: false,
+                  isDetail: false,
+                  isPosting: true,
+                  postAction: () => _handleSubmit(context),
                 ),
-                Column(
-                  children: [
-                    ContentTextField(),
-                    if (_images.isNotEmpty)
+                body: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                  child: Column(
+                    children: [
+                      TitleTextField(),
                       Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: _images.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 1,
-                                childAspectRatio: 1.94 / 1,
-                                mainAxisSpacing: 8,
-                              ),
-                          itemBuilder: (context, index) {
-                            final file = File(_images[index].path);
-                            return TempImageViewer(
-                              imageFile: file,
-                              onRemove: () {
-                                setState(() {
-                                  _images.removeAt(index);
-                                });
-                              },
-                            );
-                          },
-                        ),
+                        padding: const EdgeInsets.fromLTRB(0, 12, 0, 16),
+                        child: Divider(height: 1, color: OrmeeColor.gray[20]),
                       ),
-                  ],
+                      Column(
+                        children: [
+                          ContentTextField(),
+                          if (state.images.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: state.images.length,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 1,
+                                      childAspectRatio: 1.94 / 1,
+                                      mainAxisSpacing: 8,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  final file = File(state.images[index].path);
+                                  return TempImageViewer(
+                                    imageFile: file,
+                                    onRemove: () {
+                                      context.read<QuestionCreateBloc>().add(
+                                        ImageRemoved(index),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                        ],
+                      ),
+                      // 로딩 인디케이터 표시
+                      if (state.isSubmitting)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Column(
+                            children: [
+                              CircularProgressIndicator(),
+                              SizedBox(height: 10),
+                              Text('질문을 등록 중입니다...'),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-          bottomSheet: OrmeeBottomSheetImage(
-            isQuestion: true,
-            isSecret: _isSecret,
-            onImagePick: _showImageSourceDialog, // 콜백 함수 전달
-            onSecretToggle: () {
-              setState(() {
-                _isSecret = !_isSecret;
-              });
-            },
-          ),
+                bottomSheet: OrmeeBottomSheetImage(
+                  isQuestion: true,
+                  isSecret: state.isLocked,
+                  onImagePick: () => _showImageSourceDialog(context),
+                  onSecretToggle: () {
+                    context.read<QuestionCreateBloc>().add(IsLockedToggled());
+                  },
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

@@ -4,7 +4,8 @@ import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 
 class QuestionButton extends StatelessWidget {
-  const QuestionButton({super.key});
+  final int lectureId;
+  const QuestionButton({super.key, required this.lectureId});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,8 @@ class QuestionButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => context.push('/question/create'),
+          onTap: () =>
+              context.push('/lecture/detail/$lectureId/question/create'),
           borderRadius: BorderRadius.circular(12),
           splashColor: Colors.transparent,
           highlightColor: pressedColor,

@@ -6,6 +6,7 @@ import 'package:ormee_app/shared/widgets/day_badge.dart';
 import 'package:ormee_app/shared/widgets/profile.dart';
 
 class OrmeeTeacherCard extends StatelessWidget {
+  final int lectureId;
   final List<String> teacherNames; // 선생님 이름 리스트
   final List<String>? teacherImages; // 선생님 프로필 사진
   final String startTime; // 강의 시작 시간
@@ -16,6 +17,7 @@ class OrmeeTeacherCard extends StatelessWidget {
 
   const OrmeeTeacherCard({
     super.key,
+    required this.lectureId,
     required this.teacherNames,
     this.teacherImages,
     required this.startTime,
@@ -102,7 +104,7 @@ class OrmeeTeacherCard extends StatelessWidget {
             ],
           ),
           Spacer(),
-          QuestionButton(),
+          QuestionButton(lectureId: lectureId),
         ],
       ),
     );
