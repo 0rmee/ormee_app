@@ -44,7 +44,7 @@ class TempImageViewer extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(width: 1, color: OrmeeColor.gray[100]!),
+            border: Border.all(width: 1, color: OrmeeColor.gray[10]!),
             image: DecorationImage(
               fit: BoxFit.cover,
               image: FileImage(imageFile),
@@ -52,15 +52,13 @@ class TempImageViewer extends StatelessWidget {
           ),
         ),
         GestureDetector(
+          onTap: onRemove,
           child: Container(
             width: 20,
             height: 20,
             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            child: SvgPicture.asset('assets/icons/close.svg'),
+            child: SvgPicture.asset('assets/icons/xCircle.svg'),
           ),
-          onTap: () {
-            onRemove;
-          },
         ),
       ],
     );
