@@ -16,7 +16,7 @@ class QuestionButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => context.pop(),
+          onTap: () => context.push('/question/create'),
           borderRadius: BorderRadius.circular(12),
           splashColor: Colors.transparent,
           highlightColor: pressedColor,
