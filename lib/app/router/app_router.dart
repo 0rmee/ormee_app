@@ -26,9 +26,7 @@ class AppRouter {
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) {
-          return BlocProvider(create: (_) => LoginBloc(), child: const Login());
-        },
+        builder: (context, state) => const Branch(),
       ),
       GoRoute(
         path: '/branch',
