@@ -11,6 +11,7 @@ class OrmeeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDetail;
   final bool isPosting;
   final VoidCallback? postAction;
+  final bool? memoState;
 
   const OrmeeAppBar({
     Key? key,
@@ -20,6 +21,7 @@ class OrmeeAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.isDetail,
     required this.isPosting,
     this.postAction,
+    this.memoState,
   }) : super(key: key);
 
   @override
@@ -44,7 +46,11 @@ class OrmeeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: IconButton(
                   onPressed: () {},
                   // TODO: 추후 memo open, close 상태관리 추가
-                  icon: SvgPicture.asset('assets/icons/memo_open.svg'),
+                  icon: SvgPicture.asset(
+                    memoState!
+                        ? 'assets/icons/memo_open.svg'
+                        : 'assets/icons/memo_close.svg',
+                  ),
                   color: OrmeeColor.gray[90],
                 ),
               ),

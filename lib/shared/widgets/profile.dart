@@ -5,12 +5,14 @@ class Profile extends StatelessWidget {
   final String? profileImageUrl;
   final String defaultImagePath;
   final double opacity;
+  final double? size1;
 
   const Profile({
     super.key,
     this.profileImageUrl,
     this.defaultImagePath = 'assets/images/profile48.png',
     this.opacity = 1.0,
+    this.size1,
   });
 
   @override
@@ -18,8 +20,8 @@ class Profile extends StatelessWidget {
     return Opacity(
       opacity: opacity,
       child: Container(
-        width: 48,
-        height: 48,
+        width: size1,
+        height: size1,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           image: DecorationImage(
@@ -38,26 +40,32 @@ class MultiProfile extends StatelessWidget {
   final String? profileImageUrl;
   final String? otherProfileImageUrl;
   final String defaultImagePath;
+  final double? size1;
+  final double? size2;
+  final double? border;
 
   const MultiProfile({
     super.key,
     this.profileImageUrl,
     this.otherProfileImageUrl,
     this.defaultImagePath = 'assets/images/profile48.png',
+    this.size1,
+    this.size2,
+    this.border,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 48,
-      height: 48,
+      width: size1,
+      height: size1,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           // 아래에 깔리는 원형 이미지
           Container(
-            width: 32,
-            height: 32,
+            width: size2,
+            height: size2,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
@@ -74,10 +82,13 @@ class MultiProfile extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: Container(
-              width: 32,
-              height: 32,
+              width: size2,
+              height: size2,
               decoration: BoxDecoration(
-                border: Border.all(width: 1.0, color: OrmeeColor.white),
+                border: Border.all(
+                  width: border ?? 1.0,
+                  color: OrmeeColor.white,
+                ),
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: otherProfileImageUrl != null

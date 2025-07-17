@@ -38,10 +38,12 @@ class _OrmeeNavigationBarState extends State<OrmeeNavigationBar> {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = _getSelectedIndex(context);
-    return Scaffold(
-      body: widget.child,
-      bottomNavigationBar: _buildBottomNavigationBar(selectedIndex),
-      extendBody: true,
+    return SafeArea(
+      child: Scaffold(
+        body: widget.child,
+        bottomNavigationBar: _buildBottomNavigationBar(selectedIndex),
+        extendBody: true,
+      ),
     );
   }
 

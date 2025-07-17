@@ -3,10 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/auth/login/bloc/login_bloc.dart';
 import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
-import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/feature/auth/token/update.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
+import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
+import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
+import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
+import 'package:ormee_app/feature/lecture/home/presentation/pages/lecture_home.dart';
+import 'package:ormee_app/feature/lecture/home/presentation/widgets/qr_scanner.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet.dart';
@@ -37,16 +41,17 @@ class AppRouter {
         name: 'branch',
         builder: (context, state) => const Branch(),
       ),
-      GoRoute(
-        path: '/signup',
-        name: 'signup',
-        builder: (context, state) => Signup(),
-      ),
+      // GoRoute(
+      //   path: '/signup',
+      //   name: 'signup',
+      //   builder: (context, state) => Signup(),
+      // ),
       GoRoute(
         path: '/profile',
         name: 'profile',
         builder: (context, state) => ProfileScreen(),
       ),
+
       // GoRoute(
       //   path: '/settings',
       //   name: 'settings',
@@ -60,6 +65,22 @@ class AppRouter {
       //     return DetailScreen(id: id);
       //   },
       // ),
+      GoRoute(
+        path: '/lecture/detail/:id',
+        name: 'lecture detail',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return LectureDetailScreen(lectureId: id);
+        },
+      ),
+      GoRoute(
+        path: '/qr-scanner',
+        builder: (context, state) {
+          // extra에서 BLoC 인스턴스 가져오기
+          final bloc = state.extra as LectureHomeBloc?;
+          return QRScannerPage(bloc: bloc);
+        },
+      ),
       ShellRoute(
         builder: (context, state, child) => OrmeeNavigationBar(child: child),
         routes: [
@@ -70,8 +91,8 @@ class AppRouter {
           ),
           GoRoute(
             path: '/lecture',
-            name: 'lecture',
-            builder: (context, state) => ProfileScreen(),
+            name: 'lecture home',
+            builder: (context, state) => LectureHome(),
           ),
           GoRoute(
             path: '/notification',

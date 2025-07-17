@@ -6,15 +6,15 @@ import 'package:ormee_app/shared/widgets/button.dart';
 
 class OrmeeDialog extends StatelessWidget {
   final String titleText;
-  final String contentText;
-  final String icon;
+  final String? contentText;
+  final String? icon;
   final VoidCallback onConfirm;
 
   OrmeeDialog({
     required this.titleText,
-    required this.contentText,
+    this.contentText,
     required this.onConfirm,
-    required this.icon,
+    this.icon,
   });
 
   @override
@@ -23,20 +23,29 @@ class OrmeeDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       backgroundColor: OrmeeColor.white,
       surfaceTintColor: Colors.transparent,
-      icon: SvgPicture.asset(icon, color: OrmeeColor.purple[50]),
-      title: Heading2SemiBold20(text: titleText, color: OrmeeColor.gray[90]),
+      icon: icon != null
+          ? SvgPicture.asset(icon!, color: OrmeeColor.purple[50])
+          : null,
+      title: Center(
+        child: Heading2SemiBold20(text: titleText, color: OrmeeColor.gray[90]),
+      ),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Label1Regular14(text: contentText, color: OrmeeColor.gray[90]),
-              ],
-            ),
-            SizedBox(height: 30),
+            if (contentText != null) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Label1Regular14(
+                    text: contentText!,
+                    color: OrmeeColor.gray[90],
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+            ],
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,

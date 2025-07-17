@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/teacher_badge.dart';
 
@@ -24,8 +25,8 @@ class NoticeCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           read
-              ? SvgPicture.asset("assets/icons/ellipse.svg")
-              : SizedBox(width: 5),
+              ? SizedBox(width: 5)
+              : SvgPicture.asset("assets/icons/ellipse.svg"),
           SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +37,7 @@ class NoticeCard extends StatelessWidget {
                 children: [
                   TeacherBadge(teacherName: teacher),
                   SizedBox(width: 8),
-                  Caption1Regular11(text: date),
+                  Label2Regular12(text: date, color: OrmeeColor.gray[40]),
                 ],
               ),
             ],

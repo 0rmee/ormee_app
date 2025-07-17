@@ -994,6 +994,33 @@ class Label2RegularReading12 extends StatelessWidget {
   );
 }
 
+class Label2Semibold12 extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final TextOverflow? overflow;
+
+  const Label2Semibold12({
+    super.key,
+    required this.text,
+    this.color,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
+      fontSize: 12,
+      height: 1.4,
+      letterSpacing: -0.02 * 12,
+      color: color ?? OrmeeColor.black,
+    ),
+    overflow: overflow ?? TextOverflow.clip,
+  );
+}
+
 // --- Caption 1 (11px) ---
 class Caption1Regular11 extends StatelessWidget {
   final String text;
