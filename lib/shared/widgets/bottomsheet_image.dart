@@ -5,7 +5,9 @@ import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 
 class OrmeeBottomSheetImage extends StatelessWidget {
-  const OrmeeBottomSheetImage({super.key});
+  final bool? isQuestion;
+  final bool? isSecret;
+  const OrmeeBottomSheetImage({super.key, this.isQuestion, this.isSecret});
 
   Future<void> _pickImage(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
@@ -38,25 +40,29 @@ class OrmeeBottomSheetImage extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               splashColor: Colors.transparent,
               highlightColor: OrmeeColor.gray[20],
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 12,
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset('assets/icons/image.svg'),
-                    const SizedBox(width: 8),
-                    Headline2SemiBold16(
-                      text: '사진 첨부',
-                      color: OrmeeColor.gray[50],
-                    ),
-                  ],
-                ),
+              child: Row(
+                children: [
+                  SvgPicture.asset('assets/icons/image.svg'),
+                  const SizedBox(width: 8),
+                  Headline2SemiBold16(
+                    text: '사진 첨부',
+                    color: OrmeeColor.gray[50],
+                  ),
+                ],
               ),
             ),
           ),
           const Spacer(),
+          if (isQuestion == true) ...[
+            Headline2SemiBold16(text: '비밀글', color: OrmeeColor.gray[50]),
+            const SizedBox(width: 8),
+            SvgPicture.asset(
+              'assets/icons/box=$isSecret.svg',
+              width: 18,
+              height: 18,
+              fit: BoxFit.scaleDown,
+            ),
+          ],
         ],
       ),
     );
