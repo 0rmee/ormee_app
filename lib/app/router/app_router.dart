@@ -11,6 +11,7 @@ import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
 import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/pages/lecture_home.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/qr_scanner.dart';
+import 'package:ormee_app/feature/question/create/presentation/pages/question_create.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/bottomsheet.dart';
@@ -71,6 +72,13 @@ class AppRouter {
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return LectureDetailScreen(lectureId: id);
+        },
+      ),
+      GoRoute(
+        path: '/lecture/detail/:id/question/create',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return QuestionCreate(lectureId: id);
         },
       ),
       GoRoute(

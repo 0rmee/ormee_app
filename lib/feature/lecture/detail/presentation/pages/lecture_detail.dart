@@ -140,6 +140,7 @@ class LectureDetailScreen extends StatelessWidget {
                   } else if (state is LectureLoaded) {
                     final data = state.lecture;
                     return OrmeeTeacherCard(
+                      lectureId: data.id,
                       teacherNames: [
                         data.name,
                         ...data.coTeachers.map((e) => e.name),
