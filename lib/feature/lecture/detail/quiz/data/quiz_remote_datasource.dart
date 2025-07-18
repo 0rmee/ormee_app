@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:ormee_app/core/constants/api.dart';
+import 'package:ormee_app/feature/auth/token/update.dart';
 import 'package:ormee_app/feature/lecture/detail/quiz/data/quiz_model.dart';
 
 class QuizRemoteDataSource {
@@ -9,14 +11,10 @@ class QuizRemoteDataSource {
   QuizRemoteDataSource(this.client);
 
   Future<List<QuizModel>> fetchQuizzes(int lectureId) async {
+    final accessToken = await AuthStorage.getAccessToken();
     final response = await client.get(
-      Uri.parse(
-        'https://52.78.13.49.nip.io:8443/students/lectures/$lectureId/quizzes',
-      ),
-      headers: {
-        'Authorization':
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZWFjaGVyMTIzIiwiYXV0aCI6IlJPTEVfVEVBQ0hFUiIsImV4cCI6MTc4MzY2Mjg1Mn0.0OAtQJXrPVMuGCednj-aXXGgmezJdzIvxVGzYqwndxs",
-      }, //TODO: token 수정
+      Uri.parse('${API.hostConnect}/students/lectures/$lectureId/quizzes'),
+      headers: {'Authorization': 'Bearer $accessToken'},
     );
 
     if (response.statusCode == 200) {

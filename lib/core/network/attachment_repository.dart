@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:ormee_app/core/constants/api.dart';
 
 class AttachmentRepository {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'https://52.78.13.49.nip.io:8443',
+      baseUrl: '${API.hostConnect}',
       connectTimeout: Duration(seconds: 10),
       receiveTimeout: Duration(seconds: 10),
     ),

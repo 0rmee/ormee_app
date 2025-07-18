@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:ormee_app/core/constants/api.dart';
+import 'package:ormee_app/feature/auth/token/update.dart';
 import 'package:ormee_app/feature/lecture/home/data/model.dart';
 
 class LectureHomeRemoteDataSource {
@@ -8,12 +10,10 @@ class LectureHomeRemoteDataSource {
   LectureHomeRemoteDataSource(this.client);
 
   Future<List<LectureHome>> fetchLectures() async {
+    final accessToken = await AuthStorage.getAccessToken();
     final response = await client.get(
-      Uri.parse('https://52.78.13.49.nip.io:8443/students/lectures'),
-      headers: {
-        'Authorization':
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdHVkZW50MyIsImF1dGgiOiJST0xFX1NUVURFTlQiLCJleHAiOjE3ODM2NjY4OTF9.m_Bb8CU6mYTcNP-Y15YPUgcz6VRnTplbwTxEs0fNqS0",
-      }, //TODO: token 수정
+      Uri.parse('${API.hostConnect}/students/lectures'),
+      headers: {'Authorization': 'Bearer $accessToken'},
     );
 
     if (response.statusCode == 200) {
@@ -25,12 +25,10 @@ class LectureHomeRemoteDataSource {
   }
 
   Future<void> leaveLecture(int lectureId) async {
+    final accessToken = await AuthStorage.getAccessToken();
     final response = await client.delete(
-      Uri.parse('https://52.78.13.49.nip.io:8443/students/lectures/$lectureId'),
-      headers: {
-        'Authorization':
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdHVkZW50MyIsImF1dGgiOiJST0xFX1NUVURFTlQiLCJleHAiOjE3ODM2NjY4OTF9.m_Bb8CU6mYTcNP-Y15YPUgcz6VRnTplbwTxEs0fNqS0",
-      }, //TODO: token 수정
+      Uri.parse('${API.hostConnect}/students/lectures/$lectureId'),
+      headers: {'Authorization': 'Bearer $accessToken'},
     );
 
     if (response.statusCode != 200) {
@@ -39,12 +37,10 @@ class LectureHomeRemoteDataSource {
   }
 
   Future<void> enterLecture(int lectureId) async {
+    final accessToken = await AuthStorage.getAccessToken();
     final response = await client.post(
-      Uri.parse('https://52.78.13.49.nip.io:8443/students/lectures/$lectureId'),
-      headers: {
-        'Authorization':
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdHVkZW50MyIsImF1dGgiOiJST0xFX1NUVURFTlQiLCJleHAiOjE3ODM2NjY4OTF9.m_Bb8CU6mYTcNP-Y15YPUgcz6VRnTplbwTxEs0fNqS0",
-      }, //TODO: token 수정
+      Uri.parse('${API.hostConnect}/students/lectures/$lectureId'),
+      headers: {'Authorization': 'Bearer $accessToken'},
     );
 
     if (response.statusCode != 200) {
@@ -53,12 +49,10 @@ class LectureHomeRemoteDataSource {
   }
 
   Future<LectureHome> fetchLectureById(int lectureId) async {
+    final accessToken = await AuthStorage.getAccessToken();
     final response = await client.get(
-      Uri.parse('https://52.78.13.49.nip.io:8443/students/lectures/$lectureId'),
-      headers: {
-        'Authorization':
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdHVkZW50MyIsImF1dGgiOiJST0xFX1NUVURFTlQiLCJleHAiOjE3ODM2NjY4OTF9.m_Bb8CU6mYTcNP-Y15YPUgcz6VRnTplbwTxEs0fNqS0",
-      }, //TODO: token 수정
+      Uri.parse('${API.hostConnect}/students/lectures/$lectureId'),
+      headers: {'Authorization': 'Bearer $accessToken'},
     );
 
     if (response.statusCode == 200) {
