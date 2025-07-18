@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ormee_app/core/constants/api.dart';
 import 'package:ormee_app/feature/auth/token/update.dart';
 import 'login_event.dart';
 import 'login_state.dart';
@@ -23,7 +24,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(status: LoginStatus.loading));
     try {
       final response = await http.post(
-        Uri.parse('https://52.78.13.49.nip.io:8443/students/signin'),
+        Uri.parse('${API.hostConnect}/students/signin'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': event.username,

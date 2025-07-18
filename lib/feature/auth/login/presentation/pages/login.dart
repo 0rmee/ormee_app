@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/auth/login/bloc/login_bloc.dart';
 import 'package:ormee_app/feature/auth/login/bloc/login_event.dart';
 import 'package:ormee_app/feature/auth/login/bloc/login_state.dart';
@@ -50,6 +51,7 @@ class _LoginState extends State<Login> {
           if (state.status == LoginStatus.success) {
             OrmeeToast.show(context, "로그인 성공");
             //Navigator.pushReplacementNamed(context, '/home'); // 홈 화면으로 이동
+            context.push('/home');
           } else if (state.status == LoginStatus.failure) {
             OrmeeToast.show(context, "로그인 실패");
           }
