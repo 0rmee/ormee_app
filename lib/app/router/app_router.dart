@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/auth/login/bloc/login_bloc.dart';
 import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
+import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
+import 'package:ormee_app/feature/auth/token/update.dart';
+import 'package:ormee_app/feature/homework/create/presentation/pages/homework_create.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
@@ -70,6 +73,14 @@ class AppRouter {
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return QuestionCreate(lectureId: id);
+        },
+      ),
+      GoRoute(
+        path: '/lecture/detail/homework/:id/create',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          final title = state.extra as String;
+          return HomeworkCreate(homeworkId: id, title: title);
         },
       ),
       GoRoute(
