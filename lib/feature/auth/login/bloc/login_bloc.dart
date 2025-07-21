@@ -34,6 +34,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
+        print(json); // 개발할 때 토큰 확인용. 추후 삭제하기
         final accessToken = json['data']['accessToken'];
         final refreshToken = json['data']['refreshToken'];
 

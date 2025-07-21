@@ -143,7 +143,8 @@ class LectureCard extends StatelessWidget {
                       context: context,
                       builder: (_) {
                         return OrmeeDialog(
-                          titleText: '강의실을 퇴장하시겠습니까?',
+                          icon: 'assets/icons/warning.svg',
+                          titleText: '강의실을 퇴장하시겠어요?',
                           onConfirm: () {
                             bloc.add(LeaveLecture(lectureId));
                             context.pop();
