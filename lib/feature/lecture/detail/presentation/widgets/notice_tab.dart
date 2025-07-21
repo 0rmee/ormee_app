@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/lecture/detail/notice/bloc/notice_bloc.dart';
 import 'package:ormee_app/feature/lecture/detail/notice/bloc/notice_state.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
@@ -28,14 +29,19 @@ Widget NoticeTab() {
           itemCount: notices.length,
           itemBuilder: (context, index) {
             final notice = notices[index];
-            return NoticeCard(
-              notice: notice.title,
-              teacher: notice.author,
-              date: DateFormat(
-                'yyyy.MM.dd (E)',
-                'ko_KR',
-              ).format(notice.postDate),
-              read: false,
+            return GestureDetector(
+              onTap: () {
+                context.push('/notice/detail/${notice.id}');
+              },
+              child: NoticeCard(
+                notice: notice.title,
+                teacher: notice.author,
+                date: DateFormat(
+                  'yyyy.MM.dd (E)',
+                  'ko_KR',
+                ).format(notice.postDate),
+                read: false,
+              ),
             );
           },
           separatorBuilder: (context, index) =>

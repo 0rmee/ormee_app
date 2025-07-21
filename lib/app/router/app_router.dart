@@ -5,6 +5,7 @@ import 'package:ormee_app/feature/auth/login/bloc/login_bloc.dart';
 import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
 // import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/feature/auth/token/update.dart';
+import 'package:ormee_app/feature/notice/detail/presentation/page/notice_detail.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
@@ -87,6 +88,14 @@ class AppRouter {
           // extra에서 BLoC 인스턴스 가져오기
           final bloc = state.extra as LectureHomeBloc?;
           return QRScannerPage(bloc: bloc);
+        },
+      ),
+      GoRoute(
+        path: '/notice/detail/:id',
+        name: 'notice detail',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return NoticeDetailScreen(noticeId: id);
         },
       ),
       ShellRoute(
