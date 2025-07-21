@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:http/http.dart' as http;
@@ -21,22 +22,43 @@ class QRScannerPage extends StatefulWidget {
 class _QRScannerPageState extends State<QRScannerPage> {
   MobileScannerController controller = MobileScannerController();
   bool isScanned = false;
+  bool flashOnOff = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent, // 스캐폴드 배경도 투명하게
+      extendBodyBehindAppBar: true, // 바디가 앱바 뒤로 확장되도록
       appBar: AppBar(
-        title: Heading1SemiBold22(text: 'QR 코드 스캔'),
-        centerTitle: true,
-        backgroundColor: OrmeeColor.white,
-        foregroundColor: OrmeeColor.gray[90],
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () => context.pop(),
+          icon: SvgPicture.asset(
+            'assets/icons/chevron_left.svg',
+            color: OrmeeColor.white,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.flash_on),
-            onPressed: () => controller.toggleTorch(),
+            icon: SvgPicture.asset(
+              flashOnOff
+                  ? 'assets/icons/flash_on.svg'
+                  : 'assets/icons/flash_off.svg',
+              color: OrmeeColor.white,
+            ),
+            onPressed: () {
+              setState(() {
+                flashOnOff = !flashOnOff; // 수정: setState로 상태 업데이트
+              });
+              controller.toggleTorch();
+            },
           ),
           IconButton(
-            icon: Icon(Icons.flip_camera_ios),
+            icon: SvgPicture.asset(
+              'assets/icons/flip_camera.svg',
+              color: OrmeeColor.white,
+            ),
             onPressed: () => controller.switchCamera(),
           ),
         ],
@@ -45,16 +67,13 @@ class _QRScannerPageState extends State<QRScannerPage> {
         children: [
           MobileScanner(
             controller: controller,
+            overlayBuilder: _buildScannerOverlay,
             onDetect: (BarcodeCapture barcodeCapture) {
               if (!isScanned) {
                 isScanned = true;
                 final List<Barcode> barcodes = barcodeCapture.barcodes;
-                print('바코드 $barcodes');
-
                 if (barcodes.isNotEmpty) {
                   final String? qrData = barcodes.first.rawValue;
-                  print('큐알 $qrData');
-
                   if (qrData != null) {
                     _handleQRData(qrData);
                   }
@@ -62,34 +81,18 @@ class _QRScannerPageState extends State<QRScannerPage> {
               }
             },
           ),
-          // 스캔 가이드 오버레이
-          Center(
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white, width: 2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-          // 안내 텍스트
-          Positioned(
-            bottom: 100,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Center(
-                child: Heading1Regular22(
-                  text: 'QR 코드를 스캔하세요',
-                  color: OrmeeColor.white,
-                ),
-              ),
-            ),
-          ),
         ],
       ),
+    );
+  }
+
+  // 스캐너 오버레이 빌드 함수
+  Widget _buildScannerOverlay(
+    BuildContext context,
+    BoxConstraints constraints,
+  ) {
+    return QRScannerOverlay(
+      overlayColour: const Color(0x9919191D), // #19191D · 60%
     );
   }
 
@@ -261,4 +264,131 @@ class _QRScannerPageState extends State<QRScannerPage> {
     controller.dispose();
     super.dispose();
   }
+}
+
+// QR 스캐너 오버레이 위젯
+class QRScannerOverlay extends StatelessWidget {
+  const QRScannerOverlay({Key? key, required this.overlayColour})
+    : super(key: key);
+
+  final Color overlayColour;
+
+  @override
+  Widget build(BuildContext context) {
+    // 디바이스 크기에 따른 스캔 영역 크기 조정
+    double scanArea =
+        (MediaQuery.of(context).size.width < 400 ||
+            MediaQuery.of(context).size.height < 400)
+        ? 200.0
+        : 250.0; // 330에서 250으로 조정
+
+    return Stack(
+      children: [
+        // 마스크 효과를 위한 ColorFiltered
+        ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            overlayColour,
+            BlendMode.srcOut,
+          ), // 마법의 핵심
+          child: Stack(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  backgroundBlendMode: BlendMode.dstOut,
+                ), // 배경 + 차이 처리
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: scanArea,
+                  width: scanArea,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // 흰색 모서리 테두리
+        Align(
+          alignment: Alignment.center,
+          child: CustomPaint(
+            foregroundPainter: BorderPainter(),
+            child: SizedBox(width: scanArea + 8, height: scanArea + 8),
+          ),
+        ),
+        // 스캔 안내 텍스트
+        Positioned(
+          bottom: MediaQuery.of(context).size.height * 0.3,
+          left: 0,
+          right: 0,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Center(
+              child: Headline1SemiBold18(
+                text: 'QR 코드를 스캔하세요',
+                color: OrmeeColor.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// 흰색 테두리를 그리는 CustomPainter (라운드 선끝)
+class BorderPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    const width = 4.0;
+    const radius = 20.0;
+    const tRadius = 3 * radius;
+    final rect = Rect.fromLTWH(
+      width,
+      width,
+      size.width - 2 * width,
+      size.height - 2 * width,
+    );
+    final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(radius));
+    const clippingRect0 = Rect.fromLTWH(0, 0, tRadius, tRadius);
+    final clippingRect1 = Rect.fromLTWH(
+      size.width - tRadius,
+      0,
+      tRadius,
+      tRadius,
+    );
+    final clippingRect2 = Rect.fromLTWH(
+      0,
+      size.height - tRadius,
+      tRadius,
+      tRadius,
+    );
+    final clippingRect3 = Rect.fromLTWH(
+      size.width - tRadius,
+      size.height - tRadius,
+      tRadius,
+      tRadius,
+    );
+    final path = Path()
+      ..addRect(clippingRect0)
+      ..addRect(clippingRect1)
+      ..addRect(clippingRect2)
+      ..addRect(clippingRect3);
+    canvas.clipPath(path);
+    canvas.drawRRect(
+      rrect,
+      Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = width
+        ..strokeCap = StrokeCap.round, // 선끝을 라운드하게 설정
+    );
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
