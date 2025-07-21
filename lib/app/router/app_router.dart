@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/auth/login/bloc/login_bloc.dart';
 import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
-// import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
+import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/feature/auth/token/update.dart';
 import 'package:ormee_app/feature/homework/create/presentation/pages/homework_create.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
@@ -13,12 +13,7 @@ import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/pages/lecture_home.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/qr_scanner.dart';
 import 'package:ormee_app/feature/question/create/presentation/pages/question_create.dart';
-import 'package:ormee_app/shared/theme/app_colors.dart';
-import 'package:ormee_app/shared/theme/app_fonts.dart';
-import 'package:ormee_app/shared/widgets/bottomsheet.dart';
-import 'package:ormee_app/shared/widgets/box.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
-import 'package:ormee_app/shared/widgets/dialog.dart';
 import 'package:ormee_app/shared/widgets/lecture_card.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
@@ -34,9 +29,7 @@ class AppRouter {
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) {
-          return BlocProvider(create: (_) => LoginBloc(), child: const Login());
-        },
+        builder: (context, state) => const Branch(),
       ),
       GoRoute(
         path: '/branch',
