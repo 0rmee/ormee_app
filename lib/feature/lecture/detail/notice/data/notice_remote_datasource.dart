@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:ormee_app/core/constants/api.dart';
+import 'package:ormee_app/feature/auth/token/update.dart';
 import 'package:ormee_app/feature/lecture/detail/notice/data/notice_model.dart';
 
 class NoticeRemoteDataSource {
@@ -9,11 +11,10 @@ class NoticeRemoteDataSource {
   NoticeRemoteDataSource(this.client);
 
   Future<List<NoticeModel>> fetchNotices(int lectureId) async {
+    final accessToken = await AuthStorage.getAccessToken();
     final response = await client.get(
-      Uri.parse(
-        'https://52.78.13.49.nip.io:8443/students/lectures/$lectureId/notices',
-      ),
-      headers: {'Content-Type': 'application/json'}, //TODO: token 수정
+      Uri.parse('${API.hostConnect}/students/lectures/$lectureId/notices'),
+      headers: {'Authorization': 'Bearer $accessToken'},
     );
 
     if (response.statusCode == 200) {

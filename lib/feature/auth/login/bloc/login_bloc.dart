@@ -1,11 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ormee_app/core/constants/api.dart';
+import 'package:ormee_app/feature/auth/token/update.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(const LoginState()) {
@@ -23,12 +22,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     emit(state.copyWith(status: LoginStatus.loading));
-
-    const secureStorage = FlutterSecureStorage();
-
     try {
       final response = await http.post(
-        Uri.parse('https://52.78.13.49.nip.io:8443/student/signin'),
+        Uri.parse('${API.hostConnect}/students/signin'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': event.username,
@@ -42,8 +38,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final refreshToken = json['data']['refreshToken'];
 
         // 토큰 저장
-        await secureStorage.write(key: 'accessToken', value: accessToken);
-        await secureStorage.write(key: 'refreshToken', value: refreshToken);
+        await AuthStorage.saveTokens(
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        );
 
         emit(
           state.copyWith(

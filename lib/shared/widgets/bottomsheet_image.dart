@@ -5,26 +5,24 @@ import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 
 class OrmeeBottomSheetImage extends StatelessWidget {
-  const OrmeeBottomSheetImage({super.key});
+  final bool? isQuestion;
+  final bool? isSecret;
+  final VoidCallback? onImagePick; // 콜백 함수 추가
+  final VoidCallback? onSecretToggle;
 
-  Future<void> _pickImage(BuildContext context) async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-    );
-
-    if (pickedFile != null) {
-      debugPrint('이미지 선택됨: ${pickedFile.path}');
-    } else {
-      debugPrint('이미지 선택 취소됨');
-    }
-  }
+  const OrmeeBottomSheetImage({
+    super.key,
+    this.isQuestion,
+    this.isSecret,
+    this.onImagePick,
+    this.onSecretToggle,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 47),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
       decoration: BoxDecoration(
         color: OrmeeColor.white,
         border: Border(top: BorderSide(color: OrmeeColor.gray[10]!, width: 1)),
@@ -34,29 +32,36 @@ class OrmeeBottomSheetImage extends StatelessWidget {
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () => _pickImage(context),
+              onTap: onImagePick, // 콜백 함수 호출
               borderRadius: BorderRadius.circular(12),
               splashColor: Colors.transparent,
               highlightColor: OrmeeColor.gray[20],
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 12,
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset('assets/icons/image.svg'),
-                    const SizedBox(width: 8),
-                    Headline2SemiBold16(
-                      text: '사진 첨부',
-                      color: OrmeeColor.gray[50],
-                    ),
-                  ],
-                ),
+              child: Row(
+                children: [
+                  SvgPicture.asset('assets/icons/image.svg'),
+                  const SizedBox(width: 8),
+                  Headline2SemiBold16(
+                    text: '사진 첨부',
+                    color: OrmeeColor.gray[50],
+                  ),
+                ],
               ),
             ),
           ),
           const Spacer(),
+          if (isQuestion == true) ...[
+            Headline2SemiBold16(text: '비밀글', color: OrmeeColor.gray[50]),
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: onSecretToggle,
+              child: SvgPicture.asset(
+                'assets/icons/box=$isSecret.svg',
+                width: 18,
+                height: 18,
+                fit: BoxFit.scaleDown,
+              ),
+            ),
+          ],
         ],
       ),
     );
