@@ -1,38 +1,59 @@
+import 'package:ormee_app/shared/utils/file_utils.dart';
+
 class NoticeDetailModel {
   final String title;
   final String description;
-  final List<String> fileNames;
-  final List<String> filePaths;
   final DateTime? postDate;
-  final bool isLiked;
-  final int likes;
   final AuthorModel author;
+
+  final List<String> imageUrls;
+  final List<NoticeFile> attachmentFiles;
 
   NoticeDetailModel({
     required this.title,
     required this.description,
-    required this.fileNames,
-    required this.filePaths,
     required this.postDate,
-    required this.isLiked,
-    required this.likes,
     required this.author,
+    required this.imageUrls,
+    required this.attachmentFiles,
   });
 
   factory NoticeDetailModel.fromJson(Map<String, dynamic> json) {
+    final List<dynamic> fileNames = json['data']['fileNames'] ?? [];
+    final List<dynamic> filePaths = json['data']['filePaths'] ?? [];
+
+    List<String> images = [];
+    List<NoticeFile> files = [];
+
+    for (int i = 0; i < filePaths.length; i++) {
+      final url = filePaths[i] as String;
+      final name = fileNames.length > i ? fileNames[i] as String : '파일';
+
+      if (FileUtil.isImageFile(url)) {
+        images.add(url);
+      } else {
+        files.add(NoticeFile(name: name, url: url));
+      }
+    }
+
     return NoticeDetailModel(
       title: json['data']['title'] ?? '',
       description: json['data']['description'] ?? '',
-      fileNames: List<String>.from(json['data']['fileNames'] ?? []),
-      filePaths: List<String>.from(json['data']['filePaths'] ?? []),
       postDate: json['data']['postDate'] != null
           ? DateTime.tryParse(json['data']['postDate'])
           : null,
-      isLiked: json['data']['isLiked'] ?? false,
-      likes: json['data']['likes'] ?? 0,
       author: AuthorModel.fromJson(json['data']['author'] ?? {}),
+      imageUrls: images,
+      attachmentFiles: files,
     );
   }
+}
+
+class NoticeFile {
+  final String name;
+  final String url;
+
+  NoticeFile({required this.name, required this.url});
 }
 
 class AuthorModel {
