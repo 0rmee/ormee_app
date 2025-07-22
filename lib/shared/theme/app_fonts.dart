@@ -915,12 +915,14 @@ class Label1Semibold14 extends StatelessWidget {
   final String text;
   final Color? color;
   final TextOverflow? overflow;
+  final int? maxLines;
 
   const Label1Semibold14({
     super.key,
     required this.text,
     this.color,
     this.overflow,
+    this.maxLines,
   });
 
   @override
@@ -935,6 +937,7 @@ class Label1Semibold14 extends StatelessWidget {
       color: color ?? OrmeeColor.black,
     ),
     overflow: overflow ?? TextOverflow.clip,
+    maxLines: maxLines,
   );
 }
 
@@ -998,12 +1001,14 @@ class Label2Semibold12 extends StatelessWidget {
   final String text;
   final Color? color;
   final TextOverflow? overflow;
+  final int? maxLines;
 
   const Label2Semibold12({
     super.key,
     required this.text,
     this.color,
     this.overflow,
+    this.maxLines,
   });
 
   @override
@@ -1018,6 +1023,7 @@ class Label2Semibold12 extends StatelessWidget {
       color: color ?? OrmeeColor.black,
     ),
     overflow: overflow ?? TextOverflow.clip,
+    maxLines: maxLines,
   );
 }
 
