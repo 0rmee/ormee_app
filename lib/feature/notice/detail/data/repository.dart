@@ -9,4 +9,12 @@ class NoticeDetailRepository {
   Future<NoticeDetailModel> readNotice(int noticeId) {
     return remoteDataSource.fetchNoticeDetail(noticeId);
   }
+
+  Future<void> likeNotice(int noticeId) async {
+    await remoteDataSource.likeNotice(noticeId);
+  }
+
+  Future<void> unlikeNotice(int noticeId) async {
+    await remoteDataSource.unlikeNotice(noticeId);
+  }
 }

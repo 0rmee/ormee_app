@@ -3,7 +3,8 @@ import 'package:ormee_app/shared/utils/file_utils.dart';
 class NoticeDetailModel {
   final String title;
   final String description;
-  final DateTime? postDate;
+  final DateTime postDate;
+  bool isLiked;
   final AuthorModel author;
 
   final List<String> imageUrls;
@@ -13,6 +14,7 @@ class NoticeDetailModel {
     required this.title,
     required this.description,
     required this.postDate,
+    required this.isLiked,
     required this.author,
     required this.imageUrls,
     required this.attachmentFiles,
@@ -39,9 +41,8 @@ class NoticeDetailModel {
     return NoticeDetailModel(
       title: json['data']['title'] ?? '',
       description: json['data']['description'] ?? '',
-      postDate: json['data']['postDate'] != null
-          ? DateTime.tryParse(json['data']['postDate'])
-          : null,
+      postDate: json['data']['postDate'] ?? '',
+      isLiked: json['data']['isLiked'] ?? false,
       author: AuthorModel.fromJson(json['data']['author'] ?? {}),
       imageUrls: images,
       attachmentFiles: files,

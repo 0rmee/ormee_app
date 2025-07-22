@@ -5,3 +5,10 @@ class FetchNoticeDetail extends NoticeDetailEvent {
 
   FetchNoticeDetail(this.noticeId);
 }
+
+class ToggleLike extends NoticeDetailEvent {
+  final int noticeId;
+  final bool isLiked;
+
+  ToggleLike({required this.noticeId, required this.isLiked});
+}

@@ -24,4 +24,18 @@ class NoticeDetailRemoteDataSource {
       throw Exception('공지를 불러오지 못했습니다.');
     }
   }
+
+  Future<void> likeNotice(int noticeId) async {
+    final response = await client.put(Uri.parse('${API.hostConnect}/students/notices/$noticeId/like'));
+    if (response.statusCode != 200) {
+      throw Exception('잠시 후 다시 시도해 주세요.');
+    }
+  }
+
+  Future<void> unlikeNotice(int noticeId) async {
+    final response = await client.put(Uri.parse('${API.hostConnect}/students/notices/$noticeId/unlike'));
+    if (response.statusCode != 200) {
+      throw Exception('잠시 후 다시 시도해 주세요.');
+    }
+  }
 }
