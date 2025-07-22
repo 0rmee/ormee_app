@@ -36,11 +36,11 @@ class AppRouter {
         name: 'branch',
         builder: (context, state) => const Branch(),
       ),
-      // GoRoute(
-      //   path: '/signup',
-      //   name: 'signup',
-      //   builder: (context, state) => Signup(),
-      // ),
+      GoRoute(
+        path: '/signup',
+        name: 'signup',
+        builder: (context, state) => Signup(),
+      ),
       GoRoute(
         path: '/profile',
         name: 'profile',
