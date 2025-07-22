@@ -29,7 +29,7 @@ class AppRouter {
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) => const Branch(),
+        builder: (context, state) => const Login(),
       ),
       GoRoute(
         path: '/branch',
