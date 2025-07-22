@@ -70,7 +70,7 @@ void setupDependencies() {
   getIt.registerFactory<LectureBloc>(() => LectureBloc(getIt()));
 }
 
-String _dayToKorean(String day) {
+String dayToKorean(String day) {
   switch (day) {
     case 'MON':
       return '월';
@@ -184,7 +184,7 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                           startPeriod: data.startDate ?? 'YYYY.MM.DD',
                           endPeriod: data.dueDate ?? 'YYYY.MM.DD',
                           day: data.lectureDays
-                              .map((e) => _dayToKorean(e))
+                              .map((e) => dayToKorean(e))
                               .toList(),
                         );
                       } else if (state is LectureError) {

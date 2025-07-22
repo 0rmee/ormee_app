@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
@@ -38,10 +39,17 @@ class _OrmeeNavigationBarState extends State<OrmeeNavigationBar> {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = _getSelectedIndex(context);
-    return SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark, // 안드로이드용
+        statusBarBrightness: Brightness.light, // iOS용
+      ),
       child: Scaffold(
         body: widget.child,
-        bottomNavigationBar: _buildBottomNavigationBar(selectedIndex),
+        bottomNavigationBar: SafeArea(
+          child: _buildBottomNavigationBar(selectedIndex),
+        ),
         extendBody: true,
       ),
     );

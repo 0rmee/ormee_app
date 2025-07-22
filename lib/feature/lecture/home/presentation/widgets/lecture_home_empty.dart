@@ -8,7 +8,8 @@ import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
 
 class LectureHomeEmpty extends StatelessWidget {
-  const LectureHomeEmpty({super.key});
+  final LectureHomeBloc? bloc;
+  LectureHomeEmpty({super.key, required this.bloc});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,6 @@ class LectureHomeEmpty extends StatelessWidget {
             text: 'QR코드로 강의실 입장하기',
             isTrue: true,
             trueAction: () {
-              final bloc = context.read<LectureHomeBloc>();
               context.push('/qr-scanner', extra: bloc);
             },
           ),

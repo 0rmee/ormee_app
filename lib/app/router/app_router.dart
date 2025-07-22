@@ -5,6 +5,7 @@ import 'package:ormee_app/feature/auth/login/bloc/login_bloc.dart';
 import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/feature/auth/token/update.dart';
+import 'package:ormee_app/feature/home/presentation/pages/home.dart';
 import 'package:ormee_app/feature/homework/create/presentation/pages/homework_create.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
@@ -119,57 +120,6 @@ class AppRouter {
     ],
     errorBuilder: (context, state) => const ErrorScreen(),
   );
-}
-
-// 예시 화면들
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ormee Home'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Welcome to Ormee App!'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => context.go('/profile'),
-              child: const Text('Go to Profile'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => context.go('/settings'),
-              child: const Text('Go to Settings'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => context.go('/detail/123'),
-              child: const Text('Go to Detail (ID: 123)'),
-            ),
-            OrmeeButton(
-              text: 'text',
-              isTrue: false,
-              assetName: 'assets/icons/trash.svg',
-              dday: 'D-1',
-            ),
-            OrmeeButton(
-              text: 'text',
-              isTrue: true,
-              trueAction: () {},
-              assetName: 'assets/icons/trash.svg',
-              dday: 'D-1',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class ProfileScreen extends StatelessWidget {
