@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ormee_app/feature/auth/login/bloc/login_bloc.dart';
 import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
-// import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/feature/auth/token/update.dart';
 import 'package:ormee_app/feature/notice/detail/presentation/page/notice_detail.dart';
+import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
+import 'package:ormee_app/feature/home/presentation/pages/home.dart';
+import 'package:ormee_app/feature/homework/create/presentation/pages/homework_create.dart';
+import 'package:ormee_app/feature/notification/bloc/notification_bloc.dart';
+import 'package:ormee_app/feature/notification/data/repository.dart';
+import 'package:ormee_app/feature/notification/presentation/notification.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
@@ -13,12 +17,7 @@ import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/pages/lecture_home.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/qr_scanner.dart';
 import 'package:ormee_app/feature/question/create/presentation/pages/question_create.dart';
-import 'package:ormee_app/shared/theme/app_colors.dart';
-import 'package:ormee_app/shared/theme/app_fonts.dart';
-import 'package:ormee_app/shared/widgets/bottomsheet.dart';
-import 'package:ormee_app/shared/widgets/box.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
-import 'package:ormee_app/shared/widgets/dialog.dart';
 import 'package:ormee_app/shared/widgets/lecture_card.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
@@ -34,26 +33,23 @@ class AppRouter {
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) {
-          return BlocProvider(create: (_) => LoginBloc(), child: const Login());
-        },
+        builder: (context, state) => const Login(),
       ),
       GoRoute(
         path: '/branch',
         name: 'branch',
         builder: (context, state) => const Branch(),
       ),
-      // GoRoute(
-      //   path: '/signup',
-      //   name: 'signup',
-      //   builder: (context, state) => Signup(),
-      // ),
+      GoRoute(
+        path: '/signup',
+        name: 'signup',
+        builder: (context, state) => Signup(),
+      ),
       GoRoute(
         path: '/profile',
         name: 'profile',
         builder: (context, state) => ProfileScreen(),
       ),
-
       // GoRoute(
       //   path: '/settings',
       //   name: 'settings',
@@ -80,6 +76,14 @@ class AppRouter {
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return QuestionCreate(lectureId: id);
+        },
+      ),
+      GoRoute(
+        path: '/lecture/detail/homework/:id/create',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          final title = state.extra as String;
+          return HomeworkCreate(homeworkId: id, title: title);
         },
       ),
       GoRoute(
@@ -113,8 +117,14 @@ class AppRouter {
           ),
           GoRoute(
             path: '/notification',
-            name: 'notification',
-            builder: (context, state) => const SettingsScreen(),
+            name: "notification",
+            builder: (context, state) {
+              return BlocProvider(
+                create: (_) =>
+                    NotificationBloc(repository: NotificationRepository()),
+                child: const NotificationScreen(),
+              );
+            },
           ),
           GoRoute(
             path: '/mypage',
@@ -126,57 +136,6 @@ class AppRouter {
     ],
     errorBuilder: (context, state) => const ErrorScreen(),
   );
-}
-
-// 예시 화면들
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ormee Home'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Welcome to Ormee App!'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => context.go('/profile'),
-              child: const Text('Go to Profile'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => context.go('/settings'),
-              child: const Text('Go to Settings'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => context.go('/detail/123'),
-              child: const Text('Go to Detail (ID: 123)'),
-            ),
-            OrmeeButton(
-              text: 'text',
-              isTrue: false,
-              assetName: 'assets/icons/trash.svg',
-              dday: 'D-1',
-            ),
-            OrmeeButton(
-              text: 'text',
-              isTrue: true,
-              trueAction: () {},
-              assetName: 'assets/icons/trash.svg',
-              dday: 'D-1',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class ProfileScreen extends StatelessWidget {

@@ -12,7 +12,7 @@ class Profile extends StatelessWidget {
     this.profileImageUrl,
     this.defaultImagePath = 'assets/images/profile48.png',
     this.opacity = 1.0,
-    this.size1,
+    this.size1 = 48.0,
   });
 
   @override
@@ -49,8 +49,8 @@ class MultiProfile extends StatelessWidget {
     this.profileImageUrl,
     this.otherProfileImageUrl,
     this.defaultImagePath = 'assets/images/profile48.png',
-    this.size1,
-    this.size2,
+    this.size1 = 32.0,
+    this.size2 = 32.0,
     this.border,
   });
 

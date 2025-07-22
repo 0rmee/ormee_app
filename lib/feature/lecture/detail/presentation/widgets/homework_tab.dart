@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/assignment_card.dart';
@@ -42,13 +43,19 @@ Widget HomeworkTab() {
             final hw = homeworks[index];
             final remainingDays = hw.dueTime.difference(DateTime.now()).inDays;
 
-            return AssignmentCard(
-              assignment: hw.title,
-              state: 'D-${remainingDays > 0 ? remainingDays : 0}',
-              period:
-                  '${_formatDate(hw.openTime)} - ${_formatDate(hw.dueTime)}',
-              teacher: hw.author,
-              active: !hw.submitted,
+            return InkWell(
+              onTap: () => context.push(
+                '/lecture/detail/homework/${hw.id}/create',
+                extra: hw.title,
+              ),
+              child: AssignmentCard(
+                assignment: hw.title,
+                state: 'D-${remainingDays > 0 ? remainingDays : 0}',
+                period:
+                    '${_formatDate(hw.openTime)} - ${_formatDate(hw.dueTime)}',
+                teacher: hw.author,
+                active: !hw.submitted,
+              ),
             );
           },
           separatorBuilder: (context, index) =>

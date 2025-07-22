@@ -47,12 +47,10 @@ class OrmeeTextField extends StatefulWidget {
   final TextEditingController controller;
   final TextInputAction textInputAction;
   final Function(String) onFieldSubmitted;
-  //final bool isTextNotEmpty; // 일반 bool 타입
-  final bool? isPassword; // 선택적 파라미터
-  /*final String? helpertext;
-  final bool Function(String)? condition;*/
+  final bool? isPassword;
   final FocusNode focusNode;
-  final Function(String)? onTextChanged; // 텍스트 변경 콜백
+  final Function(String)? onTextChanged;
+  final String? errorText;
 
   const OrmeeTextField({
     Key? key,
@@ -60,12 +58,10 @@ class OrmeeTextField extends StatefulWidget {
     required this.controller,
     required this.textInputAction,
     required this.onFieldSubmitted,
-    //required this.isTextNotEmpty,
     required this.focusNode,
     this.isPassword,
-    /*this.condition,
-    this.helpertext,*/
     this.onTextChanged,
+    this.errorText,
   }) : super(key: key);
 
   @override
@@ -101,6 +97,16 @@ class _OrmeeTextField1State extends State<OrmeeTextField> {
         color: OrmeeColor.gray[100], // 또는 원하는 색상
       ),
       decoration: InputDecoration(
+        isDense: true,
+        // 에러 공간 완전히 제거
+        errorStyle: TextStyle(height: 0, fontSize: 0),
+        helperStyle: TextStyle(height: 0, fontSize: 0),
+        // 에러 텍스트를 위한 공간 제거
+        errorMaxLines: 1,
+        // 헬퍼 텍스트 공간 제거
+        helperText: '',
+        // 컨텐츠 패딩 조정 (필요시)
+        isCollapsed: false, // true로 하면 더 컴팩트해짐
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: OrmeeColor.gray[20]!),
@@ -109,6 +115,15 @@ class _OrmeeTextField1State extends State<OrmeeTextField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: OrmeeColor.purple[50]!),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: OrmeeColor.systemError),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: OrmeeColor.systemError),
+        ),
+        errorText: widget.errorText,
         hintText: widget.hintText,
         hintStyle: TextStyle(
           fontFamily: 'Pretendard',
@@ -116,13 +131,6 @@ class _OrmeeTextField1State extends State<OrmeeTextField> {
           fontWeight: FontWeight.w400,
           color: OrmeeColor.gray[50],
         ),
-        /*helperText: widget.helpertext,
-        helperStyle: TextStyle(
-          color: widget.condition?.call(widget.controller.text) == true
-              ? Colors.blue
-              : Colors.red,
-          fontSize: 12,
-        ),*/
         contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         suffixIcon: Row(
           mainAxisSize: MainAxisSize.min,
