@@ -41,7 +41,7 @@ class NoticeDetailModel {
     return NoticeDetailModel(
       title: json['data']['title'] ?? '',
       description: json['data']['description'] ?? '',
-      postDate: json['data']['postDate'] ?? '',
+      postDate: DateTime.parse(json['data']['postDate']),
       isLiked: json['data']['isLiked'] ?? false,
       author: AuthorModel.fromJson(json['data']['author'] ?? {}),
       imageUrls: images,
