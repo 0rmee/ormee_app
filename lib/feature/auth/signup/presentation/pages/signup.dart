@@ -184,7 +184,7 @@ class _SignupContentState extends State<SignupContent> {
         ),
         if (validationResult.message.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 4.0),
+            padding: const EdgeInsets.fromLTRB(8, 4, 0, 0),
             child: Label2Regular12(
               text: validationResult.message,
               color: validationResult.status == ValidationStatus.valid
@@ -298,7 +298,7 @@ class _SignupContentState extends State<SignupContent> {
         ),
         if (validationResult.message.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 4.0),
+            padding: const EdgeInsets.fromLTRB(8, 4, 0, 0),
             child: Label2Regular12(
               text: validationResult.message,
               color: validationResult.status == ValidationStatus.checked
@@ -411,7 +411,7 @@ class _SignupContentState extends State<SignupContent> {
         ),
         if (phone1Validation.message.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 4.0),
+            padding: const EdgeInsets.fromLTRB(8, 4, 0, 0),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Label2Regular12(
@@ -504,7 +504,7 @@ class _SignupContentState extends State<SignupContent> {
         ),
         if (emailValidation.message.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 4.0),
+            padding: const EdgeInsets.fromLTRB(8, 4, 0, 0),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Label2Regular12(
