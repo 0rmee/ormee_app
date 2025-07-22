@@ -24,6 +24,7 @@ class OrmeeButton extends StatelessWidget {
   final String text;
   final bool isTrue;
   final VoidCallback? trueAction;
+  final VoidCallback? falseAction;
   final String? assetName;
   final String? dday;
 
@@ -32,6 +33,7 @@ class OrmeeButton extends StatelessWidget {
     required this.text,
     required this.isTrue,
     this.trueAction,
+    this.falseAction,
     this.assetName,
     this.dday,
   });
@@ -51,7 +53,7 @@ class OrmeeButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: isTrue ? trueAction : () => context.pop(),
+          onTap: isTrue ? trueAction : falseAction,
           borderRadius: BorderRadius.circular(12),
           splashColor: Colors.transparent,
           highlightColor: pressedColor,
