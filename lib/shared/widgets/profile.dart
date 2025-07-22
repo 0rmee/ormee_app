@@ -25,7 +25,7 @@ class Profile extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           image: DecorationImage(
-            image: profileImageUrl != null
+            image: (profileImageUrl != null && profileImageUrl!.isNotEmpty)
                 ? NetworkImage(profileImageUrl!) as ImageProvider
                 : AssetImage(defaultImagePath),
             fit: BoxFit.cover,
