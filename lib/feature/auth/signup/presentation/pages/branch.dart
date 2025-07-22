@@ -30,7 +30,7 @@ class Branch extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   GestureDetector(
-                    onTap: () => context.goNamed('signup'),
+                    onTap: () => context.pushNamed('signup'),
                     child: SignupButton(role: '학생'),
                   ),
                   SizedBox(height: 15),

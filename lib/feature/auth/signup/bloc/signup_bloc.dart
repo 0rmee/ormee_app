@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:ormee_app/feature/auth/signup/data/model/signup_field_type.dart';
 import 'package:ormee_app/feature/auth/signup/data/model/validation_status.dart';
+import 'package:ormee_app/feature/auth/signup/data/repositories/api.dart';
 
 part 'signup_event.dart';
 part 'signup_state.dart';
@@ -388,7 +389,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
             ...state.validationResults,
             SignUpFieldType.id: ValidationResult(
               status: ValidationStatus.invalid,
-              message: '중복 확인 중 오류가 발생했습니다.',
+              message: '중복 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
             ),
           },
         ),
@@ -398,14 +399,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
   // ID 중복 확인 API 호출 함수
   Future<bool> _checkIdDuplication(String id) async {
-    // 실제 API 호출 로직
-    // 예시: await ApiService.checkIdDuplication(id);
-
-    // 임시로 2초 대기 후 랜덤 결과 반환
-    await Future.delayed(Duration(seconds: 2));
-
-    // 임시 로직: 'admin', 'test' 같은 ID는 중복으로 처리
-    final duplicateIds = ['admin', 'test', 'user', 'root'];
-    return duplicateIds.contains(id.toLowerCase());
+    bool avail = await ApiService.checkIdDuplication(id);
+    return !avail;
   }
 }
