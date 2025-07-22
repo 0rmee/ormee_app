@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ormee_app/feature/auth/login/bloc/login_bloc.dart';
 import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
-import 'package:ormee_app/feature/auth/token/update.dart';
 import 'package:ormee_app/feature/home/presentation/pages/home.dart';
 import 'package:ormee_app/feature/homework/create/presentation/pages/homework_create.dart';
+import 'package:ormee_app/feature/notification/bloc/notification_bloc.dart';
+import 'package:ormee_app/feature/notification/data/repository.dart';
+import 'package:ormee_app/feature/notification/presentation/notification.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
@@ -47,7 +48,6 @@ class AppRouter {
         name: 'profile',
         builder: (context, state) => ProfileScreen(),
       ),
-
       // GoRoute(
       //   path: '/settings',
       //   name: 'settings',
@@ -107,8 +107,14 @@ class AppRouter {
           ),
           GoRoute(
             path: '/notification',
-            name: 'notification',
-            builder: (context, state) => const SettingsScreen(),
+            name: "notification",
+            builder: (context, state) {
+              return BlocProvider(
+                create: (_) =>
+                    NotificationBloc(repository: NotificationRepository()),
+                child: const NotificationScreen(),
+              );
+            },
           ),
           GoRoute(
             path: '/mypage',
