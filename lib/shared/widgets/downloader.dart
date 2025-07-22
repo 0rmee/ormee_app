@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
+import 'package:ormee_app/shared/utils/file_downloader.dart';
 
 class Downloader extends StatelessWidget {
-  final String filename;
-  final String ext;
-  const Downloader({super.key, required this.filename, required this.ext});
+  final String fileName;
+  final String url;
+
+  const Downloader({super.key, required this.fileName, required this.url});
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: 167),
+      constraints: BoxConstraints(maxWidth: 160),
       child: Container(
         height: 30,
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
@@ -25,14 +27,17 @@ class Downloader extends StatelessWidget {
           children: [
             Flexible(
               child: Label2Regular12(
-                text: filename,
+                text: fileName,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(width: 4),
-            Label2Regular12(text: ext),
             const SizedBox(width: 5),
-            SvgPicture.asset("assets/icons/download.svg"),
+            GestureDetector(
+              onTap: () {
+                FileDownloader.downloadFile(url, fileName: fileName);
+              },
+              child: SvgPicture.asset("assets/icons/download.svg")
+            ),
           ],
         ),
       ),
