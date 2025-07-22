@@ -1,14 +1,11 @@
+import 'dart:io';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FileDownloader {
   static Future<void> downloadFile(String url, {required String fileName}) async {
-    final directory = await getExternalStorageDirectory();
-    final savePath = directory?.path ?? '';
-
-    if(savePath.isEmpty) {
-      throw Exception('저장 경로를 찾을 수 없습니다.');
-    }
+    final directory = await _getDownloadDirectory();
+    final savePath = directory.path;
 
     await FlutterDownloader.enqueue(
         url: url,
@@ -17,5 +14,13 @@ class FileDownloader {
         showNotification: true,
         openFileFromNotification: true
     );
+  }
+
+  static Future<Directory> _getDownloadDirectory() async {
+    if (Platform.isAndroid) {
+      final dir = await getExternalStorageDirectory();
+      if (dir != null) return dir;
+    }
+    return await getApplicationDocumentsDirectory();
   }
 }
