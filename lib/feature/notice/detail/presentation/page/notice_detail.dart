@@ -7,7 +7,7 @@ import 'package:ormee_app/feature/notice/detail/bloc/notice_detail_event.dart';
 import 'package:ormee_app/feature/notice/detail/bloc/notice_detail_state.dart';
 import 'package:ormee_app/feature/notice/detail/data/remote_datasource.dart';
 import 'package:ormee_app/feature/notice/detail/data/repository.dart';
-import 'package:ormee_app/feature/notice/detail/presentation/widgets/attachments_section.dart';
+import 'package:ormee_app/shared/widgets/attachments_section.dart';
 import 'package:ormee_app/shared/widgets/images_section.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
@@ -26,7 +26,7 @@ class NoticeDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => NoticeDetailBloc(
-        NoticeDetailRepository(NoticeDetailRemoteDataSource())
+        NoticeDetailRepository(NoticeDetailRemoteDataSource()),
       )..add(FetchNoticeDetail(noticeId)),
       child: BlocConsumer<NoticeDetailBloc, NoticeDetailState>(
         listener: (context, state) {

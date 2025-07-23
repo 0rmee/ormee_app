@@ -1,3 +1,4 @@
+import 'package:ormee_app/core/model/file_attachment.dart';
 import 'package:ormee_app/shared/utils/file_utils.dart';
 
 class NoticeDetailModel {
@@ -8,7 +9,7 @@ class NoticeDetailModel {
   final AuthorModel author;
 
   final List<String> imageUrls;
-  final List<NoticeFile> attachmentFiles;
+  final List<AttachmentFile> attachmentFiles;
 
   NoticeDetailModel({
     required this.title,
@@ -25,7 +26,7 @@ class NoticeDetailModel {
     final List<dynamic> filePaths = json['data']['filePaths'] ?? [];
 
     List<String> images = [];
-    List<NoticeFile> files = [];
+    List<AttachmentFile> files = [];
 
     for (int i = 0; i < filePaths.length; i++) {
       final url = filePaths[i] as String;
@@ -34,7 +35,7 @@ class NoticeDetailModel {
       if (FileUtil.isImageFile(url)) {
         images.add(url);
       } else {
-        files.add(NoticeFile(name: name, url: url));
+        files.add(AttachmentFile(name: name, url: url));
       }
     }
 
@@ -50,26 +51,13 @@ class NoticeDetailModel {
   }
 }
 
-class NoticeFile {
-  final String name;
-  final String url;
-
-  NoticeFile({required this.name, required this.url});
-}
-
 class AuthorModel {
   final String name;
   final String image;
 
-  AuthorModel({
-    required this.name,
-    required this.image,
-  });
+  AuthorModel({required this.name, required this.image});
 
   factory AuthorModel.fromJson(Map<String, dynamic> json) {
-    return AuthorModel(
-      name: json['name'] ?? '',
-      image: json['image'] ?? '',
-    );
+    return AuthorModel(name: json['name'] ?? '', image: json['image'] ?? '');
   }
 }

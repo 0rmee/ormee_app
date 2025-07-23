@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ormee_app/feature/notice/detail/data/model.dart';
+import 'package:ormee_app/core/model/file_attachment.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/downloader.dart';
 
 class AttachmentsSection extends StatelessWidget {
-  final List<NoticeFile> attachmentFiles;
+  final List<AttachmentFile> attachmentFiles;
 
   const AttachmentsSection({super.key, required this.attachmentFiles});
 
@@ -16,7 +16,7 @@ class AttachmentsSection extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: OrmeeColor.gray[10],
-        borderRadius: BorderRadius.circular(5)
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,6 +35,5 @@ class AttachmentsSection extends StatelessWidget {
         ],
       ),
     );
-
   }
 }
