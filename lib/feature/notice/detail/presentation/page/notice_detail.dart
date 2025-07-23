@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:ormee_app/feature/notice/detail/bloc/notice_detail_bloc.dart';
 import 'package:ormee_app/feature/notice/detail/bloc/notice_detail_event.dart';
@@ -27,7 +26,7 @@ class NoticeDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => NoticeDetailBloc(
-        NoticeDetailRepository(NoticeDetailRemoteDataSource(http.Client())),
+        NoticeDetailRepository(NoticeDetailRemoteDataSource())
       )..add(FetchNoticeDetail(noticeId)),
       child: BlocConsumer<NoticeDetailBloc, NoticeDetailState>(
         listener: (context, state) {
