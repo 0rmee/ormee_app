@@ -29,4 +29,42 @@ class NotificationRepository {
       rethrow;
     }
   }
+
+  /// 공지 개별 삭제하기
+  Future<bool> deleteNotification(int notificationId) async {
+    try {
+      final res = await _dio.delete('/students/notifications/$notificationId');
+
+      if (res.statusCode == 200 || res.statusCode == 204) {
+        return true;
+      } else {
+        throw Exception('Failed to delete notification: ${res.statusCode}');
+      }
+    } on DioException catch (e) {
+      print('DioException: ${e.message}');
+      rethrow;
+    } catch (e) {
+      print('Unexpected error: $e');
+      rethrow;
+    }
+  }
+
+  /// 공지 개별 읽기
+  Future<bool> readNotification(int notificationId) async {
+    try {
+      final res = await _dio.put('/students/notifications/$notificationId');
+
+      if (res.statusCode == 200 || res.statusCode == 204) {
+        return true;
+      } else {
+        throw Exception('Failed to delete notification: ${res.statusCode}');
+      }
+    } on DioException catch (e) {
+      print('DioException: ${e.message}');
+      rethrow;
+    } catch (e) {
+      print('Unexpected error: $e');
+      rethrow;
+    }
+  }
 }

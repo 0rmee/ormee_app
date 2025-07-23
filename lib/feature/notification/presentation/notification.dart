@@ -9,7 +9,6 @@ import 'package:ormee_app/feature/notification/presentation/widgets/date_badge.d
 import 'package:ormee_app/feature/notification/presentation/widgets/tab.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
-import 'package:ormee_app/shared/widgets/appbar.dart';
 import 'package:ormee_app/shared/widgets/notification_card.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -45,7 +44,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
               tabs: types,
               currentIndex: _currentIndex,
               onTap: (index) {
-                print(types[index]);
                 setState(() {
                   _currentIndex = index;
                 });
@@ -100,10 +98,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               itemBuilder: (context, notifIndex) {
                                 final n = notifications[notifIndex];
                                 return NotificationCard(
+                                  onReadStatusChanged: () {
+                                    //읽음 처리 반영을 위한 API 재호출
+                                    setState(() {
+                                      context.read<NotificationBloc>().add(
+                                        LoadNotifications(
+                                          type: types[_currentIndex],
+                                        ),
+                                      );
+                                    });
+                                  },
+                                  read: n.isRead,
+                                  id: n.id,
+                                  parentId: n.parentId,
+                                  type: n.type,
                                   profile: n.authorImage,
                                   headline: n.header,
                                   title: n.title,
-                                  body: n.content ?? n.body,
+                                  body: n.plainContent ?? n.body,
                                   time: n.formattedTime,
                                 );
                               },

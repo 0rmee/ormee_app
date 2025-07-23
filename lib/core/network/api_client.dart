@@ -49,8 +49,27 @@ class ApiClient {
               }
             } else {
               print('Token reissue failed, calling logout...');
-              _onLogout?.call();
-              return;
+
+              // 서버가 뭐라고 응답했는지 출력
+              print('[Auth] Response status: ${error.response?.statusCode}');
+              print('[Auth] Response data: ${error.response?.data}');
+              print('[Auth] Dio error: ${error.error}');
+              print('[Auth] Request URL: ${error.requestOptions.uri}');
+              print('[Auth] Request headers: ${error.requestOptions.headers}');
+              print('[Auth] Request body: ${error.requestOptions.data}');
+
+              // 로그아웃 처리를 비동기로 실행
+              Future.microtask(() => _onLogout?.call());
+
+              // 인증 실패 에러를 반환
+              return handler.next(
+                DioException(
+                  requestOptions: error.requestOptions,
+                  response: error.response,
+                  type: DioExceptionType.badResponse,
+                  error: 'Authentication failed - token reissue unsuccessful',
+                ),
+              );
             }
           }
 
