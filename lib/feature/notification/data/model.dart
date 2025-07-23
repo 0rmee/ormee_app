@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:html/parser.dart' as html_parser;
 
 class NotificationModel {
   final int id;
@@ -24,6 +25,19 @@ class NotificationModel {
     required this.isRead,
     required this.createdAt,
   });
+
+  /// content의 HTML 태그를 제거한 텍스트
+  String? get plainContent {
+    if (content == null || content!.trim().isEmpty) return null;
+
+    final document = html_parser.parse(content);
+    final text = document.body?.text.trim();
+
+    if (text == null || text.isEmpty) {
+      return null;
+    }
+    return text;
+  }
 
   /// createdAt을 DateTime으로 변환
   DateTime get createdAtDateTime => DateTime.parse(createdAt).toLocal();
