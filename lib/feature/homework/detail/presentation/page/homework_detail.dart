@@ -28,7 +28,7 @@ class HomeworkDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => HomeworkDetailBloc(
-        HomeworkDetailRepository(HomeworkDetailRemoteDataSource(http.Client())),
+        HomeworkDetailRepository(HomeworkDetailRemoteDataSource()),
       )..add(FetchHomeworkDetail(homeworkId)),
       child: BlocConsumer<HomeworkDetailBloc, HomeworkDetailState>(
         listener: (context, state) {
