@@ -164,13 +164,16 @@ BottomSheetInfo getBottomSheetInfo({
   }
 
   if (isSubmitted) {
-    return (
-      text: '결과보기',
-      isCheck: false,
-      onTap: () {
-        context.push('/homework/submission/detail/$homeworkId');
-      },
-    );
+    if (feedbackCompleted) {
+      return (
+        text: '결과보기',
+        isCheck: true,
+        onTap: () {
+          context.push('/homework/submission/detail/$homeworkId', extra: title);
+        },
+      );
+    }
+    return (text: '결과보기', isCheck: false, onTap: null);
   }
 
   return (
