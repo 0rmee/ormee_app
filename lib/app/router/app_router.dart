@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
 import 'package:ormee_app/feature/auth/token/update.dart';
+import 'package:ormee_app/feature/homework/detail/presentation/page/homework_detail.dart';
 import 'package:ormee_app/feature/notice/detail/presentation/page/notice_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/feature/home/presentation/pages/home.dart';
@@ -100,6 +101,14 @@ class AppRouter {
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return NoticeDetailScreen(noticeId: id);
+        },
+      ),
+      GoRoute(
+        path: '/homework/detail/:id',
+        name: 'homework detail',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return HomeworkDetailScreen(homeworkId: id);
         },
       ),
       ShellRoute(

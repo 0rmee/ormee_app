@@ -1,27 +1,31 @@
 import 'package:ormee_app/core/model/file_attachment.dart';
 import 'package:ormee_app/shared/utils/file_utils.dart';
 
-class NoticeDetailModel {
+class HomeworkDetailModel {
   final String title;
   final String description;
-  final DateTime postDate;
-  bool isLiked;
+  final DateTime openTime;
+  final DateTime dueTime;
+  final bool isSubmitted;
+  final bool feedbackCompleted;
   final AuthorModel author;
 
   final List<String> imageUrls;
   final List<AttachmentFile> attachmentFiles;
 
-  NoticeDetailModel({
+  HomeworkDetailModel({
     required this.title,
     required this.description,
-    required this.postDate,
-    required this.isLiked,
+    required this.openTime,
+    required this.dueTime,
+    required this.isSubmitted,
+    required this.feedbackCompleted,
     required this.author,
     required this.imageUrls,
     required this.attachmentFiles,
   });
 
-  factory NoticeDetailModel.fromJson(Map<String, dynamic> json) {
+  factory HomeworkDetailModel.fromJson(Map<String, dynamic> json) {
     final List<dynamic> fileNames = json['data']['fileNames'] ?? [];
     final List<dynamic> filePaths = json['data']['filePaths'] ?? [];
 
@@ -39,12 +43,17 @@ class NoticeDetailModel {
       }
     }
 
-    return NoticeDetailModel(
+    return HomeworkDetailModel(
       title: json['data']['title'] ?? '',
       description: json['data']['description'] ?? '',
-      postDate: DateTime.parse(json['data']['postDate']),
-      isLiked: json['data']['isLiked'] ?? false,
-      author: AuthorModel.fromJson(json['data']['author'] ?? {}),
+      openTime: DateTime.parse(json['data']['openTime']),
+      dueTime: DateTime.parse(json['data']['dueTime']),
+      isSubmitted: json['data']['submitted'] ?? false,
+      feedbackCompleted: json['data']['feedbackCompleted'] ?? false,
+      author: AuthorModel.fromJson(
+        json['data']['author'] ?? '',
+        json['data']['authorImage'],
+      ),
       imageUrls: images,
       attachmentFiles: files,
     );
@@ -57,7 +66,7 @@ class AuthorModel {
 
   AuthorModel({required this.name, required this.image});
 
-  factory AuthorModel.fromJson(Map<String, dynamic> json) {
-    return AuthorModel(name: json['name'] ?? '', image: json['image'] ?? '');
+  factory AuthorModel.fromJson(String name, String image) {
+    return AuthorModel(name: name, image: image);
   }
 }

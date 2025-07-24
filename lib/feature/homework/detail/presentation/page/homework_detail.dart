@@ -2,42 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:ormee_app/feature/notice/detail/bloc/notice_detail_bloc.dart';
-import 'package:ormee_app/feature/notice/detail/bloc/notice_detail_event.dart';
-import 'package:ormee_app/feature/notice/detail/bloc/notice_detail_state.dart';
-import 'package:ormee_app/feature/notice/detail/data/remote_datasource.dart';
-import 'package:ormee_app/feature/notice/detail/data/repository.dart';
+import 'package:ormee_app/feature/homework/detail/bloc/homework_detail_bloc.dart';
+import 'package:ormee_app/feature/homework/detail/bloc/homework_detail_event.dart';
+import 'package:ormee_app/feature/homework/detail/bloc/homework_detail_state.dart';
+import 'package:ormee_app/feature/homework/detail/data/remote_datasource.dart';
+import 'package:ormee_app/feature/homework/detail/data/repository.dart';
 import 'package:ormee_app/shared/widgets/attachments_section.dart';
-import 'package:ormee_app/shared/widgets/images_section.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/appbar.dart';
-import 'package:ormee_app/shared/widgets/bottomsheet_icon.dart';
+import 'package:ormee_app/shared/widgets/bottomsheet.dart';
 import 'package:ormee_app/shared/widgets/html_text.dart';
+import 'package:ormee_app/shared/widgets/images_section.dart';
 import 'package:ormee_app/shared/widgets/profile.dart';
 import 'package:ormee_app/shared/widgets/toast.dart';
 
-class NoticeDetailScreen extends StatelessWidget {
-  final int noticeId;
+import 'package:http/http.dart' as http;
 
-  const NoticeDetailScreen({super.key, required this.noticeId});
+class HomeworkDetailScreen extends StatelessWidget {
+  final int homeworkId;
+
+  const HomeworkDetailScreen({super.key, required this.homeworkId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => NoticeDetailBloc(
-        NoticeDetailRepository(NoticeDetailRemoteDataSource()),
-      )..add(FetchNoticeDetail(noticeId)),
-      child: BlocConsumer<NoticeDetailBloc, NoticeDetailState>(
+      create: (_) => HomeworkDetailBloc(
+        HomeworkDetailRepository(HomeworkDetailRemoteDataSource(http.Client())),
+      )..add(FetchHomeworkDetail(homeworkId)),
+      child: BlocConsumer<HomeworkDetailBloc, HomeworkDetailState>(
         listener: (context, state) {
-          if (state is NoticeDetailError) {
+          if (state is HomeworkDetailError) {
             OrmeeToast.show(context, state.message);
             context.pop();
           }
         },
         builder: (context, state) {
-          if (state is NoticeDetailLoaded) {
-            final notice = state.notice;
+          if (state is HomeworkDetailLoaded) {
+            final homework = state.homework;
             return Scaffold(
               appBar: OrmeeAppBar(
                 isLecture: false,
@@ -52,7 +54,7 @@ class NoticeDetailScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Heading2SemiBold20(
-                        text: notice.title,
+                        text: homework.title,
                         color: OrmeeColor.gray[800],
                       ),
                       Padding(
@@ -63,12 +65,12 @@ class NoticeDetailScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Profile(
-                                  profileImageUrl: notice.author.image,
+                                  profileImageUrl: homework.author.image,
                                   size1: 18,
                                 ),
                                 SizedBox(width: 8),
                                 Label1Semibold14(
-                                  text: notice.author.name,
+                                  text: homework.author.name,
                                   color: OrmeeColor.gray[90],
                                 ),
                               ],
@@ -78,14 +80,14 @@ class NoticeDetailScreen extends StatelessWidget {
                                 Caption1Regular11(
                                   text: DateFormat(
                                     'MM/dd',
-                                  ).format(notice.postDate),
+                                  ).format(homework.openTime),
                                   color: OrmeeColor.gray[50],
                                 ),
                                 SizedBox(width: 4),
                                 Caption1Regular11(
                                   text: DateFormat(
                                     'HH:mm',
-                                  ).format(notice.postDate),
+                                  ).format(homework.openTime),
                                   color: OrmeeColor.gray[50],
                                 ),
                               ],
@@ -93,33 +95,40 @@ class NoticeDetailScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      notice.attachmentFiles.isEmpty
+                      homework.attachmentFiles.isEmpty
                           ? Divider(
                               height: 16,
                               thickness: 1,
                               color: OrmeeColor.gray[20],
                             )
                           : AttachmentsSection(
-                              attachmentFiles: notice.attachmentFiles,
+                              attachmentFiles: homework.attachmentFiles,
                             ),
-                      notice.imageUrls.isEmpty
+                      homework.imageUrls.isEmpty
                           ? SizedBox()
-                          : ImagesSection(imageUrls: notice.imageUrls),
+                          : ImagesSection(imageUrls: homework.imageUrls),
                       SizedBox(height: 16),
-                      HtmlTextWidget(text: notice.description),
+                      HtmlTextWidget(text: homework.description),
                     ],
                   ),
                 ),
               ),
-              bottomSheet: OrmeeIconBottomSheet(
-                text: "공감하기",
-                icon: notice.isLiked
-                    ? 'assets/icons/favorite_fill.svg'
-                    : 'assets/icons/favorite.svg',
-                isLike: true,
-                ontTap: () {
-                  context.read<NoticeDetailBloc>().add(
-                    ToggleLike(noticeId: noticeId, isLiked: notice.isLiked),
+              bottomSheet: Builder(
+                builder: (context) {
+                  final info = getBottomSheetInfo(
+                    context: context,
+                    openTime: homework.openTime,
+                    dueTime: homework.dueTime,
+                    isSubmitted: homework.isSubmitted,
+                    feedbackCompleted: homework.feedbackCompleted,
+                    homeworkId: homeworkId,
+                    title: homework.title,
+                  );
+
+                  return OrmeeBottomSheet(
+                    text: info.text,
+                    isCheck: info.isCheck,
+                    onTap: info.onTap,
                   );
                 },
               ),
@@ -133,4 +142,44 @@ class NoticeDetailScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+typedef BottomSheetInfo = ({String text, bool isCheck, VoidCallback? onTap});
+
+BottomSheetInfo getBottomSheetInfo({
+  required BuildContext context,
+  required DateTime openTime,
+  required DateTime dueTime,
+  required bool isSubmitted,
+  required bool feedbackCompleted,
+  required int homeworkId,
+  required String title,
+}) {
+  final now = DateTime.now();
+
+  if (now.isBefore(openTime)) {
+    return (text: '제출하기', isCheck: false, onTap: null);
+  }
+
+  if (now.isAfter(dueTime) && !isSubmitted) {
+    return (text: '미제출', isCheck: false, onTap: null);
+  }
+
+  if (isSubmitted) {
+    return (
+      text: '결과보기',
+      isCheck: false,
+      onTap: () {
+        context.push('/homework/$homeworkId/submission');
+      },
+    );
+  }
+
+  return (
+    text: '제출하기',
+    isCheck: true,
+    onTap: () {
+      context.push('/lecture/detail/homework/$homeworkId/create', extra: title);
+    },
+  );
 }
