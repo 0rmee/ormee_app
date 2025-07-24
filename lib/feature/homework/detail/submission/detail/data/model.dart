@@ -15,7 +15,7 @@ class HomeworkSubmissionDetailModel {
     return HomeworkSubmissionDetailModel(
       name: json['data']['name'] ?? '',
       content: json['data']['content'] ?? '',
-      filePaths: json['data']['filePaths'] ?? [],
+      filePaths: List<String>.from(json['data']['filePaths'] ?? []),
       createdAt: DateTime.parse(json['data']['createdAt'])
     );
   }
