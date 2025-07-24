@@ -48,13 +48,18 @@ Widget HomeworkTab() {
                 '/lecture/detail/homework/${hw.id}/create',
                 extra: hw.title,
               ),
-              child: AssignmentCard(
-                assignment: hw.title,
-                state: 'D-${remainingDays > 0 ? remainingDays : 0}',
-                period:
-                    '${_formatDate(hw.openTime)} - ${_formatDate(hw.dueTime)}',
-                teacher: hw.author,
-                active: !hw.submitted,
+              child: GestureDetector(
+                onTap: () {
+                  context.push('/homework/detail/${hw.id}');
+                },
+                child: AssignmentCard(
+                  assignment: hw.title,
+                  state: 'D-${remainingDays > 0 ? remainingDays : 0}',
+                  period:
+                      '${_formatDate(hw.openTime)} - ${_formatDate(hw.dueTime)}',
+                  teacher: hw.author,
+                  active: !hw.submitted,
+                ),
               ),
             );
           },
