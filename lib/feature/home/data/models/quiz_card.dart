@@ -1,12 +1,12 @@
 class QuizCard {
   final int id;
-  final String? lectureTitle;
+  final String lectureTitle;
   final String quizTitle;
   final String quizDueTime;
 
   QuizCard({
     required this.id,
-    this.lectureTitle,
+    required this.lectureTitle,
     required this.quizTitle,
     required this.quizDueTime,
   });
@@ -14,7 +14,7 @@ class QuizCard {
   factory QuizCard.fromJson(Map<String, dynamic> json) {
     return QuizCard(
       id: json['id'],
-      lectureTitle: json['title'] ?? '',
+      lectureTitle: json['lectureTitle'],
       quizTitle: json['quizTitle'],
       quizDueTime: json['quizDueTime'],
     );

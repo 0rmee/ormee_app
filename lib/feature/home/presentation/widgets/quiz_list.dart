@@ -43,7 +43,7 @@ class _QuizCardSliderState extends State<QuizCardSlider> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Label2Semibold12(
-                  text: quiz.lectureTitle!,
+                  text: quiz.lectureTitle,
                   color: OrmeeColor.gray[50],
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:ormee_app/feature/home/data/models/lecture_card.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
@@ -70,50 +71,53 @@ class _LectureCardSliderState extends State<LectureCardSlider> {
 
               final isLast = index == widget.lectures.length - 1;
 
-              return Container(
-                margin: EdgeInsets.only(right: isLast ? 0 : 8),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Image.asset('assets/images/home_lecture.png'),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Label1Semibold14(text: lecture.title),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Wrap(
-                              spacing: 2,
-                              children: lecture.days
-                                  .map((e) => DayBadge(text: dayToKorean(e)))
-                                  .toList(),
-                            ),
+              return GestureDetector(
+                onTap: () => context.push('/lecture/detail/${lecture.id}'),
+                child: Container(
+                  margin: EdgeInsets.only(right: isLast ? 0 : 8),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Image.asset('assets/images/home_lecture.png'),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Label1Semibold14(text: lecture.title),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Wrap(
+                                spacing: 2,
+                                children: lecture.days
+                                    .map((e) => DayBadge(text: dayToKorean(e)))
+                                    .toList(),
+                              ),
 
-                            const SizedBox(width: 6),
-                            Label2Regular12(
-                              text: '$startTime - $endTime',
-                              color: OrmeeColor.gray[60],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Label2Regular12(
-                          text: '$startPeriod - $endPeriod',
-                          color: OrmeeColor.gray[50],
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    SvgPicture.asset('assets/icons/arrow_right.svg'),
-                  ],
+                              const SizedBox(width: 6),
+                              Label2Regular12(
+                                text: '$startTime - $endTime',
+                                color: OrmeeColor.gray[60],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Label2Regular12(
+                            text: '$startPeriod - $endPeriod',
+                            color: OrmeeColor.gray[50],
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      SvgPicture.asset('assets/icons/arrow_right.svg'),
+                    ],
+                  ),
                 ),
               );
             },

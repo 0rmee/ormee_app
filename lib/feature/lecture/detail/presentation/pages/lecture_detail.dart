@@ -142,32 +142,28 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
           valueListenable: memoSSEManager.currentMemoNotifier,
           builder: (context, memoData, _) {
             final hasMemo = memoData?.toLowerCase() == 'true';
-            return Scaffold(
-              appBar: OrmeeAppBar(
-                isLecture: true,
-                title: "오름토익 기본반",
-                isImage: false,
-                isDetail: false,
-                isPosting: false,
-                memoState: hasMemo,
-              ),
-              body: Column(
-                children: [
-                  // OrmeeTeacherCard(
-                  //   teacherNames: ['강수이'],
-                  //   startTime: '15:30',
-                  //   endTime: '16:30',
-                  //   startPeriod: '2025.06.01',
-                  //   endPeriod: '2025.07.30',
-                  //   day: ['월', '수'],
-                  // ),
-                  BlocBuilder<LectureBloc, LectureState>(
-                    builder: (context, state) {
-                      if (state is LectureLoading) {
-                        return CircularProgressIndicator();
-                      } else if (state is LectureLoaded) {
-                        final data = state.lecture;
-                        return OrmeeTeacherCard(
+
+            return BlocBuilder<LectureBloc, LectureState>(
+              builder: (context, state) {
+                if (state is LectureLoading) {
+                  return const Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  );
+                } else if (state is LectureLoaded) {
+                  final data = state.lecture;
+
+                  return Scaffold(
+                    appBar: OrmeeAppBar(
+                      isLecture: true,
+                      title: data.title,
+                      isImage: false,
+                      isDetail: false,
+                      isPosting: false,
+                      memoState: hasMemo,
+                    ),
+                    body: Column(
+                      children: [
+                        OrmeeTeacherCard(
                           lectureId: data.id,
                           teacherNames: [
                             data.name,
@@ -181,95 +177,106 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                           ],
                           startTime: data.formattedStartTime,
                           endTime: data.formattedEndTime,
-                          startPeriod: data.startDate ?? 'YYYY.MM.DD',
-                          endPeriod: data.dueDate ?? 'YYYY.MM.DD',
+                          startPeriod: data.formattedStartDate,
+                          endPeriod: data.formattedDueDate,
                           day: data.lectureDays
                               .map((e) => dayToKorean(e))
                               .toList(),
-                        );
-                      } else if (state is LectureError) {
-                        return Text('에러: ${state.message}');
-                      } else {
-                        return SizedBox();
-                      }
-                    },
-                  ),
-                  Container(height: 8, color: const Color(0xFFFBFBFB)),
-                  Container(
-                    color: Colors.white,
-                    child: BlocBuilder<NoticeBloc, NoticeState>(
-                      builder: (context, noticeState) {
-                        return BlocBuilder<QuizBloc, QuizState>(
-                          builder: (context, quizState) {
-                            return BlocBuilder<HomeworkBloc, HomeworkState>(
-                              builder: (context, homeworkState) {
-                                final noticeCount = noticeState is NoticeLoaded
-                                    ? noticeState.notices.length
-                                    : null;
-                                final quizCount = quizState is QuizLoaded
-                                    ? quizState.quizzes.length
-                                    : null;
-                                final homeworkCount =
-                                    homeworkState is HomeworkLoaded
-                                    ? homeworkState.homeworks.length
-                                    : null;
+                        ),
+                        Container(height: 8, color: const Color(0xFFFBFBFB)),
+                        Container(
+                          color: Colors.white,
+                          child: BlocBuilder<NoticeBloc, NoticeState>(
+                            builder: (context, noticeState) {
+                              return BlocBuilder<QuizBloc, QuizState>(
+                                builder: (context, quizState) {
+                                  return BlocBuilder<
+                                    HomeworkBloc,
+                                    HomeworkState
+                                  >(
+                                    builder: (context, homeworkState) {
+                                      final noticeCount =
+                                          noticeState is NoticeLoaded
+                                          ? noticeState.notices.length
+                                          : null;
+                                      final quizCount = quizState is QuizLoaded
+                                          ? quizState.quizzes.length
+                                          : null;
+                                      final homeworkCount =
+                                          homeworkState is HomeworkLoaded
+                                          ? homeworkState.homeworks.length
+                                          : null;
 
-                                return OrmeeTabBar(
-                                  tabs: [
-                                    OrmeeTab(
-                                      text: '공지',
-                                      notificationCount: noticeCount,
-                                    ),
-                                    OrmeeTab(
-                                      text: '퀴즈',
-                                      notificationCount: quizCount,
-                                    ),
-                                    OrmeeTab(
-                                      text: '숙제',
-                                      notificationCount: homeworkCount,
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        // 공지 탭
-                        Column(
-                          children: [
-                            SizedBox(height: 12),
-                            SearchButton(),
-                            Expanded(child: NoticeTab()),
-                            SizedBox(height: 80),
-                          ],
+                                      return OrmeeTabBar(
+                                        tabs: [
+                                          OrmeeTab(
+                                            text: '공지',
+                                            notificationCount: noticeCount,
+                                          ),
+                                          OrmeeTab(
+                                            text: '퀴즈',
+                                            notificationCount: quizCount,
+                                          ),
+                                          OrmeeTab(
+                                            text: '숙제',
+                                            notificationCount: homeworkCount,
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         ),
-                        // 퀴즈 탭
-                        Column(
-                          children: [
-                            SizedBox(height: 12),
-                            Expanded(child: QuizTab()),
-                            SizedBox(height: 80),
-                          ],
-                        ),
-                        // 숙제 탭
-                        Column(
-                          children: [
-                            SizedBox(height: 12),
-                            Expanded(child: HomeworkTab()),
-                            SizedBox(height: 80),
-                          ],
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              Column(
+                                children: [
+                                  const SizedBox(height: 12),
+                                  SearchButton(),
+                                  Expanded(child: NoticeTab()),
+                                  const SizedBox(height: 80),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  const SizedBox(height: 12),
+                                  Expanded(child: QuizTab()),
+                                  const SizedBox(height: 80),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  const SizedBox(height: 12),
+                                  Expanded(child: HomeworkTab()),
+                                  const SizedBox(height: 80),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
+                  );
+                } else if (state is LectureError) {
+                  return Scaffold(
+                    appBar: OrmeeAppBar(
+                      isLecture: true,
+                      title: '강의 상세',
+                      isImage: false,
+                      isDetail: false,
+                      isPosting: false,
+                      memoState: hasMemo,
+                    ),
+                    body: Center(child: Text('에러: ${state.message}')),
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
             );
           },
         ),
