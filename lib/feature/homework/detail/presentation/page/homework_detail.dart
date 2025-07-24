@@ -17,8 +17,6 @@ import 'package:ormee_app/shared/widgets/images_section.dart';
 import 'package:ormee_app/shared/widgets/profile.dart';
 import 'package:ormee_app/shared/widgets/toast.dart';
 
-import 'package:http/http.dart' as http;
-
 class HomeworkDetailScreen extends StatelessWidget {
   final int homeworkId;
 
@@ -170,7 +168,7 @@ BottomSheetInfo getBottomSheetInfo({
       text: '결과보기',
       isCheck: false,
       onTap: () {
-        context.push('/homework/$homeworkId/submission');
+        context.push('/homework/submission/detail/$homeworkId');
       },
     );
   }
