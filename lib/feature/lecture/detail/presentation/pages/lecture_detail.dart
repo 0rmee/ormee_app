@@ -107,7 +107,9 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
   void initState() {
     super.initState();
     memoSSEManager = MemoSSEManager(lectureId: widget.lectureId.toString());
-    memoSSEManager.start();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await memoSSEManager.start();
+    });
   }
 
   @override
@@ -139,10 +141,8 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
       child: DefaultTabController(
         length: 3,
         child: ValueListenableBuilder(
-          valueListenable: memoSSEManager.currentMemoNotifier,
-          builder: (context, memoData, _) {
-            final hasMemo = memoData?.toLowerCase() == 'true';
-
+          valueListenable: memoSSEManager.memoStateNotifier,
+          builder: (context, memoState, _) {
             return BlocBuilder<LectureBloc, LectureState>(
               builder: (context, state) {
                 if (state is LectureLoading) {
@@ -159,7 +159,7 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                       isImage: false,
                       isDetail: false,
                       isPosting: false,
-                      memoState: hasMemo,
+                      memoState: memoState,
                     ),
                     body: Column(
                       children: [
@@ -269,7 +269,7 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                       isImage: false,
                       isDetail: false,
                       isPosting: false,
-                      memoState: hasMemo,
+                      memoState: memoState,
                     ),
                     body: Center(child: Text('에러: ${state.message}')),
                   );
