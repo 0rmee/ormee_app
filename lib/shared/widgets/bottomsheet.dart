@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
@@ -5,11 +7,13 @@ import 'package:ormee_app/shared/theme/app_fonts.dart';
 class OrmeeBottomSheet extends StatelessWidget {
   final String text;
   final bool isCheck;
+  final VoidCallback? onTap;
 
   const OrmeeBottomSheet({
     super.key,
     required this.text,
     required this.isCheck,
+    this.onTap,
   });
 
   @override
@@ -28,7 +32,7 @@ class OrmeeBottomSheet extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: isCheck ? () {} : null,
+          onTap: isCheck ? onTap : null,
           borderRadius: BorderRadius.circular(12),
           splashColor: Colors.transparent,
           highlightColor: pressedColor,
