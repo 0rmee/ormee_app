@@ -36,7 +36,7 @@ class OrmeeIconBottomSheet extends StatelessWidget {
           const SizedBox(width: 4),
           Headline2SemiBold16(
             text: text,
-            color: isLike ? OrmeeColor.gray[60] : OrmeeColor.gray[50],
+            color: isLike ? OrmeeColor.gray[60] : OrmeeColor.purple[50],
           ),
         ],
       ),
