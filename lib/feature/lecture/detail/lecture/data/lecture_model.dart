@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class LectureModel {
   final int id;
   final String name;
@@ -8,8 +10,8 @@ class LectureModel {
   final List<String> lectureDays;
   final String startTime;
   final String endTime;
-  final String? startDate;
-  final String? dueDate;
+  final String startDate;
+  final String dueDate;
   final bool messageAvailable;
 
   LectureModel({
@@ -22,8 +24,8 @@ class LectureModel {
     required this.lectureDays,
     required this.startTime,
     required this.endTime,
-    this.startDate,
-    this.dueDate,
+    required this.startDate,
+    required this.dueDate,
     required this.messageAvailable,
   });
 
@@ -48,6 +50,16 @@ class LectureModel {
 
   String get formattedStartTime => startTime.substring(0, 5);
   String get formattedEndTime => endTime.substring(0, 5);
+
+  String get formattedStartDate {
+    final date = DateTime.parse(startDate);
+    return DateFormat('yyyy.MM.dd').format(date);
+  }
+
+  String get formattedDueDate {
+    final date = DateTime.parse(dueDate);
+    return DateFormat('yyyy.MM.dd').format(date);
+  }
 }
 
 class CoTeacher {

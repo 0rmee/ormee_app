@@ -1,27 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:ormee_app/feature/home/data/models/lecture_card.dart';
+import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/day_badge.dart';
-
-class LectureCard {
-  final String title;
-  final List<String> days; // ["MON", "WED"]
-  final String startTime; // "15:30:00"
-  final String endTime; // "17:00:00"
-  final String startDate; // "2025-06-03T00:00:00"
-  final String dueDate; // "2026-08-29T23:59:59"
-
-  LectureCard({
-    required this.title,
-    required this.days,
-    required this.startTime,
-    required this.endTime,
-    required this.startDate,
-    required this.dueDate,
-  });
-}
 
 class LectureCardSlider extends StatefulWidget {
   final List<LectureCard> lectures;
@@ -36,14 +21,14 @@ class _LectureCardSliderState extends State<LectureCardSlider> {
   late PageController _pageController;
   int _currentPage = 0;
 
-  String _formatDate(String dateStr) {
-    final date = DateTime.parse(dateStr);
-    return DateFormat('yyyy.MM.dd').format(date);
-  }
-
   String _formatTime(String timeStr) {
-    final time = DateFormat.Hms().parse(timeStr); // "15:30:00"
-    return DateFormat('HH:mm').format(time); // "15:30"
+    try {
+      final time = DateFormat.Hms().parse(timeStr); // "15:30:00"
+      return DateFormat('HH:mm').format(time); // "15:30"
+    } catch (e) {
+      // 파싱 실패 시 원본 반환 (이미 HH:mm 형식일 수도 있음)
+      return timeStr;
+    }
   }
 
   @override
@@ -78,57 +63,61 @@ class _LectureCardSliderState extends State<LectureCardSlider> {
             },
             itemBuilder: (context, index) {
               final lecture = widget.lectures[index];
-              final startPeriod = _formatDate(lecture.startDate);
-              final endPeriod = _formatDate(lecture.dueDate);
+              // _formatDate 함수 제거, 이미 포맷된 문자열 사용
+              final startPeriod = lecture.startDate; // 이미 "yyyy.MM.dd" 형식
+              final endPeriod = lecture.dueDate; // 이미 "yyyy.MM.dd" 형식
               final startTime = _formatTime(lecture.startTime);
               final endTime = _formatTime(lecture.endTime);
 
               final isLast = index == widget.lectures.length - 1;
 
-              return Container(
-                margin: EdgeInsets.only(right: isLast ? 0 : 8),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Image.asset('assets/images/home_lecture.png'),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Label1Semibold14(text: lecture.title),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Wrap(
-                              spacing: 2,
-                              children: [
-                                for (int i = 0; i < lecture.days.length; i++)
-                                  DayBadge(text: lecture.days[i]),
-                              ],
-                            ),
-                            const SizedBox(width: 6),
-                            Label2Regular12(
-                              text: '$startTime - $endTime',
-                              color: OrmeeColor.gray[60],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Label2Regular12(
-                          text: '$startPeriod - $endPeriod',
-                          color: OrmeeColor.gray[50],
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    SvgPicture.asset('assets/icons/arrow_right.svg'),
-                  ],
+              return GestureDetector(
+                onTap: () => context.push('/lecture/detail/${lecture.id}'),
+                child: Container(
+                  margin: EdgeInsets.only(right: isLast ? 0 : 8),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Image.asset('assets/images/home_lecture.png'),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Label1Semibold14(text: lecture.title),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Wrap(
+                                spacing: 2,
+                                children: lecture.days
+                                    .map((e) => DayBadge(text: dayToKorean(e)))
+                                    .toList(),
+                              ),
+
+                              const SizedBox(width: 6),
+                              Label2Regular12(
+                                text: '$startTime - $endTime',
+                                color: OrmeeColor.gray[60],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Label2Regular12(
+                            text: '$startPeriod - $endPeriod',
+                            color: OrmeeColor.gray[50],
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      SvgPicture.asset('assets/icons/arrow_right.svg'),
+                    ],
+                  ),
                 ),
               );
             },

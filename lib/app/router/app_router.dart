@@ -117,7 +117,7 @@ class AppRouter {
           GoRoute(
             path: '/home',
             name: 'home',
-            builder: (context, state) => const HomeScreen(),
+            builder: (context, state) => const HomeScreenWrapper(),
           ),
           GoRoute(
             path: '/lecture',
