@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:ormee_app/feature/home/data/models/quiz_card.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
@@ -27,59 +28,62 @@ class _QuizCardSliderState extends State<QuizCardSlider> {
           final quiz = widget.quizzes[index];
           final isLast = index == widget.quizzes.length - 1;
 
-          return Container(
-            width: MediaQuery.of(context).size.width * 0.44, // 화면 너비의 절반
-            margin: EdgeInsets.only(
-              right: isLast ? 20 : 8,
-            ), // 마지막은 오른쪽 패딩, 나머지는 간격
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Label2Semibold12(
-                  text: quiz.lectureTitle,
-                  color: OrmeeColor.gray[50],
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                SizedBox(height: 2),
-                Label1Semibold14(
-                  text: quiz.quizTitle,
-                  color: OrmeeColor.gray[90],
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Spacer(),
-                StateBadge(
-                  text: () {
-                    try {
-                      // 날짜 파싱
-                      final dueDate = DateFormat('yyyy.MM.dd HH:mm')
-                          .parseStrict(
-                            quiz.quizDueTime.trim(), // 공백 제거
-                          );
+          return GestureDetector(
+            onTap: () => context.push('/quiz/detail/${quiz.id}'),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.44, // 화면 너비의 절반
+              margin: EdgeInsets.only(
+                right: isLast ? 20 : 8,
+              ), // 마지막은 오른쪽 패딩, 나머지는 간격
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Label2Semibold12(
+                    text: quiz.lectureTitle,
+                    color: OrmeeColor.gray[50],
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  SizedBox(height: 2),
+                  Label1Semibold14(
+                    text: quiz.quizTitle,
+                    color: OrmeeColor.gray[90],
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  Spacer(),
+                  StateBadge(
+                    text: () {
+                      try {
+                        // 날짜 파싱
+                        final dueDate = DateFormat('yyyy.MM.dd HH:mm')
+                            .parseStrict(
+                              quiz.quizDueTime.trim(), // 공백 제거
+                            );
 
-                      final now = DateTime.now();
-                      final difference = dueDate.difference(now).inDays;
+                        final now = DateTime.now();
+                        final difference = dueDate.difference(now).inDays;
 
-                      // 음수일 경우 D+ 처리
-                      final ddayText = difference < 0
-                          ? 'D+${-difference}'
-                          : 'D-${difference}';
-                      return ddayText;
-                    } catch (e) {
-                      print('날짜 파싱 에러: ${quiz.quizDueTime}, $e');
-                      return 'D-?';
-                    }
-                  }(),
-                ),
-              ],
+                        // 음수일 경우 D+ 처리
+                        final ddayText = difference < 0
+                            ? 'D+${-difference}'
+                            : 'D-${difference}';
+                        return ddayText;
+                      } catch (e) {
+                        print('날짜 파싱 에러: ${quiz.quizDueTime}, $e');
+                        return 'D-?';
+                      }
+                    }(),
+                  ),
+                ],
+              ),
             ),
           );
         },
