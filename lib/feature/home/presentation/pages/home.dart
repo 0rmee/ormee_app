@@ -1,16 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:ormee_app/feature/home/bloc/home_bloc.dart';
+import 'package:ormee_app/feature/home/bloc/home_event.dart';
+import 'package:ormee_app/feature/home/bloc/home_state.dart';
+import 'package:ormee_app/feature/home/data/remote_datasource.dart';
+import 'package:ormee_app/feature/home/data/repository.dart';
 import 'package:ormee_app/feature/home/presentation/widgets/banner.dart';
 import 'package:ormee_app/feature/home/presentation/widgets/homework_list.dart';
 import 'package:ormee_app/feature/home/presentation/widgets/lecture_list.dart';
 import 'package:ormee_app/feature/home/presentation/widgets/quiz_list.dart';
-import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
+import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
+import 'package:ormee_app/feature/lecture/home/bloc/lecture_event.dart';
+import 'package:ormee_app/feature/lecture/home/data/remote_datasource.dart';
+import 'package:ormee_app/feature/lecture/home/data/repository.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/lecture_home_empty.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 
-class HomeScreen extends StatelessWidget {
+// Wrapper 위젯으로 Provider 설정을 분리
+class HomeScreenWrapper extends StatelessWidget {
+  const HomeScreenWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeBloc>(
+          create: (context) =>
+              HomeBloc(HomeRepository(HomeRemoteDataSource(http.Client()))),
+        ),
+        BlocProvider<LectureHomeBloc>(
+          create: (context) => LectureHomeBloc(
+            LectureHomeRepository(LectureHomeRemoteDataSource(http.Client())),
+          )..add(FetchLectures()),
+        ),
+      ],
+      child: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // 화면이 로드될 때 데이터 요청
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeBloc>().add(LoadHomeData());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,125 +71,151 @@ class HomeScreen extends StatelessWidget {
         ),
         backgroundColor: Colors.transparent,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: AutoBannerSlider(
-              imageUrls: [
-                'https://ormee-bucket.s3.ap-northeast-2.amazonaws.com/2025-05-22%E1%84%91%E1%85%A6%E1%86%BC%E1%84%80%E1%85%B1%E1%86%AB.png',
-                'https://ormee-bucket.s3.ap-northeast-2.amazonaws.com/2025-05-22%E1%84%91%E1%85%A6%E1%86%BC%E1%84%80%E1%85%B1%E1%86%AB.png',
-                'https://ormee-bucket.s3.ap-northeast-2.amazonaws.com/2025-05-22%E1%84%91%E1%85%A6%E1%86%BC%E1%84%80%E1%85%B1%E1%86%AB.png',
-              ],
-            ),
-          ),
-          // 강의 없는 경우
-          // LectureHomeEmpty(bloc: context.read<LectureHomeBloc>()),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+      body: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          if (state is HomeLoading) {
+            return Center(
+              child: CircularProgressIndicator(color: OrmeeColor.purple[50]),
+            );
+          }
 
-          // 수업
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Headline2SemiBold16(text: '수업'),
-          ),
-          SizedBox(height: 6),
-          LectureCardSlider(
-            lectures: [
-              LectureCard(
-                title: '오름토익 기본반',
-                days: ["MON", "WED"].map((e) => dayToKorean(e)).toList(),
-                startTime: "15:30:00",
-                endTime: "17:00:00",
-                startDate: "2025-06-03T00:00:00",
-                dueDate: "2026-08-29T23:59:59",
+          if (state is HomeError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: OrmeeColor.gray[40],
+                  ),
+                  SizedBox(height: 16),
+                  Label1Semibold14(
+                    text: '데이터를 불러오는데 실패했습니다',
+                    color: OrmeeColor.gray[40],
+                  ),
+                  SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<HomeBloc>().add(LoadHomeData());
+                    },
+                    child: Text('다시 시도'),
+                  ),
+                ],
               ),
-              LectureCard(
-                title: 'title',
-                days: ["MON", "WED"].map((e) => dayToKorean(e)).toList(),
-                startTime: "15:30:00",
-                endTime: "17:00:00",
-                startDate: "2025-06-03T00:00:00",
-                dueDate: "2026-08-29T23:59:59",
-              ),
-            ],
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+            );
+          }
 
-          // 퀴즈
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Headline2SemiBold16(text: '퀴즈 '),
-                Headline2SemiBold16(text: '3', color: OrmeeColor.purple[50]),
-              ],
-            ),
-          ),
-          SizedBox(height: 6),
-          QuizCardSlider(
-            quizzes: [
-              QuizCard(
-                lectureTitle: '오름토익 기본반 RC',
-                quizTitle: "객체지향 프로그래밍 퀴즈5",
-                quizDueTime: "2025.07.10 23:59",
-              ),
-              QuizCard(
-                lectureTitle: '오름토익 기본반 RC',
-                quizTitle: "객체지향 프로그래밍 퀴즈5",
-                quizDueTime: "2025.07.10 23:59",
-              ),
-              QuizCard(
-                lectureTitle: '오름토익 기본반 RC',
-                quizTitle: "객체지향 프로그래밍 퀴즈5",
-                quizDueTime: "2025.07.10 23:59",
-              ),
-            ],
-          ),
-          // 퀴즈 없는 경우
-          // SizedBox(
-          //   height: MediaQuery.of(context).size.height * 0.12,
-          //   child: Center(
-          //     child: Label1Semibold14(
-          //       text: '응시 가능한 퀴즈가 없어요',
-          //       color: OrmeeColor.gray[40],
-          //     ),
-          //   ),
-          // ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+          if (state is HomeLoaded) {
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<HomeBloc>().add(LoadHomeData());
+              },
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 배너
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: AutoBannerSlider(
+                        imageUrls: [
+                          'https://ormee-bucket.s3.ap-northeast-2.amazonaws.com/2025-05-22%E1%84%91%E1%85%A6%E1%86%BC%E1%84%80%E1%85%B1%E1%86%AB.png',
+                          'https://ormee-bucket.s3.ap-northeast-2.amazonaws.com/2025-05-22%E1%84%91%E1%85%A6%E1%86%BC%E1%84%80%E1%85%B1%E1%86%AB.png',
+                          'https://ormee-bucket.s3.ap-northeast-2.amazonaws.com/2025-05-22%E1%84%91%E1%85%A6%E1%86%BC%E1%84%80%E1%85%B1%E1%86%AB.png',
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-          // 숙제
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Headline2SemiBold16(text: '숙제 '),
-                Headline2SemiBold16(text: '3', color: OrmeeColor.purple[50]),
-              ],
-            ),
-          ),
-          SizedBox(height: 6),
-          HomeworkCardSlider(
-            homeworks: [
-              HomeworkCard(
-                lectureTitle: '오름토익 기본반 RC',
-                homeworkTitle: "과제",
-                homeworkDueTime: "2025.07.10 23:59",
+                    // 수업 섹션
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Headline2SemiBold16(text: '수업'),
+                    ),
+                    SizedBox(height: 6),
+
+                    // 강의가 있는 경우와 없는 경우 분기
+                    if (state.lectures.isEmpty)
+                      LectureHomeEmpty(bloc: context.read<LectureHomeBloc>())
+                    else
+                      LectureCardSlider(lectures: state.lectures),
+
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+
+                    // 퀴즈 섹션
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Headline2SemiBold16(text: '퀴즈 '),
+                          Headline2SemiBold16(
+                            text: '${state.quizzes.length}',
+                            color: OrmeeColor.purple[50],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 6),
+
+                    // 퀴즈가 있는 경우와 없는 경우 분기
+                    if (state.quizzes.isEmpty)
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.12,
+                        child: Center(
+                          child: Label1Semibold14(
+                            text: '응시 가능한 퀴즈가 없어요',
+                            color: OrmeeColor.gray[40],
+                          ),
+                        ),
+                      )
+                    else
+                      QuizCardSlider(quizzes: state.quizzes),
+
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+
+                    // 숙제 섹션
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Headline2SemiBold16(text: '숙제 '),
+                          Headline2SemiBold16(
+                            text: '${state.homeworks.length}',
+                            color: OrmeeColor.purple[50],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 6),
+
+                    // 숙제가 있는 경우와 없는 경우 분기
+                    if (state.homeworks.isEmpty)
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.12,
+                        child: Center(
+                          child: Label1Semibold14(
+                            text: '제출 가능한 숙제가 없어요',
+                            color: OrmeeColor.gray[40],
+                          ),
+                        ),
+                      )
+                    else
+                      HomeworkCardSlider(homeworks: state.homeworks),
+
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                  ],
+                ),
               ),
-            ],
-          ),
-          // 숙제 없는 경우
-          // SizedBox(
-          //   height: MediaQuery.of(context).size.height * 0.12,
-          //   child: Center(
-          //     child: Label1Semibold14(
-          //       text: '제출 가능한 숙제가 없어요',
-          //       color: OrmeeColor.gray[40],
-          //     ),
-          //   ),
-          // ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-        ],
+            );
+          }
+
+          // HomeInitial 상태일 때
+          return Center(
+            child: CircularProgressIndicator(color: OrmeeColor.purple[50]),
+          );
+        },
       ),
     );
   }

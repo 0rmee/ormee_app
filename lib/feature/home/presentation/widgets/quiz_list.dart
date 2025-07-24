@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ormee_app/feature/home/data/models/quiz_card.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/state_badge.dart';
-
-class QuizCard {
-  final String lectureTitle;
-  final String quizTitle;
-  final String quizDueTime;
-
-  QuizCard({
-    required this.lectureTitle,
-    required this.quizTitle,
-    required this.quizDueTime,
-  });
-}
 
 class QuizCardSlider extends StatefulWidget {
   final List<QuizCard> quizzes;
@@ -54,7 +43,7 @@ class _QuizCardSliderState extends State<QuizCardSlider> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Label2Semibold12(
-                  text: quiz.lectureTitle,
+                  text: quiz.lectureTitle!,
                   color: OrmeeColor.gray[50],
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -68,8 +57,27 @@ class _QuizCardSliderState extends State<QuizCardSlider> {
                 ),
                 Spacer(),
                 StateBadge(
-                  text:
-                      'D${DateFormat('yyyy.MM.dd HH:mm').parse(quiz.quizDueTime).difference(DateTime.now()).inDays}',
+                  text: () {
+                    try {
+                      // 날짜 파싱
+                      final dueDate = DateFormat('yyyy.MM.dd HH:mm')
+                          .parseStrict(
+                            quiz.quizDueTime.trim(), // 공백 제거
+                          );
+
+                      final now = DateTime.now();
+                      final difference = dueDate.difference(now).inDays;
+
+                      // 음수일 경우 D+ 처리
+                      final ddayText = difference < 0
+                          ? 'D+${-difference}'
+                          : 'D-${difference}';
+                      return ddayText;
+                    } catch (e) {
+                      print('날짜 파싱 에러: ${quiz.quizDueTime}, $e');
+                      return 'D-?';
+                    }
+                  }(),
                 ),
               ],
             ),
