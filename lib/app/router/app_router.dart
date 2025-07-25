@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
+import 'package:ormee_app/feature/homework/detail/feedback/detail/presentation/pages/feedback_detail.dart';
 import 'package:ormee_app/feature/homework/detail/presentation/page/homework_detail.dart';
 import 'package:ormee_app/feature/homework/detail/submission/detail/presentation/homework_submission_detail.dart';
 import 'package:ormee_app/feature/notice/detail/presentation/page/notice_detail.dart';
@@ -121,6 +122,13 @@ class AppRouter {
             homeworkId: id,
             homeworkTitle: title,
           );
+        },
+      ),
+      GoRoute(
+        path: '/homework/feedback/detail/:id',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return FeedbackDetailScreen(submissionId: id);
         },
       ),
       ShellRoute(
