@@ -1,3 +1,4 @@
+import 'package:ormee_app/core/model/author.dart';
 import 'package:ormee_app/core/model/file_attachment.dart';
 import 'package:ormee_app/shared/utils/file_utils.dart';
 
@@ -48,16 +49,5 @@ class NoticeDetailModel {
       imageUrls: images,
       attachmentFiles: files,
     );
-  }
-}
-
-class AuthorModel {
-  final String name;
-  final String image;
-
-  AuthorModel({required this.name, required this.image});
-
-  factory AuthorModel.fromJson(Map<String, dynamic> json) {
-    return AuthorModel(name: json['name'] ?? '', image: json['image'] ?? '');
   }
 }

@@ -52,7 +52,7 @@ class HomeworkSubmissionDetailScreen extends StatelessWidget {
                     title: "숙제",
                     isLecture: false,
                     isImage: false,
-                    isDetail: true,
+                    isDetail: false,
                     isPosting: false,
                   ),
                   body: SingleChildScrollView(
@@ -101,7 +101,7 @@ class HomeworkSubmissionDetailScreen extends StatelessWidget {
                     icon: 'assets/icons/chat_bubble.svg',
                     isLike: false,
                     ontTap: () {
-                      context.push('/'); // 피드백 상세로
+                      context.push('/homework/feedback/detail/${submission.id}');
                     },
                   ),
                 );
