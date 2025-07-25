@@ -52,7 +52,7 @@ class HomeworkSubmissionDetailScreen extends StatelessWidget {
                     title: "숙제",
                     isLecture: false,
                     isImage: false,
-                    isDetail: true,
+                    isDetail: false,
                     isPosting: false,
                   ),
                   body: SingleChildScrollView(
