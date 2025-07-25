@@ -1,3 +1,4 @@
+import 'package:ormee_app/core/model/author.dart';
 import 'package:ormee_app/core/model/file_attachment.dart';
 import 'package:ormee_app/shared/utils/file_utils.dart';
 
@@ -50,23 +51,12 @@ class HomeworkDetailModel {
       dueTime: DateTime.parse(json['data']['dueTime']),
       isSubmitted: json['data']['submitted'] ?? false,
       feedbackCompleted: json['data']['feedbackCompleted'] ?? false,
-      author: AuthorModel.fromJson(
+      author: AuthorModel.fromValue(
         json['data']['author'] ?? '',
         json['data']['authorImage'],
       ),
       imageUrls: images,
       attachmentFiles: files,
     );
-  }
-}
-
-class AuthorModel {
-  final String name;
-  final String image;
-
-  AuthorModel({required this.name, required this.image});
-
-  factory AuthorModel.fromJson(String name, String image) {
-    return AuthorModel(name: name, image: image);
   }
 }
