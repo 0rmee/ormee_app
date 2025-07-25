@@ -51,6 +51,7 @@ dependencies:
   path_provider: ^2.1.5
   flutter_html: ^3.0.0
   flutter_client_sse: ^2.0.3
+  simple_tooltip: ^1.2.0
 
 dev_dependencies:
   flutter_test:
