@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ormee_app/feature/memo/presentation/widgets/teacher_bubble.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
@@ -61,35 +62,9 @@ class _MemoDialogState extends State<MemoDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/icons/polygon.svg'),
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.6,
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: OrmeeColor.gray[20],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      "틀린 문제를 제출하세요.틀린 문제를 제출하세요.틀린 문제를 제출하세요.틀린 문제를 제출하세요.",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: OrmeeColor.gray[90],
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            TeacherBubble(
+              text: "틀린 문제를 제출하세요.틀린 문제를 제출하세요.틀린 문제를 제출하세요.틀린 문제를 제출하세요.",
+              memoState: true,
             ),
 
             SizedBox(height: 16),

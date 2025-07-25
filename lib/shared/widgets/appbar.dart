@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ormee_app/feature/lecture/detail/presentation/widgets/memo_dialog.dart';
+import 'package:ormee_app/feature/memo/presentation/widgets/memo_dialog.dart';
 import 'package:simple_tooltip/simple_tooltip.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
@@ -113,6 +113,7 @@ class _OrmeeAppBarState extends State<OrmeeAppBar> {
 
                           if (widget.memoState == true)
                             showDialogOverTooltip(context);
+                          if (widget.memoState == false) context.push('/memo');
                         },
                         child: SvgPicture.asset(
                           widget.memoState!
