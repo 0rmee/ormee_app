@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ormee_app/feature/lecture/detail/presentation/widgets/memo_dialog.dart';
 import 'package:simple_tooltip/simple_tooltip.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
@@ -71,30 +72,56 @@ class _OrmeeAppBarState extends State<OrmeeAppBar> {
                   maxWidth: 84,
                   minWidth: 84,
                   minHeight: 27,
-                  hideOnTooltipTap: true,
+                  hideOnTooltipTap: false,
                   customShadows: [],
-                  child: GestureDetector(
-                    onTap: () {
-                      // TODO: 추후 memo open, close 상태관리 추가
-                    },
-                    child: Row(
-                      children: [
-                        SizedBox(width: 30),
-                        SvgPicture.asset(
-                          widget.memoState!
-                              ? 'assets/icons/memo_open.svg'
-                              : 'assets/icons/memo_close.svg',
-                          color: OrmeeColor.gray[90],
-                        ),
-                      ],
-                    ),
-                  ),
                   content: DefaultTextStyle(
                     style: TextStyle(),
                     child: Label2Semibold12(
                       text: "쪽지 제출하기",
                       color: OrmeeColor.white,
                     ),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 30),
+                      GestureDetector(
+                        onTap: () {
+                          // TODO: 추후 memo open, close 상태관리 추가
+                          void showDialogOverTooltip(BuildContext context) {
+                            late OverlayEntry entry;
+
+                            entry = OverlayEntry(
+                              builder: (context) => Material(
+                                color: OrmeeColor.gray[90]!.withValues(
+                                  alpha: 0.6,
+                                ),
+                                child: Center(
+                                  child: MemoDialog(
+                                    onClose: () {
+                                      entry.remove();
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+
+                            Overlay.of(
+                              context,
+                              rootOverlay: true,
+                            ).insert(entry);
+                          }
+
+                          if (widget.memoState == true)
+                            showDialogOverTooltip(context);
+                        },
+                        child: SvgPicture.asset(
+                          widget.memoState!
+                              ? 'assets/icons/memo_open.svg'
+                              : 'assets/icons/memo_close.svg',
+                          color: OrmeeColor.gray[90],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
