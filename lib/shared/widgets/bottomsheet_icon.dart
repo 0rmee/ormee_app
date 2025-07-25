@@ -27,18 +27,18 @@ class OrmeeIconBottomSheet extends StatelessWidget {
         color: OrmeeColor.white,
         border: Border(top: BorderSide(color: OrmeeColor.gray[10]!, width: 1)),
       ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: ontTap,
-            child: SvgPicture.asset(icon),
-          ),
-          const SizedBox(width: 4),
-          Headline2SemiBold16(
-            text: text,
-            color: isLike ? OrmeeColor.gray[60] : OrmeeColor.purple[50],
-          ),
-        ],
+      child: GestureDetector(
+        onTap: ontTap,
+        child: Row(
+          children: [
+            SvgPicture.asset(icon),
+            const SizedBox(width: 4),
+            Headline2SemiBold16(
+              text: text,
+              color: isLike ? OrmeeColor.gray[60] : OrmeeColor.purple[50],
+            ),
+          ],
+        ),
       ),
     );
   }
