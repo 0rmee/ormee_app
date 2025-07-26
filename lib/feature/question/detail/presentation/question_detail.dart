@@ -93,14 +93,16 @@ class QuestionDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              bottomSheet: OrmeeIconBottomSheet(
-                text: "답변 확인",
-                icon: 'assets/icons/chat_bubble.svg',
-                isLike: false,
-                ontTap: () {
-                  context.push('/'); // 답변 상세
-                },
-              ),
+              bottomSheet: question.isAnswered
+                  ? OrmeeIconBottomSheet(
+                      text: "답변 확인",
+                      icon: 'assets/icons/chat_bubble.svg',
+                      isLike: false,
+                      ontTap: () {
+                        context.push('/answer/detail/$questionId');
+                      },
+                    )
+                  : null,
             );
           } else {
             return const Scaffold(
@@ -116,5 +118,4 @@ class QuestionDetailScreen extends StatelessWidget {
     if (name.length < 2) return name;
     return '${name[0]}*${name.substring(2)}';
   }
-
 }

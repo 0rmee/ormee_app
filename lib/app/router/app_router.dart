@@ -12,6 +12,7 @@ import 'package:ormee_app/feature/homework/create/presentation/pages/homework_cr
 import 'package:ormee_app/feature/notification/bloc/notification_bloc.dart';
 import 'package:ormee_app/feature/notification/data/repository.dart';
 import 'package:ormee_app/feature/notification/presentation/notification.dart';
+import 'package:ormee_app/feature/question/detail/answer/presentation/answer_detail.dart';
 import 'package:ormee_app/feature/question/detail/presentation/question_detail.dart';
 import 'package:ormee_app/feature/question/list/presentation/question_list.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
@@ -148,6 +149,14 @@ class AppRouter {
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return QuestionDetailScreen(questionId: id);
+        },
+      ),
+      GoRoute(
+        path: '/answer/detail/:id',
+        name: 'answer detail',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return AnswerDetailScreen(questionId: id);
         },
       ),
       ShellRoute(
