@@ -6,7 +6,7 @@ class AnswerDetailRepository {
 
   AnswerDetailRepository(this.remoteDataSource);
 
-  Future<AnswerDetailModel> readQuestion(int questionId) {
+  Future<AnswerDetailModel> readAnswer(int questionId) {
     return remoteDataSource.fetchAnswerDetail(questionId);
   }
 }
