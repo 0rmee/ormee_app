@@ -22,7 +22,7 @@ class OrmeeIconBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 48),
       decoration: BoxDecoration(
         color: OrmeeColor.white,
         border: Border(top: BorderSide(color: OrmeeColor.gray[10]!, width: 1)),
