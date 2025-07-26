@@ -3,7 +3,7 @@ import 'package:ormee_app/feature/memo/data/model.dart';
 
 abstract class MemoRepository {
   Future<MemoModel> getMemoDetail(int memoId);
-  Future<void> submitMemo(int memoId, MemoModel memo);
+  Future<void> submitMemo(int memoId, String context);
   Future<List<MemoModel>> getMemoList(int lectureId);
 }
 
@@ -23,9 +23,9 @@ class MemoRepositoryImpl implements MemoRepository {
   }
 
   @override
-  Future<void> submitMemo(int memoId, MemoModel memo) async {
+  Future<void> submitMemo(int memoId, String context) async {
     try {
-      await _remoteDataSource.postMemo(memoId, memo);
+      await _remoteDataSource.postMemo(memoId, context);
     } catch (e) {
       rethrow;
     }

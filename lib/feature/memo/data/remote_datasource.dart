@@ -19,11 +19,12 @@ class MemoRemoteDataSource {
     }
   }
 
-  Future<void> postMemo(int memoId, MemoModel request) async {
+  Future<void> postMemo(int memoId, String context) async {
     try {
       final response = await _dio.post(
         '/students/memos/$memoId',
-        data: request,
+        data: {"context": context},
+        options: Options(headers: {'Content-Type': 'application/json'}),
       );
 
       if (response.statusCode != 200) {

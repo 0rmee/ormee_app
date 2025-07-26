@@ -159,8 +159,11 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                       isImage: false,
                       isDetail: false,
                       isPosting: false,
-                      memoState: memoState,
+                      // memoState: memoState,
                       lectureId: data.id,
+                      memoState:
+                          true, // 추후 SSE를 통해 받은 memoId로 메모읽기API 호출->isOpen을 넣기
+                      memoId: 102,
                     ),
                     body: Column(
                       children: [
@@ -270,7 +273,8 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                       isImage: false,
                       isDetail: false,
                       isPosting: false,
-                      memoState: memoState,
+                      memoState: true, // TODO: 위와 동일하게 진행
+                      memoId: 1, // TODO: 위와 동일하게 진행
                     ),
                     body: Center(child: Text('에러: ${state.message}')),
                   );

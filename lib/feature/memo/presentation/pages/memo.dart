@@ -11,6 +11,7 @@ import 'package:ormee_app/feature/memo/presentation/widgets/teacher_bubble.dart'
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/appbar.dart';
+import 'package:ormee_app/shared/widgets/toast.dart';
 
 class Memo extends StatelessWidget {
   final int lectureId;
@@ -48,12 +49,7 @@ class MemoView extends StatelessWidget {
       body: BlocConsumer<MemoBloc, MemoState>(
         listener: (context, state) {
           if (state is MemoListError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
+            OrmeeToast.show(context, state.message);
           }
         },
         builder: (context, state) {
@@ -93,9 +89,15 @@ class MemoView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Body2RegularNormal14(
-              text: '쪽지 히스토리가 없어요.',
-              color: OrmeeColor.gray[50],
+            Icon(Icons.message_outlined, size: 48, color: OrmeeColor.gray[50]),
+            const SizedBox(height: 16),
+            Text(
+              '아직 받은 쪽지가 없습니다',
+              style: TextStyle(
+                fontSize: 16,
+                color: OrmeeColor.gray[70],
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),
@@ -132,6 +134,8 @@ class MemoView extends StatelessWidget {
         widgets.add(
           Column(
             children: [
+              if (widgets.isNotEmpty)
+                const SizedBox(height: 16), // divider 후 간격
               Label2Regular12(
                 text: _formatDate(memo.dueTime),
                 color: OrmeeColor.gray[50],
@@ -155,11 +159,12 @@ class MemoView extends StatelessWidget {
         TeacherBubble(
           text: memo.title,
           memoState: false,
-          autherImage: memo.authorImage,
+          // autherImage: memo.authorImage,
         ),
         const SizedBox(height: 8),
         if (memo.submission != null && memo.submission!.isNotEmpty)
           StudentBubble(context, memo.submission!),
+        const SizedBox(height: 16),
       ],
     );
   }
@@ -205,7 +210,7 @@ class MemoView extends StatelessWidget {
 
   Widget _buildInitialView(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
           Container(

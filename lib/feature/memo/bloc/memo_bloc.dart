@@ -32,7 +32,7 @@ class MemoBloc extends Bloc<MemoEvent, MemoState> {
   Future<void> _onSubmitMemo(SubmitMemo event, Emitter<MemoState> emit) async {
     emit(MemoSubmitting());
     try {
-      await _repository.submitMemo(event.memoId, event.memo);
+      await _repository.submitMemo(event.memoId, event.context);
       emit(const MemoSubmitSuccess(message: '쪽지가 성공적으로 제출되었습니다.'));
     } catch (e) {
       emit(MemoSubmitError(message: e.toString()));

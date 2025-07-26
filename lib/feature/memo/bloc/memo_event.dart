@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:ormee_app/feature/memo/data/model.dart';
 
 abstract class MemoEvent extends Equatable {
   const MemoEvent();
@@ -19,12 +18,12 @@ class LoadMemoDetail extends MemoEvent {
 
 class SubmitMemo extends MemoEvent {
   final int memoId;
-  final MemoModel memo;
+  final String context;
 
-  const SubmitMemo({required this.memoId, required this.memo});
+  const SubmitMemo({required this.memoId, required this.context});
 
   @override
-  List<Object?> get props => [memoId, memo];
+  List<Object?> get props => [memoId, context];
 }
 
 class LoadMemoList extends MemoEvent {
