@@ -19,7 +19,7 @@ class Fab extends StatelessWidget {
       shape: CircleBorder(),
       onPressed: action,
       elevation: 5,
-      backgroundColor: OrmeeColor.purple[40],
+      backgroundColor: OrmeeColor.purple[50],
       splashColor: OrmeeColor.purple[50],
       child: SvgPicture.asset(
         'assets/icons/plus.svg',

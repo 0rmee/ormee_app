@@ -771,6 +771,33 @@ class Body1RegularNormal16 extends StatelessWidget {
   );
 }
 
+class Body1SemiBold16 extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final TextOverflow? overflow;
+
+  const Body1SemiBold16({
+    super.key,
+    required this.text,
+    this.color,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
+      fontSize: 16,
+      height: 1.4,
+      letterSpacing: -0.02 * 16,
+      color: color ?? OrmeeColor.black,
+    ),
+    overflow: overflow ?? TextOverflow.clip,
+  );
+}
+
 // Regular reading 16px (lineHeight 155%)
 class Body1RegularReading16 extends StatelessWidget {
   final String text;

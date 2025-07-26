@@ -1,5 +1,5 @@
 import 'package:ormee_app/feature/homework/detail/feedback/detail/data/model.dart';
-import 'package:ormee_app/feature/homework/detail/feedback/detail/data/remote_repository.dart';
+import 'package:ormee_app/feature/homework/detail/feedback/detail/data/remote_datasource.dart';
 
 class FeedbackDetailRepository {
   final FeedbackDetailRemoteDataSource remoteDataSource;

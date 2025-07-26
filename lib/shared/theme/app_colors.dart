@@ -24,6 +24,7 @@ final class OrmeeColor extends Color {
   };
 
   static const Map<int, Color> purple = <int, Color>{
+    5: Color.fromARGB(255, 236, 233, 255),
     10: Color.fromARGB(255, 246, 244, 255),
     15: Color.fromARGB(255, 241, 238, 255),
     20: Color.fromARGB(255, 222, 214, 255),
