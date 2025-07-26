@@ -14,6 +14,7 @@ class OrmeeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool isPosting;
   final VoidCallback? postAction;
   final bool? memoState;
+  final int? lectureId;
 
   const OrmeeAppBar({
     Key? key,
@@ -24,6 +25,7 @@ class OrmeeAppBar extends StatefulWidget implements PreferredSizeWidget {
     required this.isPosting,
     this.postAction,
     this.memoState,
+    this.lectureId,
   }) : super(key: key);
 
   @override
@@ -113,7 +115,10 @@ class _OrmeeAppBarState extends State<OrmeeAppBar> {
 
                           if (widget.memoState == true)
                             showDialogOverTooltip(context);
-                          if (widget.memoState == false) context.push('/memo');
+                          if (widget.memoState == false)
+                            context.push(
+                              '/lecture/detail/${widget.lectureId}/memo',
+                            );
                         },
                         child: SvgPicture.asset(
                           widget.memoState!

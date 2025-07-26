@@ -160,6 +160,7 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                       isDetail: false,
                       isPosting: false,
                       memoState: memoState,
+                      lectureId: data.id,
                     ),
                     body: Column(
                       children: [

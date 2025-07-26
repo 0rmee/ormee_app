@@ -125,7 +125,13 @@ class AppRouter {
           );
         },
       ),
-      GoRoute(path: '/memo', builder: (context, state) => Memo()),
+      GoRoute(
+        path: '/lecture/detail/:id/memo',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return Memo(lectureId: id);
+        },
+      ),
       GoRoute(
         path: '/homework/feedback/detail/:id',
         builder: (context, state) {
