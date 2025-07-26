@@ -54,9 +54,11 @@ class QuestionListScreen extends StatelessWidget {
                     final question = questions[index];
                     return InkWell(
                       onTap: () {
-                        question.isMine
-                            ? context.push('') // 질문 상세 화면
-                            : OrmeeToast.show(context, '이 글은 작성자만 볼 수 있어요.');
+                        if (!question.isMine && question.isLocked) {
+                          OrmeeToast.show(context, '이 글은 작성자만 볼 수 있어요.');
+                        } else {
+                          context.push('/question/detail/${question.id}');
+                        }
                       },
                       child: QuestionCard(question: question),
                     );
