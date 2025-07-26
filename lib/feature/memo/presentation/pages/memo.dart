@@ -93,15 +93,9 @@ class MemoView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.message_outlined, size: 48, color: OrmeeColor.gray[50]),
-            const SizedBox(height: 16),
-            Text(
-              '아직 받은 쪽지가 없습니다',
-              style: TextStyle(
-                fontSize: 16,
-                color: OrmeeColor.gray[70],
-                fontWeight: FontWeight.w500,
-              ),
+            Body2RegularNormal14(
+              text: '쪽지 히스토리가 없어요.',
+              color: OrmeeColor.gray[50],
             ),
           ],
         ),
