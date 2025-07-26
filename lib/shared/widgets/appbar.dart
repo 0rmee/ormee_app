@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/memo/presentation/widgets/memo_dialog.dart';
+import 'package:ormee_app/shared/widgets/toast.dart';
 import 'package:simple_tooltip/simple_tooltip.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
@@ -14,6 +15,8 @@ class OrmeeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool isPosting;
   final VoidCallback? postAction;
   final bool? memoState;
+  final int? memoId;
+  final int? lectureId;
 
   const OrmeeAppBar({
     Key? key,
@@ -24,6 +27,8 @@ class OrmeeAppBar extends StatefulWidget implements PreferredSizeWidget {
     required this.isPosting,
     this.postAction,
     this.memoState,
+    this.memoId,
+    this.lectureId,
   }) : super(key: key);
 
   @override
@@ -34,6 +39,57 @@ class OrmeeAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _OrmeeAppBarState extends State<OrmeeAppBar> {
+  late bool _currentMemoState;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentMemoState = widget.memoState ?? false;
+  }
+
+  @override
+  void didUpdateWidget(OrmeeAppBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.memoState != null && widget.memoState != _currentMemoState) {
+      _currentMemoState = widget.memoState!;
+    }
+  }
+
+  void _onMemoSubmitted() {
+    setState(() {
+      _currentMemoState = false;
+    });
+  }
+
+  void _showMemoDialog(BuildContext context) {
+    if (widget.memoId == null) {
+      OrmeeToast.show(context, '쪽지 정보를 불러올 수 없습니다.');
+      return;
+    }
+
+    late OverlayEntry entry;
+
+    entry = OverlayEntry(
+      builder: (context) => Material(
+        color: OrmeeColor.gray[90]!.withValues(alpha: 0.6),
+        child: Center(
+          child: MemoDialog(
+            memoId: widget.memoId!,
+            onClose: () {
+              entry.remove();
+            },
+            onSubmitted: () {
+              entry.remove();
+              _onMemoSubmitted();
+            },
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context, rootOverlay: true).insert(entry);
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -58,7 +114,7 @@ class _OrmeeAppBarState extends State<OrmeeAppBar> {
                     print("Memo tooltip tapped");
                   },
                   animationDuration: Duration(milliseconds: 300),
-                  show: widget.memoState!,
+                  show: _currentMemoState,
                   backgroundColor: OrmeeColor.gray[90]!.withValues(alpha: 0.7),
                   borderRadius: 10,
                   borderWidth: 0,
@@ -86,37 +142,16 @@ class _OrmeeAppBarState extends State<OrmeeAppBar> {
                       SizedBox(width: 30),
                       GestureDetector(
                         onTap: () {
-                          // TODO: 추후 memo open, close 상태관리 추가
-                          void showDialogOverTooltip(BuildContext context) {
-                            late OverlayEntry entry;
-
-                            entry = OverlayEntry(
-                              builder: (context) => Material(
-                                color: OrmeeColor.gray[90]!.withValues(
-                                  alpha: 0.6,
-                                ),
-                                child: Center(
-                                  child: MemoDialog(
-                                    onClose: () {
-                                      entry.remove();
-                                    },
-                                  ),
-                                ),
-                              ),
+                          if (_currentMemoState == true) {
+                            _showMemoDialog(context);
+                          } else if (_currentMemoState == false) {
+                            context.push(
+                              '/lecture/detail/${widget.lectureId}/memo',
                             );
-
-                            Overlay.of(
-                              context,
-                              rootOverlay: true,
-                            ).insert(entry);
                           }
-
-                          if (widget.memoState == true)
-                            showDialogOverTooltip(context);
-                          if (widget.memoState == false) context.push('/memo');
                         },
                         child: SvgPicture.asset(
-                          widget.memoState!
+                          _currentMemoState
                               ? 'assets/icons/memo_open.svg'
                               : 'assets/icons/memo_close.svg',
                           color: OrmeeColor.gray[90],
