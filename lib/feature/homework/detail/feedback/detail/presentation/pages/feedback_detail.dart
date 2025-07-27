@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/homework/detail/feedback/detail/bloc/feedback_detail_bloc.dart';
 import 'package:ormee_app/feature/homework/detail/feedback/detail/bloc/feedback_detail_event.dart';
 import 'package:ormee_app/feature/homework/detail/feedback/detail/bloc/feedback_detail_state.dart';
-import 'package:ormee_app/feature/homework/detail/feedback/detail/data/remote_repository.dart';
+import 'package:ormee_app/feature/homework/detail/feedback/detail/data/remote_datasource.dart';
 import 'package:ormee_app/feature/homework/detail/feedback/detail/data/repository.dart';
 import 'package:ormee_app/feature/homework/detail/feedback/detail/presentation/widgets/feedback_card.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
