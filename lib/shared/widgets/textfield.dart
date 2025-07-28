@@ -51,6 +51,7 @@ class OrmeeTextField extends StatefulWidget {
   final FocusNode focusNode;
   final Function(String)? onTextChanged;
   final String? errorText;
+  final int? maxLines;
 
   const OrmeeTextField({
     Key? key,
@@ -62,6 +63,7 @@ class OrmeeTextField extends StatefulWidget {
     this.isPassword,
     this.onTextChanged,
     this.errorText,
+    this.maxLines,
   }) : super(key: key);
 
   @override
@@ -94,8 +96,10 @@ class _OrmeeTextField1State extends State<OrmeeTextField> {
         fontFamily: 'Pretendard',
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: OrmeeColor.gray[100], // 또는 원하는 색상
+        color: OrmeeColor.gray[90], // 또는 원하는 색상
       ),
+      minLines: 1,
+      maxLines: widget.maxLines ?? 1,
       decoration: InputDecoration(
         isDense: true,
         // 에러 공간 완전히 제거
@@ -135,8 +139,8 @@ class _OrmeeTextField1State extends State<OrmeeTextField> {
         suffixIcon: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(width: 12),
-            if (isTextNotEmpty && widget.focusNode.hasFocus)
+            if (isTextNotEmpty && widget.focusNode.hasFocus) ...[
+              SizedBox(width: 12),
               GestureDetector(
                 onTap: () {
                   widget.controller.clear();
@@ -152,8 +156,9 @@ class _OrmeeTextField1State extends State<OrmeeTextField> {
                   ),
                 ),
               ),
-            SizedBox(width: 12),
-            if (widget.isPassword == true && isTextNotEmpty)
+            ],
+            if (widget.isPassword == true && isTextNotEmpty) ...[
+              SizedBox(width: 12),
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -170,6 +175,7 @@ class _OrmeeTextField1State extends State<OrmeeTextField> {
                   ),
                 ),
               ),
+            ],
             SizedBox(width: 16),
           ],
         ),
