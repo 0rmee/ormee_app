@@ -9,8 +9,9 @@ import 'package:ormee_app/shared/theme/app_fonts.dart';
 class Label extends StatelessWidget {
   final String color;
   final String? text;
+  final double? width;
 
-  const Label({super.key, required this.color, this.text});
+  const Label({super.key, required this.color, this.text, this.width});
 
   String get _defaultText {
     switch (color.toLowerCase()) {
@@ -38,7 +39,7 @@ class Label extends StatelessWidget {
       case 'blue':
         return OrmeeColor.accentBlue[20]!;
       case 'orange':
-        return OrmeeColor.accentRedOrange[20]!;
+        return OrmeeColor.accentRedOrange[5]!;
       case 'gray':
         return OrmeeColor.gray[30]!;
       default:
@@ -55,9 +56,9 @@ class Label extends StatelessWidget {
       case 'blue':
         return OrmeeColor.accentBlue[10]!;
       case 'orange':
-        return OrmeeColor.accentRedOrange[10]!;
+        return OrmeeColor.accentRedOrange[20]!;
       case 'gray':
-        return OrmeeColor.gray[50]!;
+        return OrmeeColor.gray[90]!;
       default:
         return OrmeeColor.gray[50]!;
     }
@@ -66,7 +67,7 @@ class Label extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 34,
+      width: width ?? 34,
       height: 20,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
