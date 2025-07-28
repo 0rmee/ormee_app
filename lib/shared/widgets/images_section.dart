@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
+import 'package:ormee_app/shared/widgets/full_image_viewer.dart';
 
 class ImagesSection extends StatefulWidget {
   final List<String> imageUrls;
@@ -45,17 +46,33 @@ class _ImagesSectionState extends State<ImagesSection> {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: OrmeeColor.gray[20]!, width: 1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        widget.imageUrls[index],
-                        fit: BoxFit.cover,
-                        width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ImageFullScreenViewer(
+                            imageUrls: widget.imageUrls,
+                            initialIndex: index,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: OrmeeColor.gray[20]!,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          widget.imageUrls[index],
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
                       ),
                     ),
                   ),
