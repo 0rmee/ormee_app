@@ -6,8 +6,10 @@ import 'package:ormee_app/shared/theme/app_fonts.dart';
 
 class NoticeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final int count;
 
-  const NoticeAppBar({Key? key, required this.title}) : super(key: key);
+  const NoticeAppBar({Key? key, required this.title, required this.count})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +27,11 @@ class NoticeAppBar extends StatelessWidget implements PreferredSizeWidget {
               vertical: 14.0,
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Heading1SemiBold22(text: title, color: OrmeeColor.gray[90]),
+                SizedBox(width: 4),
+                Heading1Regular22(text: '$count', color: OrmeeColor.purple[50]),
+                Spacer(),
                 GestureDetector(
                   onTap: () {},
                   child: SvgPicture.asset(

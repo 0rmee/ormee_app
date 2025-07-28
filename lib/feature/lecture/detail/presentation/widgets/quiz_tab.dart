@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
 import 'package:ormee_app/shared/widgets/assignment_card.dart';
@@ -44,14 +45,18 @@ Widget QuizTab() {
           itemCount: quizzes.length,
           itemBuilder: (context, index) {
             final quiz = quizzes[index];
-
-            return AssignmentCard(
-              assignment: quiz.title,
-              state: 'D-16', // TODO: 남은 날짜 계산 필요
-              period:
-                  '${_formatDate(quiz.openTime)} - ${_formatDate(quiz.dueTime)}',
-              teacher: quiz.author,
-              active: !quiz.submitted,
+            return GestureDetector(
+              onTap: () {
+                context.push('/quiz/detail/${quiz.quizId}');
+              },
+              child: AssignmentCard(
+                assignment: quiz.title,
+                state: 'D-16', // TODO: 남은 날짜 계산 필요
+                period:
+                    '${_formatDate(quiz.openTime)} - ${_formatDate(quiz.dueTime)}',
+                teacher: quiz.author,
+                active: !quiz.submitted,
+              ),
             );
           },
           separatorBuilder: (context, index) =>

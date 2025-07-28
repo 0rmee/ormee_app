@@ -5,6 +5,7 @@ import 'package:ormee_app/feature/auth/login/presentation/pages/login.dart';
 import 'package:ormee_app/feature/homework/detail/feedback/detail/presentation/pages/feedback_detail.dart';
 import 'package:ormee_app/feature/homework/detail/presentation/page/homework_detail.dart';
 import 'package:ormee_app/feature/homework/detail/submission/detail/presentation/homework_submission_detail.dart';
+import 'package:ormee_app/feature/memo/presentation/pages/memo.dart';
 import 'package:ormee_app/feature/notice/detail/presentation/page/notice_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/feature/home/presentation/pages/home.dart';
@@ -13,6 +14,10 @@ import 'package:ormee_app/feature/notification/bloc/notification_bloc.dart';
 import 'package:ormee_app/feature/notification/data/repository.dart';
 import 'package:ormee_app/feature/notification/presentation/notification.dart';
 import 'package:ormee_app/feature/quiz/result/presentation/quiz_result.dart';
+import 'package:ormee_app/feature/quiz/detail/presentation/quiz_detail.dart';
+import 'package:ormee_app/feature/question/detail/answer/presentation/answer_detail.dart';
+import 'package:ormee_app/feature/question/detail/presentation/question_detail.dart';
+import 'package:ormee_app/feature/question/list/presentation/question_list.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
@@ -24,6 +29,8 @@ import 'package:ormee_app/shared/widgets/button.dart';
 import 'package:ormee_app/shared/widgets/lecture_card.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
+
+import '../../feature/quiz/result/presentation/quiz_result.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -126,7 +133,15 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: '/lecture/detail/:id/memo',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return Memo(lectureId: id);
+        },
+      ),
+      GoRoute(
         path: '/homework/feedback/detail/:id',
+        name: 'feedback detail',
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return FeedbackDetailScreen(submissionId: id);
@@ -139,6 +154,38 @@ class AppRouter {
           final id = int.parse(state.pathParameters['id']!);
           final title = state.uri.queryParameters['title'] ?? '퀴즈 결과';
           return QuizResultScreen(quizId: id, title: title);
+        },
+      ),
+        GoRoute(
+        path: '/quiz/detail/:id',
+        name: 'quiz_detail',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return QuizDetailScreen(quizId: id);
+        },
+      ),
+      GoRoute(
+        path: '/question/list/:id',
+        name: 'question list',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return QuestionListScreen(lectureId: id);
+        },
+      ),
+      GoRoute(
+        path: '/question/detail/:id',
+        name: 'question detail',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return QuestionDetailScreen(questionId: id);
+        },
+      ),
+      GoRoute(
+        path: '/answer/detail/:id',
+        name: 'answer detail',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return AnswerDetailScreen(questionId: id);
         },
       ),
       ShellRoute(

@@ -4,16 +4,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
+import 'package:ormee_app/feature/notification/data/repository.dart';
 
 class OrmeeNavigationBar extends StatefulWidget {
   final Widget child;
-  final int notificationCount; // TODO: 알림 개수 컨트롤러 연결
 
-  const OrmeeNavigationBar({
-    super.key,
-    required this.child,
-    this.notificationCount = 100,
-  });
+  const OrmeeNavigationBar({super.key, required this.child});
 
   @override
   State<OrmeeNavigationBar> createState() => _OrmeeNavigationBarState();
@@ -27,6 +23,43 @@ class _OrmeeNavigationBarState extends State<OrmeeNavigationBar> {
     '/mypage',
   ];
 
+  final NotificationRepository _notificationRepository =
+      NotificationRepository();
+  int _notificationCount = 0;
+  bool _isLoadingCount = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNotificationCount();
+  }
+
+  Future<void> _fetchNotificationCount() async {
+    if (_isLoadingCount) return;
+
+    setState(() {
+      _isLoadingCount = true;
+    });
+
+    try {
+      final count = await _notificationRepository.fetchNotificationCount();
+      if (mounted) {
+        setState(() {
+          _notificationCount = count;
+        });
+      }
+    } catch (e) {
+      print('Failed to fetch notification count: $e');
+      // 에러 시 기본값 0을 유지
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingCount = false;
+        });
+      }
+    }
+  }
+
   int _getSelectedIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
     return _routes.indexWhere((r) => location.startsWith(r));
@@ -34,6 +67,11 @@ class _OrmeeNavigationBarState extends State<OrmeeNavigationBar> {
 
   void _onItemTapped(int index) {
     context.go(_routes[index]);
+
+    // 알림 탭을 클릭했을 때 카운트 새로고침
+    if (index == 2) {
+      _fetchNotificationCount();
+    }
   }
 
   @override
@@ -92,8 +130,8 @@ class _OrmeeNavigationBarState extends State<OrmeeNavigationBar> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 알림 탭일 때 + 알림 탭 선택하지 않았을 때 배지 표시
-            if (isNotification && widget.notificationCount > 0 && !isSelected)
+            // 알림 탭일 때 + 알림 탭 선택하지 않았을 때 + 알림 개수가 있을 때 배지 표시
+            if (isNotification && _notificationCount > 0 && !isSelected)
               Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -113,9 +151,9 @@ class _OrmeeNavigationBarState extends State<OrmeeNavigationBar> {
                         borderRadius: BorderRadius.circular(13),
                       ),
                       child: Text(
-                        widget.notificationCount > 99
+                        _notificationCount > 99
                             ? '99+'
-                            : widget.notificationCount.toString(),
+                            : _notificationCount.toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 10,
@@ -140,5 +178,10 @@ class _OrmeeNavigationBarState extends State<OrmeeNavigationBar> {
         ),
       ),
     );
+  }
+
+  // 외부에서 알림 개수를 새로고침할 수 있는 메서드 (필요시 사용)
+  void refreshNotificationCount() {
+    _fetchNotificationCount();
   }
 }

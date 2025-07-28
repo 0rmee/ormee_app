@@ -11,7 +11,7 @@ class ApiClient {
       BaseOptions(
         baseUrl: API.hostConnect,
         connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 5),
+        receiveTimeout: const Duration(seconds: 10),
       ),
     );
 
