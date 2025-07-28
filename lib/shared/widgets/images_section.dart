@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
-import 'package:ormee_app/shared/widgets/full_image_viewer.dart';
 
 class ImagesSection extends StatefulWidget {
   final List<String> imageUrls;
@@ -48,14 +48,12 @@ class _ImagesSectionState extends State<ImagesSection> {
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ImageFullScreenViewer(
-                            imageUrls: widget.imageUrls,
-                            initialIndex: index,
-                          ),
-                        ),
+                      context.push(
+                        '/image/viewer',
+                        extra: {
+                          'imageUrls': widget.imageUrls,
+                          'initialIndex': currentPage,
+                        },
                       );
                     },
                     child: Container(

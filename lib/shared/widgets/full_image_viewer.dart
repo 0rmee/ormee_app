@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
-import 'package:ormee_app/shared/widgets/appbar.dart';
 
 class ImageFullScreenViewer extends StatefulWidget {
   final List<String> imageUrls;

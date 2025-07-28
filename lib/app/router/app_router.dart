@@ -24,6 +24,7 @@ import 'package:ormee_app/feature/lecture/home/presentation/pages/lecture_home.d
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/qr_scanner.dart';
 import 'package:ormee_app/feature/question/create/presentation/pages/question_create.dart';
 import 'package:ormee_app/shared/widgets/button.dart';
+import 'package:ormee_app/shared/widgets/full_image_viewer.dart';
 import 'package:ormee_app/shared/widgets/lecture_card.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
@@ -165,6 +166,20 @@ class AppRouter {
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return AnswerDetailScreen(questionId: id);
+        },
+      ),
+      GoRoute(
+        path: '/image/viewer',
+        name: 'full image viewer',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final imageUrls = extra['imageUrls'] as List<String>;
+          final initialIndex = extra['initialIndex'] as int;
+
+          return ImageFullScreenViewer(
+            imageUrls: imageUrls,
+            initialIndex: initialIndex,
+          );
         },
       ),
       ShellRoute(
