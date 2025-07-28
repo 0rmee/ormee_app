@@ -64,7 +64,7 @@ class OrmeeButton extends StatelessWidget {
               color: activeColor,
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 // icon
