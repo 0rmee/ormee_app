@@ -13,6 +13,7 @@ import 'package:ormee_app/feature/homework/create/presentation/pages/homework_cr
 import 'package:ormee_app/feature/notification/bloc/notification_bloc.dart';
 import 'package:ormee_app/feature/notification/data/repository.dart';
 import 'package:ormee_app/feature/notification/presentation/notification.dart';
+import 'package:ormee_app/feature/quiz/result/presentation/quiz_result.dart';
 import 'package:ormee_app/feature/quiz/detail/presentation/quiz_detail.dart';
 import 'package:ormee_app/feature/question/detail/answer/presentation/answer_detail.dart';
 import 'package:ormee_app/feature/question/detail/presentation/question_detail.dart';
@@ -147,6 +148,15 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: '/quiz/result/:id',
+        name: 'quiz_result',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          final title = state.uri.queryParameters['title'] ?? '퀴즈 결과';
+          return QuizResultScreen(quizId: id, title: title);
+        },
+      ),
+        GoRoute(
         path: '/quiz/detail/:id',
         name: 'quiz_detail',
         builder: (context, state) {
