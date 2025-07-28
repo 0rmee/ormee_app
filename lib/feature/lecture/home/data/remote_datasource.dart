@@ -1,7 +1,6 @@
-import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:ormee_app/core/constants/api.dart';
-import 'package:ormee_app/feature/auth/token/update.dart';
+import 'package:ormee_app/core/network/api_client.dart';
 import 'package:ormee_app/feature/lecture/home/data/model.dart';
 
 class LectureHomeRemoteDataSource {
@@ -9,15 +8,13 @@ class LectureHomeRemoteDataSource {
 
   LectureHomeRemoteDataSource(this.client);
 
+  final Dio _dio = ApiClient.instance.dio;
+
   Future<List<LectureHome>> fetchLectures() async {
-    final accessToken = await AuthStorage.getAccessToken();
-    final response = await client.get(
-      Uri.parse('${API.hostConnect}/students/lectures'),
-      headers: {'Authorization': 'Bearer $accessToken'},
-    );
+    final response = await _dio.get('/students/lectures');
 
     if (response.statusCode == 200) {
-      final List data = json.decode(response.body)['data'];
+      final List data = response.data['data'];
       return data.map((e) => LectureHome.fromJson(e)).toList();
     } else {
       throw Exception('강의 목록을 불러오지 못했습니다.');
@@ -25,11 +22,7 @@ class LectureHomeRemoteDataSource {
   }
 
   Future<void> leaveLecture(int lectureId) async {
-    final accessToken = await AuthStorage.getAccessToken();
-    final response = await client.delete(
-      Uri.parse('${API.hostConnect}/students/lectures/$lectureId'),
-      headers: {'Authorization': 'Bearer $accessToken'},
-    );
+    final response = await _dio.delete('/students/lectures/$lectureId');
 
     if (response.statusCode != 200) {
       throw Exception('강의실 퇴장 실패');
@@ -37,11 +30,7 @@ class LectureHomeRemoteDataSource {
   }
 
   Future<void> enterLecture(int lectureId) async {
-    final accessToken = await AuthStorage.getAccessToken();
-    final response = await client.post(
-      Uri.parse('${API.hostConnect}/students/lectures/$lectureId'),
-      headers: {'Authorization': 'Bearer $accessToken'},
-    );
+    final response = await _dio.post('/students/lectures/$lectureId');
 
     if (response.statusCode != 200) {
       throw Exception('강의실 입장 실패');
@@ -49,14 +38,10 @@ class LectureHomeRemoteDataSource {
   }
 
   Future<LectureHome> fetchLectureById(int lectureId) async {
-    final accessToken = await AuthStorage.getAccessToken();
-    final response = await client.get(
-      Uri.parse('${API.hostConnect}/students/lectures/$lectureId'),
-      headers: {'Authorization': 'Bearer $accessToken'},
-    );
+    final response = await _dio.get('/students/lectures/$lectureId');
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body)['data'];
+      final data = response.data['data'];
       return LectureHome.fromJson(data);
     } else {
       throw Exception('강의 정보를 불러오지 못했습니다.');

@@ -81,12 +81,13 @@ class _OrmeeNavigationBarState extends State<OrmeeNavigationBar> {
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark, // 안드로이드용
-        statusBarBrightness: Brightness.light, // iOS용
+        statusBarBrightness: Brightness.dark, // iOS용
       ),
       child: Scaffold(
         body: widget.child,
-        bottomNavigationBar: SafeArea(
-          child: _buildBottomNavigationBar(selectedIndex),
+        bottomNavigationBar: Container(
+          color: OrmeeColor.white,
+          child: SafeArea(child: _buildBottomNavigationBar(selectedIndex)),
         ),
         extendBody: true,
       ),
