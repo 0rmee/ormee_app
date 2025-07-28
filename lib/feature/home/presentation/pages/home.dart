@@ -119,13 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // 배너
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: AutoBannerSlider(
-                        imageUrls: [
-                          'https://ormee-bucket.s3.ap-northeast-2.amazonaws.com/2025-05-22%E1%84%91%E1%85%A6%E1%86%BC%E1%84%80%E1%85%B1%E1%86%AB.png',
-                          'https://ormee-bucket.s3.ap-northeast-2.amazonaws.com/2025-05-22%E1%84%91%E1%85%A6%E1%86%BC%E1%84%80%E1%85%B1%E1%86%AB.png',
-                          'https://ormee-bucket.s3.ap-northeast-2.amazonaws.com/2025-05-22%E1%84%91%E1%85%A6%E1%86%BC%E1%84%80%E1%85%B1%E1%86%AB.png',
-                        ],
-                      ),
+                      child: AutoBannerSlider(banners: state.banners),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 

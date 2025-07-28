@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:ormee_app/feature/home/data/models/banner.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AutoBannerSlider extends StatefulWidget {
-  final List<String> imageUrls;
+  final List<BannerModel> banners;
 
-  const AutoBannerSlider({super.key, required this.imageUrls});
+  const AutoBannerSlider({super.key, required this.banners});
 
   @override
   State<AutoBannerSlider> createState() => _AutoBannerSliderState();
@@ -27,7 +29,7 @@ class _AutoBannerSliderState extends State<AutoBannerSlider> {
   void _startAutoSlide() {
     _timer = Timer.periodic(const Duration(seconds: 3), (_) {
       if (_pageController.hasClients) {
-        _currentPage = (_currentPage + 1) % widget.imageUrls.length;
+        _currentPage = (_currentPage + 1) % widget.banners.length;
         _pageController.animateToPage(
           _currentPage,
           duration: const Duration(milliseconds: 300),
@@ -61,20 +63,24 @@ class _AutoBannerSliderState extends State<AutoBannerSlider> {
             },
             child: PageView.builder(
               controller: _pageController,
-              itemCount: widget.imageUrls.length,
+              itemCount: widget.banners.length,
               onPageChanged: (index) {
                 setState(() {
                   _currentPage = index;
                 });
               },
               itemBuilder: (context, index) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    widget.imageUrls[index],
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
+                return GestureDetector(
+                  onTap: () async =>
+                      await launchUrl(Uri.parse(widget.banners[index].path)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      widget.banners[index].image,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
                   ),
                 );
               },
@@ -97,7 +103,7 @@ class _AutoBannerSliderState extends State<AutoBannerSlider> {
                     color: OrmeeColor.white,
                   ),
                   Label2Regular12(
-                    text: ' / ${widget.imageUrls.length}',
+                    text: ' / ${widget.banners.length}',
                     color: OrmeeColor.white.withValues(alpha: 0.5),
                   ),
                 ],
