@@ -60,12 +60,14 @@ class _CustomLabelIndicatorPainter extends BoxPainter {
 class OrmeeTabBar2 extends StatelessWidget implements PreferredSizeWidget {
   final List<String> tabs;
   final int currentIndex;
+  final List<int> notifications; // 각 탭별 알림 개수 리스트
   final void Function(int) onTap;
 
   const OrmeeTabBar2({
     super.key,
     required this.tabs,
     required this.currentIndex,
+    required this.notifications, // 변경: 리스트로 받음
     required this.onTap,
   });
 
@@ -100,34 +102,64 @@ class OrmeeTabBar2 extends StatelessWidget implements PreferredSizeWidget {
               color: OrmeeColor.purple[50]!,
               borderRadius: BorderRadius.circular(1),
             ),
-            tabs: tabs.map((tab) => _buildTab(tab)).toList(),
+            tabs: tabs.asMap().entries.map((entry) {
+              int index = entry.key;
+              String tab = entry.value;
+              int notificationCount = index < notifications.length
+                  ? notifications[index]
+                  : 0;
+              return _buildTab(tab, notificationCount, index);
+            }).toList(),
           );
         },
       ),
     );
   }
 
-  Widget _buildTab(String tabText) {
+  Widget _buildTab(String tabText, int notificationCount, int tabIndex) {
     return Tab(
       child: Builder(
         builder: (context) {
           final TabController? tabController = DefaultTabController.of(context);
-          final int currentTabIndex = tabs.indexOf(tabText);
 
           return AnimatedBuilder(
             animation:
                 tabController?.animation ?? const AlwaysStoppedAnimation(0),
             builder: (context, child) {
-              final bool isSelected = tabController?.index == currentTabIndex;
-
+              final bool isSelected = tabController?.index == tabIndex;
               return isSelected
-                  ? Headline2SemiBold16(
-                      text: tabText,
-                      color: OrmeeColor.purple[50],
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Headline2SemiBold16(
+                          text: tabText,
+                          color: OrmeeColor.purple[50],
+                        ),
+
+                        if (notificationCount != 0) ...[
+                          SizedBox(width: 8),
+                          Headline2SemiBold16(
+                            text: '$notificationCount',
+                            color: OrmeeColor.purple[35],
+                          ),
+                        ],
+                      ],
                     )
-                  : Headline2Regular16(
-                      text: tabText,
-                      color: OrmeeColor.gray[60],
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Headline2Regular16(
+                          text: tabText,
+                          color: OrmeeColor.gray[60],
+                        ),
+                        if (notificationCount != 0) ...[
+                          SizedBox(width: 8),
+                          Headline2Regular16(
+                            text: '$notificationCount',
+                            color: OrmeeColor.gray[50],
+                          ),
+                        ],
+                      ],
                     );
             },
           );
