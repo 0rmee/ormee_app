@@ -18,12 +18,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoading());
 
     try {
+      final banners = await repository.getBanners();
       final lectures = await repository.getLectures();
       final quizzes = await repository.getQuizzes();
       final homeworks = await repository.getHomeworks();
 
       emit(
-        HomeLoaded(lectures: lectures, quizzes: quizzes, homeworks: homeworks),
+        HomeLoaded(
+          banners: banners,
+          lectures: lectures,
+          quizzes: quizzes,
+          homeworks: homeworks,
+        ),
       );
     } catch (e) {
       emit(HomeError(e.toString()));

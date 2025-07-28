@@ -242,21 +242,18 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                                   const SizedBox(height: 12),
                                   SearchButton(),
                                   Expanded(child: NoticeTab()),
-                                  const SizedBox(height: 80),
                                 ],
                               ),
                               Column(
                                 children: [
                                   const SizedBox(height: 12),
                                   Expanded(child: QuizTab()),
-                                  const SizedBox(height: 80),
                                 ],
                               ),
                               Column(
                                 children: [
                                   const SizedBox(height: 12),
                                   Expanded(child: HomeworkTab()),
-                                  const SizedBox(height: 80),
                                 ],
                               ),
                             ],

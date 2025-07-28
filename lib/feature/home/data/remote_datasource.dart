@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:ormee_app/core/constants/api.dart';
 import 'package:ormee_app/core/network/api_client.dart';
 import 'package:ormee_app/feature/auth/token/update.dart';
+import 'package:ormee_app/feature/home/data/models/banner.dart';
 import 'package:ormee_app/feature/home/data/models/homework_card.dart';
 import 'package:ormee_app/feature/home/data/models/lecture_card.dart';
 import 'package:ormee_app/feature/home/data/models/quiz_card.dart';
@@ -11,6 +12,17 @@ class HomeRemoteDataSource {
   final http.Client client;
 
   HomeRemoteDataSource(this.client);
+
+  Future<List<BannerModel>> fetchBanners() async {
+    final response = await ApiClient.instance.dio.get('/students/home/banners');
+
+    if (response.statusCode == 200) {
+      final List data = response.data['data'];
+      return data.map((e) => BannerModel.fromJson(e)).toList();
+    } else {
+      throw Exception('배너 목록을 불러오지 못했습니다.');
+    }
+  }
 
   // 강의 목록
   Future<List<LectureCard>> fetchLectures() async {

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:ormee_app/feature/home/data/models/banner.dart';
 import 'package:ormee_app/feature/home/data/models/homework_card.dart';
 import 'package:ormee_app/feature/home/data/models/lecture_card.dart';
 import 'package:ormee_app/feature/home/data/models/quiz_card.dart';
@@ -15,11 +16,13 @@ class HomeInitial extends HomeState {}
 class HomeLoading extends HomeState {}
 
 class HomeLoaded extends HomeState {
+  final List<BannerModel> banners;
   final List<LectureCard> lectures;
   final List<QuizCard> quizzes;
   final List<HomeworkCard> homeworks;
 
   const HomeLoaded({
+    required this.banners,
     required this.lectures,
     required this.quizzes,
     required this.homeworks,
