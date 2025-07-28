@@ -13,6 +13,7 @@ import 'package:ormee_app/feature/homework/create/presentation/pages/homework_cr
 import 'package:ormee_app/feature/notification/bloc/notification_bloc.dart';
 import 'package:ormee_app/feature/notification/data/repository.dart';
 import 'package:ormee_app/feature/notification/presentation/notification.dart';
+import 'package:ormee_app/feature/quiz/detail/presentation/quiz_detail.dart';
 import 'package:ormee_app/feature/question/detail/answer/presentation/answer_detail.dart';
 import 'package:ormee_app/feature/question/detail/presentation/question_detail.dart';
 import 'package:ormee_app/feature/question/list/presentation/question_list.dart';
@@ -27,6 +28,8 @@ import 'package:ormee_app/shared/widgets/button.dart';
 import 'package:ormee_app/shared/widgets/lecture_card.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
+
+import '../../feature/quiz/result/presentation/quiz_result.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -141,6 +144,14 @@ class AppRouter {
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return FeedbackDetailScreen(submissionId: id);
+        },
+      ),
+      GoRoute(
+        path: '/quiz/detail/:id',
+        name: 'quiz_detail',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return QuizDetailScreen(quizId: id);
         },
       ),
       GoRoute(
