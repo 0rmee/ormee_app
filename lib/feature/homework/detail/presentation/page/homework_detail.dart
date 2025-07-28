@@ -38,6 +38,7 @@ class HomeworkDetailScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is HomeworkDetailLoaded) {
             final homework = state.homework;
+
             return Scaffold(
               appBar: OrmeeAppBar(
                 isLecture: false,
@@ -46,69 +47,75 @@ class HomeworkDetailScreen extends StatelessWidget {
                 isPosting: false,
               ),
               body: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 12, 20, 72),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Heading2SemiBold20(
-                        text: homework.title,
-                        color: OrmeeColor.gray[800],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Heading2SemiBold20(
+                            text: homework.title,
+                            color: OrmeeColor.gray[800],
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Profile(
+                                    profileImageUrl: homework.author.image,
+                                    size1: 18,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Label1Semibold14(
+                                    text: homework.author.name,
+                                    color: OrmeeColor.gray[90],
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Caption1Regular11(
+                                    text: DateFormat('MM/dd').format(homework.openTime),
+                                    color: OrmeeColor.gray[50],
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Caption1Regular11(
+                                    text: DateFormat('HH:mm').format(homework.openTime),
+                                    color: OrmeeColor.gray[50],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          homework.attachmentFiles.isEmpty
+                              ? Divider(
+                            height: 16,
+                            thickness: 1,
+                            color: OrmeeColor.gray[20],
+                          )
+                              : AttachmentsSection(
+                            attachmentFiles: homework.attachmentFiles,
+                          ),
+                        ],
                       ),
+                    ),
+
+                    if (homework.imageUrls.isNotEmpty)
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Profile(
-                                  profileImageUrl: homework.author.image,
-                                  size1: 18,
-                                ),
-                                SizedBox(width: 8),
-                                Label1Semibold14(
-                                  text: homework.author.name,
-                                  color: OrmeeColor.gray[90],
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Caption1Regular11(
-                                  text: DateFormat(
-                                    'MM/dd',
-                                  ).format(homework.openTime),
-                                  color: OrmeeColor.gray[50],
-                                ),
-                                SizedBox(width: 4),
-                                Caption1Regular11(
-                                  text: DateFormat(
-                                    'HH:mm',
-                                  ).format(homework.openTime),
-                                  color: OrmeeColor.gray[50],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: ImagesSection(imageUrls: homework.imageUrls),
                       ),
-                      homework.attachmentFiles.isEmpty
-                          ? Divider(
-                              height: 16,
-                              thickness: 1,
-                              color: OrmeeColor.gray[20],
-                            )
-                          : AttachmentsSection(
-                              attachmentFiles: homework.attachmentFiles,
-                            ),
-                      homework.imageUrls.isEmpty
-                          ? SizedBox()
-                          : ImagesSection(imageUrls: homework.imageUrls),
-                      SizedBox(height: 16),
-                      HtmlTextWidget(text: homework.description),
-                    ],
-                  ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 72),
+                      child: HtmlTextWidget(text: homework.description),
+                    ),
+                  ],
                 ),
               ),
               bottomSheet: Builder(

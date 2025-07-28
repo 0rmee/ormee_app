@@ -36,6 +36,7 @@ class AnswerDetailScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is AnswerDetailLoaded) {
             final answer = state.answer;
+
             return Scaffold(
               appBar: OrmeeAppBar(
                 title: '답변 확인',
@@ -45,45 +46,50 @@ class AnswerDetailScreen extends StatelessWidget {
                 isPosting: false,
               ),
               body: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Profile(
-                                profileImageUrl: answer.author.image,
-                                size1: 18,
+                              Row(
+                                children: [
+                                  Profile(
+                                    profileImageUrl: answer.author.image,
+                                    size1: 18,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Label1Semibold14(
+                                    text: answer.author.name,
+                                    color: OrmeeColor.gray[90],
+                                  ),
+                                ],
                               ),
-                              SizedBox(width: 8),
-                              Label1Semibold14(
-                                text: answer.author.name,
-                                color: OrmeeColor.gray[90],
+                              Caption1Regular11(
+                                text: DateFormat('yy.MM.dd').format(answer.createdAt),
+                                color: OrmeeColor.gray[50],
                               ),
                             ],
                           ),
-                          Caption1Regular11(
-                            text: DateFormat(
-                              'yy.MM.dd',
-                            ).format(answer.createdAt),
-                            color: OrmeeColor.gray[50],
-                          ),
+                          const SizedBox(height: 16),
+                          HtmlTextWidget(text: answer.content),
                         ],
                       ),
-                      SizedBox(height: 16),
-                      HtmlTextWidget(text: answer.content),
-                      answer.filePaths.isEmpty
-                          ? SizedBox()
-                          : Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: ImagesSection(imageUrls: answer.filePaths),
-                            ),
-                    ],
-                  ),
+                    ),
+
+                    if (answer.filePaths.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: ImagesSection(imageUrls: answer.filePaths),
+                      ),
+
+                    const SizedBox(height: 16),
+                  ],
                 ),
               ),
             );
@@ -97,3 +103,4 @@ class AnswerDetailScreen extends StatelessWidget {
     );
   }
 }
+

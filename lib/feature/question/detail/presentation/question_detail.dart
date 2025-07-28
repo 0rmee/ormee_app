@@ -36,6 +36,7 @@ class QuestionDetailScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is QuestionDetailLoaded) {
             final question = state.question;
+
             return Scaffold(
               appBar: OrmeeAppBar(
                 title: '질문',
@@ -45,52 +46,59 @@ class QuestionDetailScreen extends StatelessWidget {
                 isPosting: false,
               ),
               body: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 12, 20, 72),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Heading2SemiBold20(
-                        text: question.title,
-                        color: OrmeeColor.gray[800],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Label1Semibold14(
-                              text: question.isMine
-                                  ? question.author
-                                  : _maskAuthorName(question.author),
-                              color: OrmeeColor.gray[90],
-                            ),
-                            Caption1Regular11(
-                              text: DateFormat(
-                                'yy.MM.dd',
-                              ).format(question.createdAt),
-                              color: OrmeeColor.gray[50],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        height: 16,
-                        thickness: 1,
-                        color: OrmeeColor.gray[20],
-                      ),
-                      SizedBox(height: 16),
-                      HtmlTextWidget(text: question.content),
-                      question.filePaths.isEmpty
-                          ? SizedBox()
-                          : Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: ImagesSection(
-                                imageUrls: question.filePaths,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Heading2SemiBold20(
+                            text: question.title,
+                            color: OrmeeColor.gray[800],
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label1Semibold14(
+                                text: question.isMine
+                                    ? question.author
+                                    : _maskAuthorName(question.author),
+                                color: OrmeeColor.gray[90],
                               ),
+                              Caption1Regular11(
+                                text: DateFormat(
+                                  'yy.MM.dd',
+                                ).format(question.createdAt),
+                                color: OrmeeColor.gray[50],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Divider(
+                            height: 16,
+                            thickness: 1,
+                            color: OrmeeColor.gray[20],
+                          ),
+                          if (question.content.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16.0),
+                              child: HtmlTextWidget(text: question.content),
                             ),
-                    ],
-                  ),
+                        ],
+                      ),
+                    ),
+
+                    if (question.filePaths.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: ImagesSection(imageUrls: question.filePaths),
+                      ),
+
+                    const SizedBox(height: 72),
+                  ],
                 ),
               ),
               bottomSheet: question.isAnswered
