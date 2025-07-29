@@ -14,31 +14,31 @@ class Downloader extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: 160),
-      child: Container(
-        height: 30,
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-        decoration: BoxDecoration(
-          color: OrmeeColor.white,
-          border: Border.all(color: OrmeeColor.gray[30]!, width: 1),
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: Label2Regular12(
-                text: fileName,
-                overflow: TextOverflow.ellipsis,
+      child: GestureDetector(
+        onTap: () {
+          downloadFile(context: context, url: url, fileName: fileName);
+        },
+        child: Container(
+          height: 30,
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+          decoration: BoxDecoration(
+            color: OrmeeColor.white,
+            border: Border.all(color: OrmeeColor.gray[30]!, width: 1),
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Label2Regular12(
+                  text: fileName,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-            const SizedBox(width: 5),
-            GestureDetector(
-              onTap: () {
-                FileDownloader.downloadFile(url, fileName: fileName);
-              },
-              child: SvgPicture.asset("assets/icons/download.svg")
-            ),
-          ],
+              const SizedBox(width: 5),
+              SvgPicture.asset("assets/icons/download.svg"),
+            ],
+          ),
         ),
       ),
     );
