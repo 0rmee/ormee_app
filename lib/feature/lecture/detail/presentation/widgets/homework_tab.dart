@@ -42,12 +42,22 @@ Widget HomeworkTab() {
           itemBuilder: (context, index) {
             final hw = homeworks[index];
             final remainingDays = hw.dueTime.difference(DateTime.now()).inDays;
+            String stateText;
+            if (hw.submitted) {
+              stateText = '제출완료';
+            } else if (remainingDays > 0) {
+              stateText = 'D-$remainingDays';
+            } else if (remainingDays == 0) {
+              stateText = 'D-DAY';
+            } else {
+              stateText = '미제출';
+            }
 
             return InkWell(
               onTap: () => context.push('/homework/detail/${hw.id}'),
               child: AssignmentCard(
                 assignment: hw.title,
-                state: 'D-${remainingDays > 0 ? remainingDays : 0}',
+                state: stateText,
                 period:
                     '${_formatDate(hw.openTime)} - ${_formatDate(hw.dueTime)}',
                 teacher: hw.author,

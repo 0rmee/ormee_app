@@ -45,13 +45,27 @@ Widget QuizTab() {
           itemCount: quizzes.length,
           itemBuilder: (context, index) {
             final quiz = quizzes[index];
+            final remainingDays = quiz.dueTime
+                .difference(DateTime.now())
+                .inDays;
+
+            String stateText;
+            if (quiz.submitted) {
+              stateText = '제출완료';
+            } else if (remainingDays > 0) {
+              stateText = 'D-$remainingDays';
+            } else if (remainingDays == 0) {
+              stateText = 'D-DAY';
+            } else {
+              stateText = '미제출';
+            }
             return GestureDetector(
               onTap: () {
                 context.push('/quiz/detail/${quiz.quizId}');
               },
               child: AssignmentCard(
                 assignment: quiz.title,
-                state: 'D-16', // TODO: 남은 날짜 계산 필요
+                state: stateText,
                 period:
                     '${_formatDate(quiz.openTime)} - ${_formatDate(quiz.dueTime)}',
                 teacher: quiz.author,

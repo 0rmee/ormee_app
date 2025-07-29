@@ -70,6 +70,7 @@ class _HomeworkCreateState extends State<HomeworkCreate> {
         20,
         100,
       ),
+      popUpAnimationStyle: AnimationStyle.noAnimation,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       elevation: 3,
       color: OrmeeColor.white,
@@ -186,6 +187,7 @@ class _HomeworkCreateState extends State<HomeworkCreate> {
                                 },
                               ),
                             ),
+                          SizedBox(height: 65),
                         ],
                       ),
                       // 로딩 인디케이터 표시
