@@ -1,26 +1,46 @@
 import 'dart:io';
-import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:file_saver/file_saver.dart';
+import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:ormee_app/shared/widgets/toast.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
-class FileDownloader {
-  static Future<void> downloadFile(String url, {required String fileName}) async {
-    final directory = await _getDownloadDirectory();
-    final savePath = directory.path;
+Future<void> downloadFile({
+  required BuildContext context,
+  required String url,
+  required String fileName,
+}) async {
+  try {
+    final dio = Dio();
 
-    await FlutterDownloader.enqueue(
-        url: url,
-        fileName: fileName,
-        savedDir: savePath,
-        showNotification: true,
-        openFileFromNotification: true
-    );
-  }
+    // 임시 파일 다운로드
+    final tempDir = await getTemporaryDirectory();
+    final tempPath = '${tempDir.path}/$fileName';
+    await dio.download(url, tempPath);
 
-  static Future<Directory> _getDownloadDirectory() async {
-    if (Platform.isAndroid) {
-      final dir = await getExternalStorageDirectory();
-      if (dir != null) return dir;
+    final tempFile = File(tempPath);
+
+    if (Platform.isIOS) {
+      // iOS: 공유 시트
+      final xFile = XFile(tempFile.path, name: fileName);
+      await Share.shareXFiles([xFile]);
+    } else if (Platform.isAndroid) {
+      // AOS: 경로 지정 후 저장
+      final bytes = await tempFile.readAsBytes();
+      await FileSaver.instance.saveAs(
+        name: fileName,
+        bytes: bytes,
+        mimeType: MimeType.other, fileExtension: '',
+      );
+
+      OrmeeToast.show(context, "📁 '$fileName' 저장 완료. 파일 앱에서 확인하세요.");
+    } else {
+      throw UnsupportedError("지원하지 않는 플랫폼이에요.");
     }
-    return await getApplicationDocumentsDirectory();
+  } catch (e, stack) {
+    debugPrint("❌ 다운로드 실패: $e");
+    debugPrint("StackTrace: $stack");
+    OrmeeToast.show(context, "❌ 파일을 저장하지 못했어요. 다시 시도해 주세요.");
   }
 }
