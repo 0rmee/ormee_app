@@ -1,37 +1,104 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Notification;
+import 'package:ormee_app/feature/search/data/notification/model.dart';
 import 'package:ormee_app/feature/notification/presentation/widgets/date_badge.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/widgets/notification_card.dart';
+import 'package:intl/intl.dart';
 
-Widget NotificationResult() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: DateBadge(date: "2024. 07. 11 (토)"),
-      ),
-      ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: 3,
-        itemBuilder: (context, notifIndex) {
-          return NotificationCard(
-            onReadStatusChanged: () {},
-            read: false,
-            id: 1,
-            parentId: 1,
-            type: "공지",
-            // profile: n.authorImage,
-            headline: "오름토익 기본반",
-            title: "선생님 이거 어떻게 풀어요?",
-            body: "답변이 등록되었습니다. 확인해보세요!",
-            time: "오전 8시 40분",
-          );
-        },
-        separatorBuilder: (context, notifIndex) =>
-            Divider(height: 1, color: OrmeeColor.gray[20]),
-      ),
-    ],
-  );
+class NotificationResult extends StatelessWidget {
+  final List<Notification> notifications;
+  final void Function(int id)? onTap;
+
+  const NotificationResult({
+    super.key,
+    required this.notifications,
+    this.onTap,
+  });
+
+  Map<String, List<Notification>> _groupNotificationsByDate() {
+    final Map<String, List<Notification>> grouped = {};
+
+    for (final notification in notifications) {
+      final dateKey = DateFormat('yyyy-MM-dd').format(notification.createdAt);
+      if (grouped[dateKey] == null) {
+        grouped[dateKey] = [];
+      }
+      grouped[dateKey]!.add(notification);
+    }
+
+    return grouped;
+  }
+
+  String _formatKoreanDateHeader(DateTime dateTime) {
+    return DateFormat('yyyy. MM. dd (E)', 'ko_KR').format(dateTime);
+  }
+
+  String _formatTime(DateTime dateTime) {
+    final hour = dateTime.hour;
+    final minute = dateTime.minute;
+    final period = hour < 12 ? '오전' : '오후';
+    final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+    return '$period ${displayHour}시 ${minute.toString().padLeft(2, '0')}분';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (notifications.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final grouped = _groupNotificationsByDate();
+    final dateKeys = grouped.keys.toList()..sort((a, b) => b.compareTo(a));
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: dateKeys.length,
+      itemBuilder: (context, index) {
+        final dateKey = dateKeys[index];
+        final dayNotifications = grouped[dateKey]!;
+        final dateTime = DateTime.parse(dateKey);
+        final dateHeader = _formatKoreanDateHeader(dateTime);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // 날짜 뱃지
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: DateBadge(date: dateHeader),
+            ),
+
+            // 해당 날짜의 알림들
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: dayNotifications.length,
+              itemBuilder: (context, notifIndex) {
+                final notification = dayNotifications[notifIndex];
+
+                return NotificationCard(
+                  onReadStatusChanged: () => onTap?.call(notification.id),
+                  read: notification.isRead,
+                  id: notification.id,
+                  parentId: notification.parentId,
+                  type: notification.type,
+                  profile: notification.authorImage,
+                  headline: notification.header,
+                  title: notification.title,
+                  body: notification.body,
+                  time: _formatTime(notification.createdAt),
+                );
+              },
+              separatorBuilder: (context, notifIndex) =>
+                  Divider(height: 1, color: OrmeeColor.gray[20]),
+            ),
+
+            // 마지막 날짜가 아니면 간격 추가
+            if (index < dateKeys.length - 1) const SizedBox(height: 16),
+          ],
+        );
+      },
+    );
+  }
 }
