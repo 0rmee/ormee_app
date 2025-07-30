@@ -103,9 +103,10 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/notice/search',
+        path: '/search/notice/:lectureId',
         builder: (context, state) {
-          return NoticeSearch();
+          final lectureId = int.parse(state.pathParameters['lectureId']!);
+          return NoticeSearch(lectureId: lectureId);
         },
       ),
       GoRoute(

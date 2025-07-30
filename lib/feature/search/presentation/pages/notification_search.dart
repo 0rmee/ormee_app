@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ormee_app/feature/search/presentation/widgets/history.dart';
-import 'package:ormee_app/feature/search/presentation/widgets/notice_result.dart';
 import 'package:ormee_app/feature/search/presentation/widgets/notification_result.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
@@ -60,7 +59,7 @@ class NotificationSearch extends StatelessWidget {
               ],
             ),
             SizedBox(height: 18),
-            History(),
+            // History(),
             NotificationResult(),
           ],
         ),

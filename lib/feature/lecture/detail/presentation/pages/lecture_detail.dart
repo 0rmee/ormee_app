@@ -242,7 +242,9 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                                 children: [
                                   const SizedBox(height: 12),
                                   GestureDetector(
-                                    onTap: () => context.push('/notice/search'),
+                                    onTap: () => context.push(
+                                      '/search/notice/${data.id}',
+                                    ),
                                     child: SearchButton(),
                                   ),
                                   Expanded(child: NoticeTab()),
