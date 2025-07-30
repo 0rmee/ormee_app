@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:ormee_app/core/network/memo_sse.dart';
 import 'package:ormee_app/feature/lecture/detail/homework/bloc/homework_bloc.dart';
@@ -240,7 +241,10 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                               Column(
                                 children: [
                                   const SizedBox(height: 12),
-                                  SearchButton(),
+                                  GestureDetector(
+                                    onTap: () => context.push('/notice/search'),
+                                    child: SearchButton(),
+                                  ),
                                   Expanded(child: NoticeTab()),
                                 ],
                               ),
