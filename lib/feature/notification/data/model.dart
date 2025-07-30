@@ -39,6 +39,18 @@ class NotificationModel {
     return text;
   }
 
+  String get plainTitle {
+    //if (title == null || title!.trim().isEmpty) return null;
+
+    final document = html_parser.parse(title);
+    final text = document.body?.text.trim();
+
+    if (text == null || text.isEmpty) {
+      return "";
+    }
+    return text;
+  }
+
   /// createdAt을 DateTime으로 변환
   DateTime get createdAtDateTime => DateTime.parse(createdAt).toLocal();
 
