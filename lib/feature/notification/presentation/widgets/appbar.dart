@@ -33,7 +33,7 @@ class NoticeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Heading1Regular22(text: '$count', color: OrmeeColor.purple[50]),
                 Spacer(),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () => context.push('/notification/search'),
                   child: SvgPicture.asset(
                     "assets/icons/search_20.svg",
                     color: OrmeeColor.gray[60],
