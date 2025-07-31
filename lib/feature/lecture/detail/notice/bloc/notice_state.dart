@@ -8,8 +8,9 @@ class NoticeLoading extends NoticeState {}
 
 class NoticeLoaded extends NoticeState {
   final List<NoticeModel> notices;
+  final List<NoticeModel> pinnedNotices;
 
-  NoticeLoaded(this.notices);
+  NoticeLoaded(this.notices, this.pinnedNotices);
 }
 
 class NoticeError extends NoticeState {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:ormee_app/core/network/memo_sse.dart';
 import 'package:ormee_app/feature/lecture/detail/homework/bloc/homework_bloc.dart';
@@ -124,7 +125,7 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
       providers: [
         BlocProvider(
           create: (_) =>
-              getIt<NoticeBloc>()..add(FetchNotices(widget.lectureId)),
+              getIt<NoticeBloc>()..add(FetchAllNotices(widget.lectureId)),
         ),
         BlocProvider(
           create: (_) => getIt<QuizBloc>()..add(FetchQuizzes(widget.lectureId)),
@@ -240,7 +241,12 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                               Column(
                                 children: [
                                   const SizedBox(height: 12),
-                                  SearchButton(),
+                                  GestureDetector(
+                                    onTap: () => context.push(
+                                      '/search/notice/${data.id}',
+                                    ),
+                                    child: SearchButton(),
+                                  ),
                                   Expanded(child: NoticeTab()),
                                 ],
                               ),

@@ -16,14 +16,14 @@ SearchBar(
 ),
 */
 
-class SearchBar extends StatefulWidget {
+class OrmeeSearchBar extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final String hintText;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onSearch;
 
-  const SearchBar({
+  const OrmeeSearchBar({
     super.key,
     required this.controller,
     required this.focusNode,
@@ -33,10 +33,10 @@ class SearchBar extends StatefulWidget {
   });
 
   @override
-  State<SearchBar> createState() => _SearchBarState();
+  State<OrmeeSearchBar> createState() => _OrmeeSearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _OrmeeSearchBarState extends State<OrmeeSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,9 +53,10 @@ class _SearchBarState extends State<SearchBar> {
             child: TextField(
               style: TextStyle(
                 fontFamily: 'Pretendard',
-                fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: OrmeeColor.gray[100], // 또는 원하는 색상
+                fontSize: 14,
+                height: 1.4,
+                letterSpacing: -0.02 * 14,
               ),
               controller: widget.controller,
               focusNode: widget.focusNode,
@@ -65,10 +66,12 @@ class _SearchBarState extends State<SearchBar> {
                 contentPadding: EdgeInsets.zero,
                 hintText: widget.hintText,
                 hintStyle: TextStyle(
-                  fontFamily: 'Pretendard',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
                   color: OrmeeColor.gray[50],
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  height: 1.4,
+                  letterSpacing: -0.02 * 14,
                 ),
               ),
               onChanged: widget.onChanged,

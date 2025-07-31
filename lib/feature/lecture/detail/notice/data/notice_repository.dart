@@ -9,4 +9,8 @@ class NoticeRepository {
   Future<List<NoticeModel>> getNotices(int lectureId) {
     return remoteDataSource.fetchNotices(lectureId);
   }
+
+  Future<List<NoticeModel>> getPinnedNotices(int lectureId) {
+    return remoteDataSource.fetchPinnedNotices(lectureId);
+  }
 }

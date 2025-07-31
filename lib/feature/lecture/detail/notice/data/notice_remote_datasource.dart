@@ -21,4 +21,17 @@ class NoticeRemoteDataSource {
       throw Exception('공지사항을 불러오지 못했습니다.');
     }
   }
+
+  Future<List<NoticeModel>> fetchPinnedNotices(int lectureId) async {
+    final response = await _dio.get(
+      '/students/lectures/$lectureId/notices/pin',
+    );
+
+    if (response.statusCode == 200) {
+      final List data = response.data['data'];
+      return data.map((e) => NoticeModel.fromJson(e)).toList();
+    } else {
+      throw Exception('고정된 공지사항을 불러오지 못했습니다.');
+    }
+  }
 }

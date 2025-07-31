@@ -61,7 +61,6 @@ Widget HomeworkTab() {
                 period:
                     '${_formatDate(hw.openTime)} - ${_formatDate(hw.dueTime)}',
                 teacher: hw.author,
-                active: !hw.submitted,
               ),
             );
           },
