@@ -29,19 +29,17 @@ Widget NoticeTab() {
           itemCount: notices.length,
           itemBuilder: (context, index) {
             final notice = notices[index];
-            return GestureDetector(
+            return NoticeCard(
+              noticeId: notice.id,
+              notice: notice.title,
+              teacher: notice.author,
+              date: DateFormat(
+                'yyyy.MM.dd (E)',
+                'ko_KR',
+              ).format(notice.postDate),
               onTap: () {
                 context.push('/notice/detail/${notice.id}');
               },
-              child: NoticeCard(
-                notice: notice.title,
-                teacher: notice.author,
-                date: DateFormat(
-                  'yyyy.MM.dd (E)',
-                  'ko_KR',
-                ).format(notice.postDate),
-                read: false,
-              ),
             );
           },
           separatorBuilder: (context, index) =>

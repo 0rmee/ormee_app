@@ -15,16 +15,14 @@ class NoticeResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        child: NoticeCard(
-          notice: notice.title,
-          teacher: notice.author,
-          date: _formatDate(notice.postDate),
-          read: false, // 읽음 상태는 별도 관리가 필요할 수 있음
-        ),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: NoticeCard(
+        noticeId: notice.id,
+        notice: notice.title,
+        teacher: notice.author,
+        date: DateFormat('yyyy.MM.dd (E)', 'ko_KR').format(notice.postDate),
+        onTap: onTap,
       ),
     );
   }
