@@ -125,7 +125,7 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
       providers: [
         BlocProvider(
           create: (_) =>
-              getIt<NoticeBloc>()..add(FetchNotices(widget.lectureId)),
+              getIt<NoticeBloc>()..add(FetchAllNotices(widget.lectureId)),
         ),
         BlocProvider(
           create: (_) => getIt<QuizBloc>()..add(FetchQuizzes(widget.lectureId)),
