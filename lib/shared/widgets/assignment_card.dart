@@ -9,7 +9,6 @@ class AssignmentCard extends StatelessWidget {
   final String state;
   final String teacher;
   final String period;
-  final bool active;
 
   const AssignmentCard({
     super.key,
@@ -17,7 +16,6 @@ class AssignmentCard extends StatelessWidget {
     required this.state,
     required this.period,
     required this.teacher,
-    required this.active,
   });
 
   @override
@@ -29,10 +27,7 @@ class AssignmentCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Headline2SemiBold16(
-                text: assignment,
-                color: active ? OrmeeColor.black : OrmeeColor.gray[40],
-              ),
+              Headline2SemiBold16(text: assignment, color: OrmeeColor.black),
               StateBadge(text: state),
             ],
           ),

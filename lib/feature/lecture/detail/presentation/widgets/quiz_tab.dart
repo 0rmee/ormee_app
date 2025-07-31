@@ -69,7 +69,6 @@ Widget QuizTab() {
                 period:
                     '${_formatDate(quiz.openTime)} - ${_formatDate(quiz.dueTime)}',
                 teacher: quiz.author,
-                active: !quiz.submitted,
               ),
             );
           },
