@@ -11,6 +11,7 @@ class NoticeCard extends StatefulWidget {
   final String teacher;
   final String date;
   final VoidCallback? onTap;
+  final bool isPinned;
 
   const NoticeCard({
     super.key,
@@ -19,6 +20,7 @@ class NoticeCard extends StatefulWidget {
     required this.notice,
     required this.teacher,
     this.onTap,
+    required this.isPinned,
   });
 
   @override
@@ -34,11 +36,18 @@ class _NoticeCardState extends State<NoticeCard> {
     _loadReadStatus();
   }
 
-  // SharedPreferences에서 읽음 상태 로드 (기본값은 false)
   Future<void> _loadReadStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    final readStatus =
-        prefs.getBool('notice_read_${widget.noticeId}') ?? false; // 기본값 false
+    bool readStatus;
+
+    if (widget.isPinned) {
+      // 고정 공지는 항상 읽음 상태로 표시
+      readStatus = true;
+    } else {
+      // 일반 공지는 SharedPreferences에서 읽음 상태 확인
+      readStatus = prefs.getBool('notice_read_${widget.noticeId}') ?? false;
+    }
+
     if (mounted) {
       setState(() {
         _isRead = readStatus;
@@ -82,9 +91,15 @@ class _NoticeCardState extends State<NoticeCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    !widget.isPinned
+                        ? SizedBox()
+                        : Container(
+                            padding: EdgeInsets.only(right: 8),
+                            child: SvgPicture.asset('assets/icons/pin.svg'),
+                          ),
                     Headline2SemiBold16(text: widget.notice),
                     _isRead
-                        ? SizedBox(width: 5)
+                        ? SizedBox()
                         : Container(
                             padding: EdgeInsets.only(left: 6),
                             child: SvgPicture.asset("assets/icons/ellipse.svg"),

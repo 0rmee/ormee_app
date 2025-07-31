@@ -23,6 +23,7 @@ class NoticeResult extends StatelessWidget {
         teacher: notice.author,
         date: DateFormat('yyyy.MM.dd (E)', 'ko_KR').format(notice.postDate),
         onTap: onTap,
+        isPinned: false,
       ),
     );
   }
