@@ -1,6 +1,6 @@
 class Notification {
   final int id;
-  final String authorImage;
+  final String? authorImage; // null 허용
   final String type;
   final int parentId;
   final String header;
@@ -12,7 +12,7 @@ class Notification {
 
   Notification({
     required this.id,
-    required this.authorImage,
+    this.authorImage, // null 허용으로 변경
     required this.type,
     required this.parentId,
     required this.header,
@@ -24,18 +24,26 @@ class Notification {
   });
 
   factory Notification.fromJson(Map<String, dynamic> json) {
-    return Notification(
-      id: json['id'],
-      authorImage: json['authorImage'],
-      type: json['type'],
-      parentId: json['parentId'],
-      header: json['header'],
-      title: json['title'],
-      body: json['body'],
-      content: json['content'],
-      isRead: json['isRead'],
-      createdAt: DateTime.parse(json['createdAt']),
-    );
+    try {
+      return Notification(
+        id: json['id'] ?? 0,
+        authorImage: json['authorImage'], // null 그대로 허용
+        type: json['type'] ?? '',
+        parentId: json['parentId'] ?? 0,
+        header: json['header'] ?? '',
+        title: json['title'] ?? '',
+        body: json['body'] ?? '',
+        content: json['content'] ?? '',
+        isRead: json['isRead'] ?? false,
+        createdAt: json['createdAt'] != null
+            ? DateTime.parse(json['createdAt'])
+            : DateTime.now(),
+      );
+    } catch (e) {
+      print('NotificationModel 파싱 에러: $e');
+      print('JSON 데이터: $json');
+      throw Exception('NotificationModel 파싱 실패: $e');
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -49,7 +57,7 @@ class Notification {
       'body': body,
       'content': content,
       'isRead': isRead,
-      'createdAt': createdAt,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 }
@@ -66,13 +74,30 @@ class NotificationSearchResponse {
   });
 
   factory NotificationSearchResponse.fromJson(Map<String, dynamic> json) {
-    return NotificationSearchResponse(
-      status: json['status'],
-      code: json['code'],
-      data: (json['data'] as List<dynamic>)
-          .map((e) => Notification.fromJson(e))
-          .toList(),
-    );
+    try {
+      final dataList = json['data'] as List;
+      final notifications = <Notification>[];
+
+      for (int i = 0; i < dataList.length; i++) {
+        try {
+          final notification = Notification.fromJson(dataList[i]);
+          notifications.add(notification);
+        } catch (e) {
+          print('알림 $i 파싱 실패: $e'); // 디버깅용
+          print('실패한 데이터: ${dataList[i]}'); // 디버깅용
+          // 개별 알림 파싱 실패 시에도 계속 진행
+        }
+      }
+
+      return NotificationSearchResponse(
+        status: json['status'] ?? 'unknown',
+        code: json['code'] ?? 0,
+        data: notifications,
+      );
+    } catch (e) {
+      print('NotificationSearchResponse 파싱 에러: $e'); // 디버깅용
+      throw Exception('NotificationSearchResponse 파싱 실패: $e');
+    }
   }
 }
 

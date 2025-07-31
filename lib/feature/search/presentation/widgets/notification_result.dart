@@ -15,6 +15,7 @@ class NotificationResult extends StatelessWidget {
     this.onTap,
   });
 
+  // 날짜별로 알림들을 그룹핑
   Map<String, List<Notification>> _groupNotificationsByDate() {
     final Map<String, List<Notification>> grouped = {};
 
@@ -29,10 +30,22 @@ class NotificationResult extends StatelessWidget {
     return grouped;
   }
 
+  // 날짜 헤더 포맷팅 (한국어)
   String _formatKoreanDateHeader(DateTime dateTime) {
-    return DateFormat('yyyy. MM. dd (E)', 'ko_KR').format(dateTime);
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final targetDay = DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+    if (targetDay == today) {
+      return '오늘';
+    } else if (targetDay == today.subtract(const Duration(days: 1))) {
+      return '어제';
+    } else {
+      return DateFormat('yyyy. MM. dd (E)', 'ko_KR').format(dateTime);
+    }
   }
 
+  // 시간 포맷팅 (항상 오전/오후 시간으로)
   String _formatTime(DateTime dateTime) {
     final hour = dateTime.hour;
     final minute = dateTime.minute;
@@ -48,7 +61,8 @@ class NotificationResult extends StatelessWidget {
     }
 
     final grouped = _groupNotificationsByDate();
-    final dateKeys = grouped.keys.toList()..sort((a, b) => b.compareTo(a));
+    final dateKeys = grouped.keys.toList()
+      ..sort((a, b) => b.compareTo(a)); // 최신순
 
     return ListView.builder(
       shrinkWrap: true,
@@ -83,7 +97,7 @@ class NotificationResult extends StatelessWidget {
                   id: notification.id,
                   parentId: notification.parentId,
                   type: notification.type,
-                  profile: notification.authorImage,
+                  profile: notification.authorImage, // null일 수 있음
                   headline: notification.header,
                   title: notification.title,
                   body: notification.body,
