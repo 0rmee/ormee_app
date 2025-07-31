@@ -24,14 +24,22 @@ class NoticeCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          read
-              ? SizedBox(width: 5)
-              : SvgPicture.asset("assets/icons/ellipse.svg"),
-          SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Headline2SemiBold16(text: notice),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Headline2SemiBold16(text: notice),
+                  read
+                      ? SizedBox(width: 5)
+                      : Container(
+                          padding: EdgeInsets.only(left: 6),
+                          child: SvgPicture.asset("assets/icons/ellipse.svg"),
+                        ),
+                ],
+              ),
               SizedBox(height: 12),
               Row(
                 children: [
