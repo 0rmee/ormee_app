@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ormee_app/shared/widgets/teacher_badge2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ormee_app/shared/theme/app_colors.dart';
 import 'package:ormee_app/shared/theme/app_fonts.dart';
@@ -108,9 +109,15 @@ class _NoticeCardState extends State<NoticeCard> {
                 ),
                 SizedBox(height: 12),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TeacherBadge(teacherName: widget.teacher),
-                    SizedBox(width: 8),
+                    TeacherBadge2(widget.teacher),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 6),
+                      height: 12,
+                      width: 1,
+                      color: OrmeeColor.gray[20],
+                    ),
                     Label2Regular12(
                       text: widget.date,
                       color: OrmeeColor.gray[40],
