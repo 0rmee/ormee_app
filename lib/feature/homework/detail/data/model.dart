@@ -53,7 +53,7 @@ class HomeworkDetailModel {
       feedbackCompleted: json['data']['feedbackCompleted'] ?? false,
       author: AuthorModel.fromValue(
         json['data']['author'] ?? '',
-        json['data']['authorImage'],
+        json['data']['authorImage'] ?? '',
       ),
       imageUrls: images,
       attachmentFiles: files,
