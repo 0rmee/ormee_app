@@ -175,7 +175,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     type: n.type,
                     profile: n.authorImage,
                     headline: n.header,
-                    title: n.title,
+                    title: n.plainTitle,
                     body: n.plainContent ?? n.body,
                     time: n.formattedTime,
                   );

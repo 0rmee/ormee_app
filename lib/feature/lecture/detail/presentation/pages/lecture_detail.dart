@@ -202,7 +202,7 @@ class _LectureDetailScreenState extends State<LectureDetailScreen>
       providers: [
         BlocProvider(
           create: (_) =>
-              getIt<NoticeBloc>()..add(FetchNotices(widget.lectureId)),
+              getIt<NoticeBloc>()..add(FetchAllNotices(widget.lectureId)),
         ),
         BlocProvider(
           create: (_) => getIt<QuizBloc>()..add(FetchQuizzes(widget.lectureId)),
@@ -317,6 +317,30 @@ class _LectureDetailScreenState extends State<LectureDetailScreen>
                                     },
                                   );
                                 },
+                              );
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              Column(
+                                children: [
+                                  const SizedBox(height: 12),
+                                  GestureDetector(
+                                    onTap: () => context.push(
+                                      '/search/notice/${data.id}',
+                                    ),
+                                    child: SearchButton(),
+                                  ),
+                                  Expanded(child: NoticeTab()),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  const SizedBox(height: 12),
+                                  Expanded(child: QuizTab()),
+                                ],
                               ),
                             ),
                             Expanded(

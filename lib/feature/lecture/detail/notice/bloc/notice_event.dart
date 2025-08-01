@@ -1,6 +1,7 @@
 abstract class NoticeEvent {}
 
-class FetchNotices extends NoticeEvent {
+class FetchAllNotices extends NoticeEvent {
   final int lectureId;
-  FetchNotices(this.lectureId);
+
+  FetchAllNotices(this.lectureId);
 }

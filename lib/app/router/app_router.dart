@@ -6,6 +6,7 @@ import 'package:ormee_app/feature/homework/detail/feedback/detail/presentation/p
 import 'package:ormee_app/feature/homework/detail/presentation/page/homework_detail.dart';
 import 'package:ormee_app/feature/homework/detail/submission/detail/presentation/homework_submission_detail.dart';
 import 'package:ormee_app/feature/memo/presentation/pages/memo.dart';
+import 'package:ormee_app/feature/mypage/list/presentation/maypage_list.dart';
 import 'package:ormee_app/feature/notice/detail/presentation/page/notice_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/feature/home/presentation/pages/home.dart';
@@ -18,6 +19,8 @@ import 'package:ormee_app/feature/quiz/detail/presentation/quiz_detail.dart';
 import 'package:ormee_app/feature/question/detail/answer/presentation/answer_detail.dart';
 import 'package:ormee_app/feature/question/detail/presentation/question_detail.dart';
 import 'package:ormee_app/feature/question/list/presentation/question_list.dart';
+import 'package:ormee_app/feature/search/presentation/pages/notice_search.dart';
+import 'package:ormee_app/feature/search/presentation/pages/notification_search.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
 import 'package:ormee_app/feature/lecture/detail/presentation/pages/lecture_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/branch.dart';
@@ -61,19 +64,6 @@ class AppRouter {
         name: 'profile',
         builder: (context, state) => ProfileScreen(),
       ),
-      // GoRoute(
-      //   path: '/settings',
-      //   name: 'settings',
-      //   builder: (context, state) => const SettingsScreen(),
-      // ),
-      // GoRoute(
-      //   path: '/detail/:id',
-      //   name: 'detail',
-      //   builder: (context, state) {
-      //     final id = state.pathParameters['id']!;
-      //     return DetailScreen(id: id);
-      //   },
-      // ),
       GoRoute(
         path: '/lecture/detail/:id',
         name: 'lecture detail',
@@ -111,6 +101,13 @@ class AppRouter {
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return NoticeDetailScreen(noticeId: id);
+        },
+      ),
+      GoRoute(
+        path: '/search/notice/:lectureId',
+        builder: (context, state) {
+          final lectureId = int.parse(state.pathParameters['lectureId']!);
+          return NoticeSearch(lectureId: lectureId);
         },
       ),
       GoRoute(
@@ -157,7 +154,7 @@ class AppRouter {
           return QuizResultScreen(quizId: id, title: title);
         },
       ),
-        GoRoute(
+      GoRoute(
         path: '/quiz/detail/:id',
         name: 'quiz_detail',
         builder: (context, state) {
@@ -203,6 +200,12 @@ class AppRouter {
           );
         },
       ),
+      GoRoute(
+        path: '/notification/search',
+        builder: (context, state) {
+          return NotificationSearch();
+        },
+      ),
       ShellRoute(
         builder: (context, state, child) => OrmeeNavigationBar(child: child),
         routes: [
@@ -230,7 +233,7 @@ class AppRouter {
           GoRoute(
             path: '/mypage',
             name: 'mypage',
-            builder: (context, state) => ProfileScreen(),
+            builder: (context, state) => MyPageScreen(),
           ),
         ],
       ),
@@ -333,62 +336,6 @@ class ProfileScreen extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Settings Screen'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => context.go('/'),
-              child: const Text('Go Back Home'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DetailScreen extends StatelessWidget {
-  final String id;
-
-  const DetailScreen({super.key, required this.id});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Detail - $id'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Detail Screen - ID: $id'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => context.go('/'),
-              child: const Text('Go Back Home'),
-            ),
-          ],
         ),
       ),
     );
