@@ -31,7 +31,7 @@ class QuizRepository {
           .toList();
 
       await _dio.post(
-        '/students/quizzes/$quizId/submit',
+        '/students/quizzes',
         data: submissions.map((s) => s.toJson()).toList(),
       );
     } on DioException catch (e) {
