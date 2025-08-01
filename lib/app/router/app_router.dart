@@ -6,6 +6,7 @@ import 'package:ormee_app/feature/homework/detail/feedback/detail/presentation/p
 import 'package:ormee_app/feature/homework/detail/presentation/page/homework_detail.dart';
 import 'package:ormee_app/feature/homework/detail/submission/detail/presentation/homework_submission_detail.dart';
 import 'package:ormee_app/feature/memo/presentation/pages/memo.dart';
+import 'package:ormee_app/feature/mypage/list/presentation/maypage_list.dart';
 import 'package:ormee_app/feature/notice/detail/presentation/page/notice_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
 import 'package:ormee_app/feature/home/presentation/pages/home.dart';
@@ -232,7 +233,7 @@ class AppRouter {
           GoRoute(
             path: '/mypage',
             name: 'mypage',
-            builder: (context, state) => ProfileScreen(),
+            builder: (context, state) => MyPageScreen(),
           ),
         ],
       ),
