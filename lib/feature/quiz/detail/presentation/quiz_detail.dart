@@ -290,7 +290,9 @@ class QuizDetailView extends StatelessWidget {
             child: OrmeeButton(
               text: '퀴즈 응시하기',
               isTrue: true,
-              trueAction: () {},
+              trueAction: () {
+                context.push('/quiz/take/$quizId?title=$title');
+              },
               dday: dday,
             ),
             // ElevatedButton(
@@ -374,9 +376,10 @@ class QuizDetailView extends StatelessWidget {
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: null,
+              onPressed: () =>
+                  context.push('/quiz/result/$quizId?title=$title'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey[300],
+                backgroundColor: Colors.grey[30],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

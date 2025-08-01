@@ -309,7 +309,8 @@ class QuizResultView extends StatelessWidget {
           if (problem.type == ProblemType.choice)
             OrmeeSingleChoiceAnswer(
               items: problem.items,
-              answer: problem.submission ?? '',
+              submission: problem.submission ?? '',
+              answer: problem.answer,
               isCorrect: isCorrect,
             )
           else if (problem.type == ProblemType.essay)
