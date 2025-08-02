@@ -1,3 +1,4 @@
+// mypage_history_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -32,11 +33,28 @@ class MypageHistory extends StatelessWidget {
           ),
           body: Column(
             children: [
-              OrmeeTabBar(
-                tabs: [
-                  OrmeeTab(text: '진행 중인 강의'),
-                  OrmeeTab(text: '이전 강의'),
-                ],
+              BlocBuilder<LectureHistoryBloc, LectureHistoryState>(
+                builder: (context, state) {
+                  final openLecturesCount = state is LectureHistoryLoaded
+                      ? state.openLectures.length
+                      : null;
+                  final closedLecturesCount = state is LectureHistoryLoaded
+                      ? state.closedLectures.length
+                      : null;
+
+                  return OrmeeTabBar(
+                    tabs: [
+                      OrmeeTab(
+                        text: '진행 중인 강의',
+                        notificationCount: openLecturesCount,
+                      ),
+                      OrmeeTab(
+                        text: '이전 강의',
+                        notificationCount: closedLecturesCount,
+                      ),
+                    ],
+                  );
+                },
               ),
               Expanded(
                 child: BlocBuilder<LectureHistoryBloc, LectureHistoryState>(
