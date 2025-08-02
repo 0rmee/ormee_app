@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:ormee_app/core/events/quiz_events.dart';
+import 'package:ormee_app/core/network/api_client.dart';
 import 'package:ormee_app/feature/quiz/bloc/quiz_bloc.dart';
 import 'package:ormee_app/feature/quiz/bloc/quiz_event.dart';
 import 'package:ormee_app/feature/quiz/bloc/quiz_state.dart';
@@ -331,8 +332,14 @@ class QuizDetailView extends StatelessWidget {
             child: OrmeeButton(
               text: '퀴즈 응시하기',
               isTrue: true,
-              trueAction: () {
-                context.push('/quiz/take/$quizId?title=$title');
+              trueAction: () async {
+                final success = await ApiClient.instance.reissueToken();
+                if (success) {
+                  context.push('/quiz/take/$quizId?title=$title');
+                } else {
+                  // 재발급 실패 처리 (예: 에러 메시지, 로그아웃 등)
+                  print('토큰 재발급 실패!');
+                }
               },
               dday: dday,
             ),
