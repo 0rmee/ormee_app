@@ -19,6 +19,7 @@ import 'package:ormee_app/feature/quiz/detail/presentation/quiz_detail.dart';
 import 'package:ormee_app/feature/question/detail/answer/presentation/answer_detail.dart';
 import 'package:ormee_app/feature/question/detail/presentation/question_detail.dart';
 import 'package:ormee_app/feature/question/list/presentation/question_list.dart';
+import 'package:ormee_app/feature/quiz/take/presentation/quiz_take.dart';
 import 'package:ormee_app/feature/search/presentation/pages/notice_search.dart';
 import 'package:ormee_app/feature/search/presentation/pages/notification_search.dart';
 import 'package:ormee_app/feature/splash/splash.dart';
@@ -33,8 +34,6 @@ import 'package:ormee_app/shared/widgets/full_image_viewer.dart';
 import 'package:ormee_app/shared/widgets/lecture_card.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
-
-import '../../feature/quiz/result/presentation/quiz_result.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -156,10 +155,23 @@ class AppRouter {
       ),
       GoRoute(
         path: '/quiz/detail/:id',
-        name: 'quiz_detail',
+        name: 'quiz_detail', // 이건 goNamed용
+        pageBuilder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return MaterialPage(
+            key: state.pageKey,
+            name: '/quiz/detail/$id', // Navigator.popUntil용 name 설정
+            child: QuizDetailScreen(quizId: id),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/quiz/take/:id',
+        name: 'quiz_take',
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
-          return QuizDetailScreen(quizId: id);
+          final title = state.uri.queryParameters['title'] ?? '퀴즈 결과';
+          return Quiz(quizId: id, quizTitle: title);
         },
       ),
       GoRoute(
