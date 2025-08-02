@@ -69,7 +69,7 @@ class MemoSSEManager {
                 _handleSSEError(error);
               }
             },
-            cancelOnError: true,
+            cancelOnError: false,
           );
 
       print("✅ [SSE] Started: $url");
@@ -136,7 +136,7 @@ class MemoSSEManager {
       _handleAuthenticationError();
     } else {
       // 일반적인 연결 에러는 재연결 시도
-      _scheduleReconnect();
+      //_scheduleReconnect();
     }
   }
 
