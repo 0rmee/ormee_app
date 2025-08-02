@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:ormee_app/core/events/quiz_events.dart';
+import 'package:ormee_app/core/network/api_client.dart';
 import 'package:ormee_app/feature/quiz/bloc/quiz_bloc.dart';
 import 'package:ormee_app/feature/quiz/bloc/quiz_event.dart';
 import 'package:ormee_app/feature/quiz/bloc/quiz_state.dart';
@@ -14,15 +17,54 @@ import 'package:ormee_app/shared/widgets/label.dart';
 import 'package:ormee_app/shared/widgets/profile.dart';
 import 'package:ormee_app/feature/quiz/detail/data/repository.dart';
 
-class QuizDetailScreen extends StatelessWidget {
+class QuizDetailScreen extends StatefulWidget {
   final int quizId;
   const QuizDetailScreen({super.key, required this.quizId});
 
   @override
+  State<QuizDetailScreen> createState() => _QuizDetailScreenState();
+}
+
+class _QuizDetailScreenState extends State<QuizDetailScreen> with RouteAware {
+  late QuizBloc _quizBloc;
+  late StreamSubscription _eventSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    // BLoC을 initState에서 생성
+    _quizBloc = QuizBloc(QuizRepository());
+    _loadQuizData();
+    _eventSubscription = GlobalEventBus().on<QuizDetailRefreshEvent>().listen((
+      event,
+    ) {
+      if (event.quizId == widget.quizId) {
+        _refreshData();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _eventSubscription.cancel();
+    _quizBloc.close(); // BLoC 정리
+    super.dispose();
+  }
+
+  void _loadQuizData() {
+    _quizBloc.add(LoadQuiz(widget.quizId));
+  }
+
+  void _refreshData() {
+    // BLoC 이벤트로 데이터 새로고침
+    _quizBloc.add(LoadQuiz(widget.quizId));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => QuizBloc(QuizRepository())..add(LoadQuiz(quizId)),
-      child: QuizDetailView(quizId: quizId),
+    return BlocProvider.value(
+      value: _quizBloc,
+      child: QuizDetailView(quizId: widget.quizId),
     );
   }
 }
@@ -290,8 +332,14 @@ class QuizDetailView extends StatelessWidget {
             child: OrmeeButton(
               text: '퀴즈 응시하기',
               isTrue: true,
-              trueAction: () {
-                context.push('/quiz/take/$quizId?title=$title');
+              trueAction: () async {
+                final success = await ApiClient.instance.reissueToken();
+                if (success) {
+                  context.push('/quiz/take/$quizId?title=$title');
+                } else {
+                  // 재발급 실패 처리 (예: 에러 메시지, 로그아웃 등)
+                  print('토큰 재발급 실패!');
+                }
               },
               dday: dday,
             ),

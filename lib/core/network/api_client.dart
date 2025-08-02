@@ -49,7 +49,7 @@ class ApiClient {
               '🔍 [DEBUG] Current _refreshToken before reissue: ${_refreshToken?.substring(0, 20)}...',
             );
 
-            final reissueSuccess = await _reissueToken();
+            final reissueSuccess = await reissueToken();
 
             if (reissueSuccess) {
               print('✅ [TOKEN] Token reissue successful, retrying request...');
@@ -293,7 +293,7 @@ class ApiClient {
     }
   }
 
-  Future<bool> _reissueToken() async {
+  Future<bool> reissueToken() async {
     // 동시성 문제 방지
     if (_isReissuingToken) {
       print('⏳ [TOKEN] Token reissue already in progress, waiting...');
