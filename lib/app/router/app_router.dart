@@ -6,6 +6,7 @@ import 'package:ormee_app/feature/homework/detail/feedback/detail/presentation/p
 import 'package:ormee_app/feature/homework/detail/presentation/page/homework_detail.dart';
 import 'package:ormee_app/feature/homework/detail/submission/detail/presentation/homework_submission_detail.dart';
 import 'package:ormee_app/feature/memo/presentation/pages/memo.dart';
+import 'package:ormee_app/feature/mypage/history/presentation/pages/mypage_history.dart';
 import 'package:ormee_app/feature/mypage/list/presentation/maypage_list.dart';
 import 'package:ormee_app/feature/notice/detail/presentation/page/notice_detail.dart';
 import 'package:ormee_app/feature/auth/signup/presentation/pages/signup.dart';
@@ -29,9 +30,7 @@ import 'package:ormee_app/feature/lecture/home/bloc/lecture_bloc.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/pages/lecture_home.dart';
 import 'package:ormee_app/feature/lecture/home/presentation/widgets/qr_scanner.dart';
 import 'package:ormee_app/feature/question/create/presentation/pages/question_create.dart';
-import 'package:ormee_app/shared/widgets/button.dart';
 import 'package:ormee_app/shared/widgets/full_image_viewer.dart';
-import 'package:ormee_app/shared/widgets/lecture_card.dart';
 import 'package:ormee_app/shared/widgets/navigationbar.dart';
 import 'package:ormee_app/shared/widgets/tab.dart';
 
@@ -59,16 +58,18 @@ class AppRouter {
         builder: (context, state) => Signup(),
       ),
       GoRoute(
-        path: '/profile',
-        name: 'profile',
-        builder: (context, state) => ProfileScreen(),
-      ),
-      GoRoute(
         path: '/lecture/detail/:id',
         name: 'lecture detail',
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           return LectureDetailScreen(lectureId: id);
+        },
+      ),
+      GoRoute(
+        path: '/lecture/detail/:id/memo',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return Memo(lectureId: id);
         },
       ),
       GoRoute(
@@ -89,7 +90,6 @@ class AppRouter {
       GoRoute(
         path: '/qr-scanner',
         builder: (context, state) {
-          // extra에서 BLoC 인스턴스 가져오기
           final bloc = state.extra as LectureHomeBloc?;
           return QRScannerPage(bloc: bloc);
         },
@@ -127,13 +127,6 @@ class AppRouter {
             homeworkId: id,
             homeworkTitle: title,
           );
-        },
-      ),
-      GoRoute(
-        path: '/lecture/detail/:id/memo',
-        builder: (context, state) {
-          final id = int.parse(state.pathParameters['id']!);
-          return Memo(lectureId: id);
         },
       ),
       GoRoute(
@@ -218,6 +211,12 @@ class AppRouter {
           return NotificationSearch();
         },
       ),
+      GoRoute(
+        path: '/mypage/history',
+        builder: (context, state) {
+          return MypageHistory();
+        },
+      ),
       ShellRoute(
         builder: (context, state, child) => OrmeeNavigationBar(child: child),
         routes: [
@@ -252,106 +251,6 @@ class AppRouter {
     ],
     errorBuilder: (context, state) => const ErrorScreen(),
   );
-}
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Profile'),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        ),
-        body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              // 탭바 위에 올릴 내용들
-              SliverToBoxAdapter(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: OrmeeButton(
-                        text: 'text',
-                        isTrue: true,
-                        trueAction: () {},
-                        assetName: 'assets/icons/trash.svg',
-                      ),
-                    ),
-                    Expanded(
-                      child: OrmeeButton(
-                        text: 'text',
-                        isTrue: true,
-                        trueAction: () {},
-                        assetName: 'assets/icons/trash.svg',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: OrmeeButton(
-                  text: 'text',
-                  isTrue: true,
-                  trueAction: () {},
-                  assetName: 'assets/icons/trash.svg',
-                ),
-              ),
-              // 탭바
-              SliverAppBar(
-                automaticallyImplyLeading: false,
-                backgroundColor: Colors.white,
-                elevation: 0,
-                pinned: true,
-                floating: false,
-                toolbarHeight: 0,
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(48.0),
-                  child: OrmeeTabBar(
-                    tabs: [
-                      OrmeeTab(text: '공지', notificationCount: 3),
-                      OrmeeTab(text: '숙제', notificationCount: null),
-                      OrmeeTab(text: '퀴즈', notificationCount: 1),
-                    ],
-                  ),
-                ),
-              ),
-            ];
-          },
-          body: TabBarView(
-            children: [
-              SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    const Text("내용"),
-                    const SizedBox(height: 20),
-                    OrmeeLectureCard(
-                      title: '오름토익 기본반 RC',
-                      teacherNames: '강수이 • 최윤선 T',
-                      subText: '재수하지 말자',
-                      // dDay: 'D-16',
-                    ),
-                  ],
-                ),
-              ),
-              const SingleChildScrollView(
-                padding: EdgeInsets.all(16.0),
-                child: Column(children: [Text("내용")]),
-              ),
-              const SingleChildScrollView(
-                padding: EdgeInsets.all(16.0),
-                child: Column(children: [Text("내용")]),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class ErrorScreen extends StatelessWidget {

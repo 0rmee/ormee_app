@@ -132,7 +132,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     // 강의가 있는 경우와 없는 경우 분기
                     if (state.lectures.isEmpty)
-                      LectureHomeEmpty(bloc: context.read<LectureHomeBloc>())
+                      LectureHomeEmpty(
+                        bloc: context.read<LectureHomeBloc>(),
+                        qr: true,
+                      )
                     else
                       LectureCardSlider(lectures: state.lectures),
 

@@ -62,7 +62,10 @@ class LectureHome extends StatelessWidget {
               appBar: LectureHomeAppBar(count: lectures.length),
               body: SafeArea(
                 child: lectures.isEmpty
-                    ? LectureHomeEmpty(bloc: context.read<LectureHomeBloc>())
+                    ? LectureHomeEmpty(
+                        bloc: context.read<LectureHomeBloc>(),
+                        qr: true,
+                      )
                     : ListView.builder(
                         itemCount: lectures.length,
                         itemBuilder: (context, index) {

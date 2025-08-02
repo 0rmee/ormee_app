@@ -44,7 +44,7 @@ class MyPageScreen extends StatelessWidget {
                       icon: 'assets/icons/list.svg',
                       title: '수강내역',
                       onTap: () {
-                        // 수강내역 페이지
+                        context.push('/mypage/history');
                       },
                     ),
                     MyPageCard(
